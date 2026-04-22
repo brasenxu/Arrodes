@@ -1,0 +1,729 @@
+{
+  "_notes": [
+    "Seed set for ticket 004. Covers both LOTM1 and COI — retrieval spans both books, so both casts need pre-merged aliases to prevent NER fragmentation.",
+    "All entries have is_spoiler=0. Entity-level reveal gating is deferred to ticket 017; chunk-level reading-position filter is the only spoiler mechanism.",
+    "Pathway convention: one entity per pathway (22 total). Sequence 9 tier names (Seer, Spectator, Sailor, Mystery Pryer) are folded in as aliases of their parent pathway.",
+    "meta.book indicates primary appearance; 'both' = cross-book recurring. meta.pathway is an NER hint, not authoritative."
+  ],
+  "entities": [
+    {
+      "canonical_name": "Klein Moretti",
+      "entity_type": "character",
+      "aliases": [
+        "Zhou Mingrui",
+        "Sherlock Moriarty",
+        "Gehrman Sparrow",
+        "Dwayne Dantès",
+        "Dwayne Dantes",
+        "Merlin Hermes",
+        "Sinbad Voluntier",
+        "John Yode",
+        "The Fool",
+        "Mr. Fool",
+        "Fool God",
+        "Lord of Mysteries",
+        "Angel of Redemption",
+        "Miracle Magician",
+        "Clown Angel",
+        "Mr. Clown",
+        "Daoist Zhou",
+        "The Mysterious Ruler above the Gray Fog",
+        "King of Yellow and Black"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "pathway": "Fool", "tarot_club": "The Fool" }
+    },
+    {
+      "canonical_name": "Audrey Hall",
+      "entity_type": "character",
+      "aliases": [
+        "Justice",
+        "Miss Justice",
+        "Miss Audrey",
+        "Miss Pride",
+        "Backlund's Most Dazzling Gem"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "pathway": "Visionary", "tarot_club": "Justice" }
+    },
+    {
+      "canonical_name": "Alger Wilson",
+      "entity_type": "character",
+      "aliases": [
+        "The Hanged Man",
+        "Mr. Hanged Man",
+        "Stormbringer Alger",
+        "Captain of the Blue Avenger",
+        "Lord Wilson"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "pathway": "Tyrant", "pathway_note": "Alger is on Tyrant Pathway (Sailor tier); his Tarot Club codename happens to be The Hanged Man but that's unrelated to pathway", "tarot_club": "The Hanged Man" }
+    },
+    {
+      "canonical_name": "Derrick Berg",
+      "entity_type": "character",
+      "aliases": [
+        "The Sun",
+        "Mr. Sun",
+        "Little Sun",
+        "Elder Berg"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "pathway": "Sun", "tarot_club": "The Sun" }
+    },
+    {
+      "canonical_name": "Emlyn White",
+      "entity_type": "character",
+      "aliases": [
+        "The Moon",
+        "Mr. Moon",
+        "Son of the Moon",
+        "Bai Ailin"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "pathway": "Moon", "tarot_club": "The Moon" }
+    },
+    {
+      "canonical_name": "Fors Wall",
+      "entity_type": "character",
+      "aliases": [
+        "The Magician",
+        "Miss Magician",
+        "Madam Magician",
+        "Margaret Taylor",
+        "Slacker Without a Dream",
+        "Salted Fish Without Dreams",
+        "Romance Queen"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "pathway": "Door", "tarot_club": "The Magician" }
+    },
+    {
+      "canonical_name": "Leonard Mitchell",
+      "entity_type": "character",
+      "aliases": [
+        "The Star",
+        "Mr. Star",
+        "Dear Poet",
+        "Mr. Poet"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "pathway": "Darkness", "tarot_club": "The Star" }
+    },
+    {
+      "canonical_name": "Cattleya",
+      "entity_type": "character",
+      "aliases": [
+        "The Hermit",
+        "Miss Hermit",
+        "Madam Bewitching"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "pathway": "Hermit", "tarot_club": "The Hermit" }
+    },
+    {
+      "canonical_name": "Xio Derecha",
+      "entity_type": "character",
+      "aliases": [
+        "Judgement",
+        "Mr. Judgement",
+        "Miss Judgement"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "tarot_club": "Judgement" }
+    },
+    {
+      "canonical_name": "Azik Eggers",
+      "entity_type": "character",
+      "aliases": [
+        "Mr. Azik",
+        "Death Consul",
+        "Baron Lamud",
+        "Angel of Death"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Death",
+        "sequence": 2,
+        "affiliation": "Church of the Fool; Eggers Family",
+        "relation": "Son of Salinger (the god Death, SEQ0 Death Pathway). Azik is NOT Death himself. External Beyonder orgs mistakenly believed him to be Tarot Club 'The Death' — seed does not treat 'Death' as an Azik alias."
+      }
+    },
+    {
+      "canonical_name": "Salinger",
+      "entity_type": "character",
+      "aliases": [
+        "Death",
+        "God of the Dead",
+        "Underworld Emperor"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Death",
+        "sequence": 0,
+        "secondary_pathway": "Red Priest (SEQ0)",
+        "status": "deceased (Pale Era; killed by Seven Orthodox Gods)",
+        "affiliation": "Eggers Family; Balam Empire (founder); Rose Redemption (former)",
+        "relation": "Father of Azik Eggers. Left part of his soul in Azik for future resurrection.",
+        "note": "'Death' as a deity name in the narrative refers to Salinger, not Azik and not the pathway. Disambiguate against 'Death Pathway' (entity_type=pathway) at NER time."
+      }
+    },
+    {
+      "canonical_name": "Will Auceptin",
+      "entity_type": "character",
+      "aliases": [
+        "Will Ceres",
+        "Snake of Mercury",
+        "Angel of Mercury",
+        "Mr. Mercury"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "pathway": "Wheel of Fortune", "affiliation": "Church of the Fool; Life School of Thought" }
+    },
+    {
+      "canonical_name": "Dunn Smith",
+      "entity_type": "character",
+      "aliases": [
+        "Captain Dunn",
+        "Captain Smith",
+        "Deng En"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "pathway": "Darkness", "affiliation": "Nighthawks" }
+    },
+    {
+      "canonical_name": "Old Neil",
+      "entity_type": "character",
+      "aliases": [
+        "Neil Eskatt",
+        "Mr. Neil"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "affiliation": "Nighthawks" }
+    },
+    {
+      "canonical_name": "Rozanne Bansy",
+      "entity_type": "character",
+      "aliases": [
+        "Rozanne",
+        "Miss Rozanne"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "affiliation": "Nighthawks" }
+    },
+    {
+      "canonical_name": "Benson Moretti",
+      "entity_type": "character",
+      "aliases": [
+        "Benson",
+        "Big Brother Benson"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "relation": "Klein Moretti's elder brother" }
+    },
+    {
+      "canonical_name": "Melissa Moretti",
+      "entity_type": "character",
+      "aliases": [
+        "Melissa",
+        "Little Melissa"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "relation": "Klein Moretti's younger sister" }
+    },
+    {
+      "canonical_name": "Amon",
+      "entity_type": "character",
+      "aliases": [
+        "Mr. Error",
+        "The Blasphemer",
+        "Lil' Raven",
+        "Termiboros",
+        "Monette",
+        "Angel of Time",
+        "God of Trickery",
+        "God of Mischief",
+        "God of Deceit"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "pathway": "Error", "sequence": 0, "note": "Mr. A is NOT Amon — see separate Mr. A entry" }
+    },
+    {
+      "canonical_name": "Mr. A",
+      "entity_type": "character",
+      "aliases": [
+        "Mister A"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Hanged Man",
+        "sequence": 5,
+        "affiliation": "Aurora Order (one of 22 Oracles); worshipped the True Creator (Adam)",
+        "note": "Distinct from Amon. Sequence 5 Beyonder of Hanged Man / Secrets Suppliant Pathway. Killed by Antigonus June 1350."
+      }
+    },
+    {
+      "canonical_name": "Adam",
+      "entity_type": "character",
+      "aliases": [
+        "True Creator",
+        "True Creator Adam",
+        "Zealous Brother",
+        "That Zealot",
+        "He-Who-Must-Not-Be-Named",
+        "Angel of Imagination",
+        "Grisha",
+        "Grisha Adam",
+        "Peng Deng",
+        "Child of the Creator"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "pathway": "Visionary", "sequence": 0, "founder_of": "Twilight Hermit Order" }
+    },
+    {
+      "canonical_name": "Medici",
+      "entity_type": "character",
+      "aliases": [
+        "Red Angel",
+        "War Angel",
+        "Great God of War",
+        "Ancestor Medici"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Red Priest",
+        "sequence": 1,
+        "note": "Ancestor of the Medici Family — NOT the same as Albus Medici (his descendant); see separate entry"
+      }
+    },
+    {
+      "canonical_name": "Albus Medici",
+      "entity_type": "character",
+      "aliases": [],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "coi",
+        "pathway": "Red Priest",
+        "sequence": 5,
+        "affiliation": "Medici Family; Iron and Blood Cross Order",
+        "note": "Descendant of the original Medici (Red Angel). Distinct character; translation-time ambiguity with ancestor is the whole reason this seed pre-separates them."
+      }
+    },
+    {
+      "canonical_name": "Roselle Gustav",
+      "entity_type": "character",
+      "aliases": [
+        "Emperor Roselle",
+        "Emperor Caesar",
+        "Huang Tao",
+        "Son of Steam",
+        "Black Emperor",
+        "Knowledge Emperor",
+        "First Consul of the Intis Republic"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "pathway": "Black Emperor", "sequence": 0, "note": "Modern-day identity Huang Tao is distinct from Zhou Mingrui — both are transmigrators, Huang Tao is Zhou Mingrui's superior at Intis Group" }
+    },
+    {
+      "canonical_name": "Lumian Lee",
+      "entity_type": "character",
+      "aliases": [
+        "The Chariot",
+        "Mr. Chariot",
+        "Ciel Dubois",
+        "Louis Berry",
+        "Li Ming",
+        "Lumina Lee",
+        "Saint Lumian",
+        "Lion",
+        "Prankster King of Cordu",
+        "Calamity of Destruction",
+        "Ruler of Calamity",
+        "Dual-Pathway King of Angels",
+        "Seven of Wands"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "coi", "tarot_club": "The Chariot (Major); formerly Seven of Wands (Minor)", "protagonist": true }
+    },
+    {
+      "canonical_name": "Ryan Vitia",
+      "entity_type": "character",
+      "aliases": [
+        "Ryan Koss",
+        "Ryan"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "coi", "pathway": "Twilight Giant", "affiliation": "Machinery Hivemind" }
+    },
+    {
+      "canonical_name": "Reinette Tinekerr",
+      "entity_type": "character",
+      "aliases": [
+        "Reinette",
+        "Miss Messenger",
+        "Angel of the Holy Spirit"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "coi", "pathway": "Chained", "affiliation": "Rose School of Thought" }
+    },
+    {
+      "canonical_name": "Franca Roland",
+      "entity_type": "character",
+      "aliases": [
+        "The Empress",
+        "Miss Empress",
+        "Franco Roland",
+        "Charname",
+        "Luo Fu",
+        "Saint Franca",
+        "Red Boots",
+        "God of Disease",
+        "Malady God Queen",
+        "Hidden Blade",
+        "Two of Cups"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "coi", "pathway": "Demoness", "tarot_club": "The Empress (Major); formerly Two of Cups (Minor)" }
+    },
+    {
+      "canonical_name": "Jenna",
+      "entity_type": "character",
+      "aliases": [
+        "Celia Bello",
+        "Jian Na",
+        "Seven of Cups",
+        "Little Minx",
+        "Showy Diva"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "coi",
+        "pathway": "Demoness",
+        "sequence": 3,
+        "tarot_club": "Seven of Cups (Minor, under The Chariot)",
+        "affiliation": "Pope of the Sick Church"
+      }
+    },
+    {
+      "canonical_name": "Tarot Club",
+      "entity_type": "organization",
+      "aliases": [
+        "The Tarot Club",
+        "Tarot Gathering"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "founded_by": "Klein Moretti" }
+    },
+    {
+      "canonical_name": "Nighthawks",
+      "entity_type": "organization",
+      "aliases": [
+        "The Nighthawks",
+        "Nighthawks Team",
+        "Nighthawks Squad"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "parent": "Church of the Evernight Goddess" }
+    },
+    {
+      "canonical_name": "Church of the Fool",
+      "entity_type": "organization",
+      "aliases": [
+        "Fool Church",
+        "Order of the Fool"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "patron_deity": "Klein Moretti / The Fool" }
+    },
+    {
+      "canonical_name": "Church of the Evernight Goddess",
+      "entity_type": "organization",
+      "aliases": [
+        "Evernight Church",
+        "Church of Evernight"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "patron_deity": "Evernight Goddess" }
+    },
+    {
+      "canonical_name": "Aurora Order",
+      "entity_type": "organization",
+      "aliases": [
+        "The Aurora Order",
+        "Order of Aurora"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both" }
+    },
+    {
+      "canonical_name": "Machinery Hivemind",
+      "entity_type": "organization",
+      "aliases": [
+        "The Machinery Hivemind",
+        "Hivemind",
+        "Machinery Group"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "parent": "Church of the God of Steam and Machinery" }
+    },
+    {
+      "canonical_name": "Rose School of Thought",
+      "entity_type": "organization",
+      "aliases": [
+        "Rose School",
+        "The Rose School of Thought"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "coi" }
+    },
+    {
+      "canonical_name": "Fool",
+      "entity_type": "pathway",
+      "aliases": [
+        "Fool Pathway",
+        "Pathway of the Fool",
+        "Seer",
+        "Seer Pathway",
+        "Pathway of the Seer"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_0": "Lord of Mysteries", "sequence_9": "Seer", "note": "Seer is Sequence 9 tier name; folded in as alias" }
+    },
+    {
+      "canonical_name": "Sun",
+      "entity_type": "pathway",
+      "aliases": [
+        "Sun Pathway",
+        "Pathway of the Sun"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_0": "Sun God" }
+    },
+    {
+      "canonical_name": "Tyrant",
+      "entity_type": "pathway",
+      "aliases": [
+        "Tyrant Pathway",
+        "Pathway of the Tyrant",
+        "Sailor",
+        "Sailor Pathway",
+        "Pathway of the Sailor"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_9": "Sailor", "note": "Sailor is Sequence 9 tier name of Tyrant Pathway; folded in as alias. Alger Wilson is on this pathway." }
+    },
+    {
+      "canonical_name": "Red Priest",
+      "entity_type": "pathway",
+      "aliases": [
+        "Red Priest Pathway",
+        "Pathway of the Red Priest",
+        "War Pathway"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_0": "War God" }
+    },
+    {
+      "canonical_name": "Hanged Man",
+      "entity_type": "pathway",
+      "aliases": [
+        "Hanged Man Pathway",
+        "Pathway of the Hanged Man",
+        "Secrets Suppliant",
+        "Secrets Suppliant Pathway"
+      ],
+      "is_spoiler": 0,
+      "meta": { "note": "Also called the Secrets Suppliant Pathway. Mr. A was on this pathway (Sequence 5). Distinct from Alger Wilson's Tarot Club codename." }
+    },
+    {
+      "canonical_name": "Hermit",
+      "entity_type": "pathway",
+      "aliases": [
+        "Hermit Pathway",
+        "Pathway of the Hermit",
+        "Mystery Pryer",
+        "Mystery Pryer Pathway"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_9": "Mystery Pryer", "note": "Distinct from Visionary Pathway. Cattleya (The Hermit in Tarot Club) is on this pathway." }
+    },
+    {
+      "canonical_name": "Visionary",
+      "entity_type": "pathway",
+      "aliases": [
+        "Visionary Pathway",
+        "Pathway of the Visionary",
+        "Spectator",
+        "Spectator Pathway",
+        "Pathway of the Spectator"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_0": "Visionary", "sequence_9": "Spectator", "note": "Spectator is Sequence 9 tier name; folded in as alias. Adam and Audrey Hall are on this pathway." }
+    },
+    {
+      "canonical_name": "Door",
+      "entity_type": "pathway",
+      "aliases": [
+        "Door Pathway",
+        "Pathway of the Door",
+        "Apprentice",
+        "Apprentice Pathway",
+        "Pathway of the Apprentice"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_9": "Apprentice", "note": "Apprentice is Sequence 9 tier name; folded in as alias. Fors Wall is on this pathway." }
+    },
+    {
+      "canonical_name": "Error",
+      "entity_type": "pathway",
+      "aliases": [
+        "Error Pathway",
+        "Pathway of Error"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_0": "Error", "note": "Amon's pathway" }
+    },
+    {
+      "canonical_name": "White Tower",
+      "entity_type": "pathway",
+      "aliases": [
+        "White Tower Pathway",
+        "Pathway of the White Tower"
+      ],
+      "is_spoiler": 0,
+      "meta": {}
+    },
+    {
+      "canonical_name": "Darkness",
+      "entity_type": "pathway",
+      "aliases": [
+        "Darkness Pathway",
+        "Pathway of Darkness",
+        "Sleepless",
+        "Sleepless Pathway",
+        "Pathway of the Sleepless"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_9": "Sleepless", "note": "Sleepless is Sequence 9 tier name; folded in as alias. Leonard Mitchell and Dunn Smith are on this pathway." }
+    },
+    {
+      "canonical_name": "Death",
+      "entity_type": "pathway",
+      "aliases": [
+        "Death Pathway",
+        "Pathway of Death"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_0": "Death (Salinger)", "note": "Sequence 0 'Death' is Salinger (character entity). Azik Eggers is on this pathway at SEQ2 Death Consul; he is Salinger's son but is NOT Death." }
+    },
+    {
+      "canonical_name": "Twilight Giant",
+      "entity_type": "pathway",
+      "aliases": [
+        "Twilight Giant Pathway",
+        "Pathway of the Twilight Giant"
+      ],
+      "is_spoiler": 0,
+      "meta": { "note": "Ryan Vitia is on this pathway." }
+    },
+    {
+      "canonical_name": "Demoness",
+      "entity_type": "pathway",
+      "aliases": [
+        "Demoness Pathway",
+        "Pathway of the Demoness"
+      ],
+      "is_spoiler": 0,
+      "meta": { "note": "Franca Roland and Jenna are on this pathway." }
+    },
+    {
+      "canonical_name": "Paragon",
+      "entity_type": "pathway",
+      "aliases": [
+        "Paragon Pathway",
+        "Pathway of the Paragon"
+      ],
+      "is_spoiler": 0,
+      "meta": {}
+    },
+    {
+      "canonical_name": "Wheel of Fortune",
+      "entity_type": "pathway",
+      "aliases": [
+        "Wheel of Fortune Pathway",
+        "Pathway of the Wheel of Fortune",
+        "Fortune Pathway"
+      ],
+      "is_spoiler": 0,
+      "meta": { "note": "Will Auceptin is on this pathway." }
+    },
+    {
+      "canonical_name": "Mother",
+      "entity_type": "pathway",
+      "aliases": [
+        "Mother Pathway",
+        "Pathway of the Mother",
+        "Earth Mother Pathway"
+      ],
+      "is_spoiler": 0,
+      "meta": {}
+    },
+    {
+      "canonical_name": "Moon",
+      "entity_type": "pathway",
+      "aliases": [
+        "Moon Pathway",
+        "Pathway of the Moon"
+      ],
+      "is_spoiler": 0,
+      "meta": { "note": "Emlyn White is on this pathway." }
+    },
+    {
+      "canonical_name": "Abyss",
+      "entity_type": "pathway",
+      "aliases": [
+        "Abyss Pathway",
+        "Pathway of the Abyss"
+      ],
+      "is_spoiler": 0,
+      "meta": {}
+    },
+    {
+      "canonical_name": "Chained",
+      "entity_type": "pathway",
+      "aliases": [
+        "Chained Pathway",
+        "Pathway of the Chained",
+        "Prisoner",
+        "Prisoner Pathway",
+        "Pathway of the Prisoner"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_9": "Prisoner", "note": "Prisoner is Sequence 9 tier name; folded in as alias. Reinette Tinekerr is on this pathway." }
+    },
+    {
+      "canonical_name": "Black Emperor",
+      "entity_type": "pathway",
+      "aliases": [
+        "Black Emperor Pathway",
+        "Pathway of the Black Emperor"
+      ],
+      "is_spoiler": 0,
+      "meta": { "sequence_0": "Black Emperor", "note": "Roselle Gustav is on this pathway." }
+    },
+    {
+      "canonical_name": "Justiciar",
+      "entity_type": "pathway",
+      "aliases": [
+        "Justiciar Pathway",
+        "Pathway of the Justiciar"
+      ],
+      "is_spoiler": 0,
+      "meta": {}
+    }
+  ]
+}
