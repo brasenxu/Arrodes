@@ -1,0 +1,64 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# next
+.next/
+out/
+next-env.d.ts
+.swc/
+
+# env
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+
+# vercel
+.vercel
+
+# drizzle
+drizzle/meta/
+
+# typescript
+*.tsbuildinfo
+
+# tooling caches
+.turbo/
+.eslintcache
+.cache/
+
+# tests
+coverage/
+*.lcov
+
+# logs
+*.log
+pnpm-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# os / editor
+.DS_Store
+._*
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# source material — not committed, sourced locally
+data/epub/*.epub
+data/raw/
+
+# eval artifacts
+eval-runs/
+
+# personal workspace — not committed
+.claude/
+.cursor/
+
+# project docs (design/research/tickets) — not committed for now
+docs/
+*.zip
