@@ -16,6 +16,7 @@
 
 import { generateText, type LanguageModel } from "ai";
 import type { RawChunk } from "@/lib/rag/chunking";
+import { SERIES_PRIMER } from "./primer";
 
 export type ContextualPrefix = {
   chunkIndex: number;
@@ -104,8 +105,21 @@ async function contextualizeOne(opts: {
         content: [
           {
             type: "text",
-            // Document block — prompt-cached. Keep header + body deterministic:
-            // any byte change invalidates every downstream cache read.
+            // Primer block — cached with its own breakpoint. Byte-identical
+            // across every chapter, so this block cache-reads across the entire
+            // ingest (written once on the very first chunk, read thereafter).
+            // Also serves as "padding" to lift short chapters above Haiku 4.5's
+            // 4096-token minimum cacheable prefix.
+            text: SERIES_PRIMER,
+            providerOptions: {
+              anthropic: { cacheControl: { type: "ephemeral", ttl: "1h" } },
+            },
+          },
+          {
+            type: "text",
+            // Document block — cached with its own breakpoint. Byte-identical
+            // across every chunk within the same chapter, so this block
+            // cache-reads 7–9 times per chapter after the first chunk writes it.
             text: `<document title=${JSON.stringify(chapterHeader)}>\n${chapterText}\n</document>`,
             providerOptions: {
               anthropic: { cacheControl: { type: "ephemeral", ttl: "1h" } },

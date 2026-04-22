@@ -294,6 +294,9 @@ async function ingestChunksPhase(
     console.log(
       `\n[chunks] dry-run complete — ${target.length} chapters, ${totalChunks} chunks, measured cost $${estimateCost(usage).toFixed(4)}`,
     );
+    console.log(
+      `[chunks] token spend: noCache=${usage.context.noCacheInputTokens} cacheRead=${usage.context.cacheReadTokens} cacheWrite=${usage.context.cacheWriteTokens} output=${usage.context.outputTokens} embed=${usage.embedTokens}`,
+    );
     return;
   }
 
