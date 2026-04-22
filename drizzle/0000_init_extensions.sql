@@ -1,5 +1,15 @@
 -- Hand-authored migration for features Drizzle can't model natively.
--- Run after `drizzle-kit migrate`.
+--
+-- Ordering: the generated Drizzle migration references `vector(1536)` columns,
+-- so `CREATE EXTENSION vector` MUST exist before `drizzle-kit migrate` runs.
+-- The `ALTER TABLE` + `CREATE INDEX` statements below reference `chunks` and
+-- `summaries` which are created by the Drizzle migration, so they must run
+-- after. The file is idempotent (IF NOT EXISTS everywhere) — run it once
+-- before migrate for the extensions, then once after for the rest:
+--
+--   psql "$DATABASE_URL_UNPOOLED" -c 'CREATE EXTENSION IF NOT EXISTS vector; CREATE EXTENSION IF NOT EXISTS pg_trgm;'
+--   pnpm db:migrate
+--   psql "$DATABASE_URL_UNPOOLED" -f drizzle/0000_init_extensions.sql
 
 CREATE EXTENSION IF NOT EXISTS vector;
 CREATE EXTENSION IF NOT EXISTS pg_trgm;

@@ -11,6 +11,14 @@ import {
   timestamp,
 } from "drizzle-orm/pg-core";
 
+// Chapter classification. Drives reading-position spoiler filtering and
+// retrieval pre-filters. `main` = canonical plot, `side_story` = narrative
+// side content (An Ordinary Person's Daily Life, In Modern Day, That Corner,
+// Daily Life in Cordu), `bonus` = non-narrative author material (afterwords,
+// future WeChat author-notes import).
+export const CONTENT_KINDS = ["main", "side_story", "bonus"] as const;
+export type ContentKind = (typeof CONTENT_KINDS)[number];
+
 // pgvector type shim — 1536-dim matches OpenAI text-embedding-3-small.
 // Swap dim when switching to Qwen3-Embedding-8B (4096).
 const vector = (name: string, { dimensions }: { dimensions: number }) =>
@@ -41,6 +49,9 @@ export const chapters = pgTable(
     chapterNum: integer("chapter_num").notNull(),
     chapterTitle: text("chapter_title").notNull(),
     rawText: text("raw_text").notNull(),
+    contentKind: text("content_kind", { enum: CONTENT_KINDS })
+      .notNull()
+      .default("main"),
   },
   (t) => [uniqueIndex("chapters_book_chapter_idx").on(t.bookId, t.chapterNum)],
 );
@@ -62,6 +73,11 @@ export const chunks = pgTable(
     // (Drizzle doesn't model tsvector natively — handled in migration)
     embedding: vector("embedding", { dimensions: 1536 }).notNull(),
     tokenCount: integer("token_count").notNull(),
+    // Denormalized from chapters.content_kind so retrieval can pre-filter
+    // without joining (matches the bookId/chapterNum denormalization above).
+    contentKind: text("content_kind", { enum: CONTENT_KINDS })
+      .notNull()
+      .default("main"),
     meta: jsonb("meta").$type<Record<string, unknown>>().default({}),
   },
   (t) => [

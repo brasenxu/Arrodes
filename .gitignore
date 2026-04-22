@@ -62,3 +62,4 @@ eval-runs/
 # project docs (design/research/tickets) — not committed for now
 docs/
 *.zip
+.env*.local
