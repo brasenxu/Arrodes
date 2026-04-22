@@ -2,7 +2,7 @@
   "_notes": [
     "Seed set for ticket 004. Covers both LOTM1 and COI — retrieval spans both books, so both casts need pre-merged aliases to prevent NER fragmentation.",
     "All entries have is_spoiler=0. Entity-level reveal gating is deferred to ticket 017; chunk-level reading-position filter is the only spoiler mechanism.",
-    "Pathway convention: one entity per pathway (22 total). Sequence 9 tier names (Seer, Spectator, Sailor, Mystery Pryer) are folded in as aliases of their parent pathway.",
+    "Pathway convention: one entity per pathway (22 total). Sequence 9 tier names (Seer, Spectator, Sailor, Mystery Pryer, Apprentice, Prisoner, Sleepless) are folded in as aliases of their parent pathway. The Sequence 0 tier title is always the pathway name itself (e.g., SEQ0 of White Tower Pathway is 'White Tower'); the deity currently or historically holding that position is recorded separately in meta.sequence_0_deity.",
     "meta.book indicates primary appearance; 'both' = cross-book recurring. meta.pathway is an NER hint, not authoritative."
   ],
   "entities": [
@@ -31,7 +31,7 @@
         "King of Yellow and Black"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "pathway": "Fool", "tarot_club": "The Fool" }
+      "meta": { "book": "both", "pathway": "Fool", "sequence": 0, "tarot_club": "The Fool" }
     },
     {
       "canonical_name": "Audrey Hall",
@@ -57,7 +57,13 @@
         "Lord Wilson"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "pathway": "Tyrant", "pathway_note": "Alger is on Tyrant Pathway (Sailor tier); his Tarot Club codename happens to be The Hanged Man but that's unrelated to pathway", "tarot_club": "The Hanged Man" }
+      "meta": {
+        "book": "both",
+        "pathway": "Tyrant",
+        "secondary_pathway": "Hanged Man",
+        "pathway_note": "Started on Tyrant Pathway (SEQ9 Sailor tier). By end of Circle of Inevitability, switched to Hanged Man Pathway (SEQ2 Profane Presbyter). Tarot Club codename 'The Hanged Man' pre-existed the pathway switch and isn't derived from it.",
+        "tarot_club": "The Hanged Man"
+      }
     },
     {
       "canonical_name": "Derrick Berg",
@@ -133,6 +139,25 @@
       "meta": { "book": "lotm1", "tarot_club": "Judgement" }
     },
     {
+      "canonical_name": "Sharron",
+      "entity_type": "character",
+      "aliases": [
+        "Temperance",
+        "Miss Temperance",
+        "Miss Bodyguard",
+        "Ma'am Maryam",
+        "Madame Sharron"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Chained",
+        "tarot_club": "Temperance",
+        "affiliation": "Church of the Fool; Rose School of Thought Temperance Faction (former)",
+        "relation": "Student of Reinette Tinekerr"
+      }
+    },
+    {
       "canonical_name": "Azik Eggers",
       "entity_type": "character",
       "aliases": [
@@ -163,7 +188,7 @@
         "book": "lotm1",
         "pathway": "Death",
         "sequence": 0,
-        "secondary_pathway": "Red Priest (SEQ0)",
+        "red_priest_uniqueness_note": "Fused the Red Priest Pathway Uniqueness (via the River of Eternal Darkness distributary) into a brand-new Great Old One path — became a Half Great Old One; madness from the fusion contributed to his Pale Era defeat. Not a second SEQ0 on Red Priest — framing should be 'absorbed Red Priest Uniqueness into Half Great Old One path'.",
         "status": "deceased (Pale Era; killed by Seven Orthodox Gods)",
         "affiliation": "Eggers Family; Balam Empire (founder); Rose Redemption (former)",
         "relation": "Father of Azik Eggers. Left part of his soul in Azik for future resurrection.",
@@ -245,10 +270,18 @@
         "Angel of Time",
         "God of Trickery",
         "God of Mischief",
-        "God of Deceit"
+        "God of Deceit",
+        "Dual-Pathway True God"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "pathway": "Error", "sequence": 0, "note": "Mr. A is NOT Amon — see separate Mr. A entry" }
+      "meta": {
+        "book": "both",
+        "pathway": "Error",
+        "sequence": 0,
+        "secondary_pathway": "Door",
+        "uniqueness_note": "Born a SEQ1 Worm of Time with the Error Uniqueness; later accommodated the Door Uniqueness and a Key of Stars Beyonder characteristic, ascending to Dual-Pathway True God.",
+        "note": "Mr. A is NOT Amon — see separate Mr. A entry"
+      }
     },
     {
       "canonical_name": "Mr. A",
@@ -262,7 +295,47 @@
         "pathway": "Hanged Man",
         "sequence": 5,
         "affiliation": "Aurora Order (one of 22 Oracles); worshipped the True Creator (Adam)",
-        "note": "Distinct from Amon. Sequence 5 Beyonder of Hanged Man / Secrets Suppliant Pathway. Killed by Antigonus June 1350."
+        "death": "June 1350. Killed by Klein's trap — forced observation of the mad Half-Fool Antigonus caused instant mental death; body mutated and fused with the historical projection Senor and Creeping Hunger into a gigantic mushroom. The proximate agent is Klein's trap, not Antigonus acting directly.",
+        "note": "Distinct from Amon. Sequence 5 Beyonder of Hanged Man / Secrets Suppliant Pathway."
+      }
+    },
+    {
+      "canonical_name": "Antigonus",
+      "entity_type": "character",
+      "aliases": [
+        "The Half-Fool",
+        "An Xiaotian",
+        "Miracle Master",
+        "Miracle Invoker",
+        "King of Angels of the Fool Pathway",
+        "Founder of the Nation of the Evernight"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Fool",
+        "sequence": 2,
+        "former_sequence": 1,
+        "affiliation": "Antigonus Family (deceased); Church of the Evernight Goddess; Tudor Empire (former); Solomon Empire (former); Nation of the Evernight (founder)",
+        "note": "Earned 'The Half-Fool' via a fate-manipulation ritual with Amon. Demoted from SEQ1 to SEQ2 by Klein upon Klein's acquisition of the Fool Uniqueness. His mad state is the 'mythical projection' that killed Mr. A in Klein's Foggy Town trap. Descended from Demonic Wolf Flegrea bloodline. The Antigonus Family's Notebook drives major LOTM1 plot arcs."
+      }
+    },
+    {
+      "canonical_name": "Ince Zangwill",
+      "entity_type": "character",
+      "aliases": [
+        "Former Archbishop of Evernight"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Death",
+        "former_sequence": "5 (Gatekeeper)",
+        "secondary_pathway": "Darkness",
+        "sequence": "4 (Nightwatcher, after pathway switch)",
+        "affiliation": "Church of the Evernight Goddess (former); allied with Mr. A, Panatiya, Sauron-Einhorn-Medici",
+        "equipment": "Sealed Artifact 0-08 (Quill of Alzuhod); umbilical cord from True Creator's Spawn",
+        "note": "Blind in one eye. Fugitive from Evernight after his archbishop era."
       }
     },
     {
@@ -327,6 +400,200 @@
       ],
       "is_spoiler": 0,
       "meta": { "book": "lotm1", "pathway": "Black Emperor", "sequence": 0, "note": "Modern-day identity Huang Tao is distinct from Zhou Mingrui — both are transmigrators, Huang Tao is Zhou Mingrui's superior at Intis Group" }
+    },
+    {
+      "canonical_name": "Evernight Goddess",
+      "entity_type": "character",
+      "aliases": [
+        "Amanises",
+        "Goddess of Misfortune",
+        "Lady of Crimson",
+        "Eternal Darkness",
+        "Nether Lord",
+        "Mother of Concealment",
+        "Empress of Misfortune and Horror",
+        "Mistress of Repose and Silence"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Darkness",
+        "sequence": 0,
+        "status": "alive",
+        "affiliation": "Haoli Lineage; Church of the Eternal Darkness; one of the Seven Orthodox Gods",
+        "species": "Demonic Wolf (former human)",
+        "note": "Formed from the eye of the Original Creator. Controls SEQ0 Darkness + multiple SEQ1 authorities across Darkness, Death, Twilight Giant. Divine Kingdom: Tenebrous Heaven. Sealed Antigonus in Foggy Town."
+      }
+    },
+    {
+      "canonical_name": "Lord of Storms",
+      "entity_type": "character",
+      "aliases": [
+        "Leodero",
+        "Wind Angel",
+        "King of the Skies",
+        "Emperor of the Seas",
+        "Lord of the Calamity",
+        "God of the Storms"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Tyrant",
+        "sequence": 0,
+        "status": "deceased (July 1360, during the Apocalypse)",
+        "affiliation": "Church of the Lord of Storms; one of the Seven Orthodox Gods",
+        "note": "Former Wind Angel under the Ancient Sun God (Third Epoch). Patron of sailors and Loen Kingdom. Died striking the Mother Goddess of Depravity."
+      }
+    },
+    {
+      "canonical_name": "Lilith",
+      "entity_type": "character",
+      "aliases": [
+        "Sanguine Ancestor Lilith",
+        "Earth Mother",
+        "The Source of Life",
+        "The Mother of All Things"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Mother",
+        "sequence": 0,
+        "secondary_pathway": "Moon",
+        "secondary_sequence": 0,
+        "former_pathway": "Demoness",
+        "status": "deceased (Summer 1360; died willingly to Lumian Lee to become a symbolic weapon against the Mother Goddess of Depravity)",
+        "note": "One of the eight Ancient Gods (Second Epoch). Sanguines' ancestor and god. Faked her death and took on the identity/destiny of Omebella (the original Earth Mother), ascending to Mother SEQ0 and becoming the deity of the Church of the Earth Mother. Symbol: bat wings over a crimson moon."
+      }
+    },
+    {
+      "canonical_name": "Eternal Blazing Sun",
+      "entity_type": "character",
+      "aliases": [
+        "Aucuses",
+        "White Angel",
+        "Inextinguishable Light",
+        "Embodiment of Order",
+        "God of Contracts",
+        "Guardian of Businesses",
+        "Father of all Life"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Sun",
+        "sequence": 0,
+        "affiliation": "Church of the Eternal Blazing Sun; one of the Seven Orthodox Gods",
+        "note": "Formerly one of eight Kings of Angels under the Ancient Sun God (Third Epoch). Distinct from the Ancient Sun God — became SEQ0 Sun after the Ancient Sun God's downfall."
+      }
+    },
+    {
+      "canonical_name": "God of Combat",
+      "entity_type": "character",
+      "aliases": [
+        "Badheil",
+        "God of Dawn",
+        "Great Knight God",
+        "Master of War",
+        "Patron of Guns",
+        "Twilight of All Things"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Twilight Giant",
+        "sequence": 0,
+        "status": "deceased (1352, killed in 1350 World War by Evernight Goddess and Lilith-as-Earth-Mother)",
+        "affiliation": "Church of the God of Combat; Rose Redemption (former); one of the Seven Orthodox Gods",
+        "note": "Second Epoch God of Dawn (subsidiary to Giant King Aurmir); Third Epoch apotheosis to SEQ0 Twilight Giant; Fourth Epoch established Church; Fifth Epoch killed 1352."
+      }
+    },
+    {
+      "canonical_name": "God of Knowledge and Wisdom",
+      "entity_type": "character",
+      "aliases": [
+        "Herabergen",
+        "Heraberg",
+        "Dragon of Betrayal",
+        "Old Dragon",
+        "Wisdom Angel",
+        "Dragon of Wisdom",
+        "The Tower of Knowledge",
+        "The Embodiment of Reason",
+        "The Scholar that Cognizes Everything"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "White Tower",
+        "sequence": 0,
+        "affiliation": "Church of the God of Knowledge and Wisdom; one of the Seven Orthodox Gods"
+      }
+    },
+    {
+      "canonical_name": "God of Steam and Machinery",
+      "entity_type": "character",
+      "aliases": [
+        "Yuggs Stiano",
+        "God of Craftsmanship",
+        "The Artisan",
+        "True Blessing",
+        "Embodiment of Essence",
+        "Guardian of Craftsmen",
+        "Brilliance of Technology"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Paragon",
+        "sequence": 0,
+        "secondary_pathway": "Hermit",
+        "affiliation": "Church of the God of Steam and Machinery; one of the Seven Orthodox Gods",
+        "note": "Changed title from 'God of Craftsmanship' to 'God of Steam and Machinery' in the Fifth Epoch following Roselle Gustav's Industrial Revolution."
+      }
+    },
+    {
+      "canonical_name": "Primordial Demoness",
+      "entity_type": "character",
+      "aliases": [
+        "Cheek",
+        "Primordial",
+        "Primordial One",
+        "Chaos Demoness",
+        "False Deity",
+        "The Source of All Catastrophes",
+        "The Demoness who controls Chaos"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Demoness",
+        "sequence": 0,
+        "status": "deceased; exists as personality inside Lumian Lee's dream (mayor of his dream city)",
+        "affiliation": "Demoness Sect (principal deity)",
+        "note": "Joined Salinger in the Pale Era. Honorific: 'The Female Body of the Primordial God Almighty'."
+      }
+    },
+    {
+      "canonical_name": "Flegrea",
+      "entity_type": "character",
+      "aliases": [
+        "Annihilation Demonic Wolf Flegrea",
+        "Evernight Demonic Wolf",
+        "King of Demonic Wolves"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Darkness",
+        "secondary_pathway": "Fool",
+        "uniqueness_note": "Held Darkness Uniqueness + 3 SEQ1 characteristics; Fool Uniqueness + 1 SEQ1 characteristic",
+        "status": "deceased (Second Epoch, Early Era of Fire; conspiracy of Sanguine Ancestor Lilith and Mutated King Kvastir)",
+        "affiliation": "Demonic Wolves; Ancient Gods",
+        "origin": "Forsaken Land of the Gods (Eastern Continent)",
+        "note": "Antigonus descends from Flegrea's bloodline — relevant to Fool Pathway origin lore."
+      }
     },
     {
       "canonical_name": "Lumian Lee",
@@ -447,7 +714,68 @@
         "Church of Evernight"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "patron_deity": "Evernight Goddess" }
+      "meta": { "book": "both", "patron_deity": "Evernight Goddess (Amanises)", "orthodox": true }
+    },
+    {
+      "canonical_name": "Church of the Lord of Storms",
+      "entity_type": "organization",
+      "aliases": [
+        "Storms Church",
+        "Church of Storms"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "patron_deity": "Lord of Storms (Leodero)", "orthodox": true, "note": "Controls Tyrant Pathway. Alger Wilson was formerly a Cardinal here." }
+    },
+    {
+      "canonical_name": "Church of the God of Steam and Machinery",
+      "entity_type": "organization",
+      "aliases": [
+        "Steam Church",
+        "Church of Steam and Machinery",
+        "Church of the God of Craftsmanship"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "patron_deity": "God of Steam and Machinery (Yuggs Stiano)", "orthodox": true, "note": "Parent of Machinery Hivemind. Formerly 'Church of the God of Craftsmanship'." }
+    },
+    {
+      "canonical_name": "Church of the Eternal Blazing Sun",
+      "entity_type": "organization",
+      "aliases": [
+        "Sun Church",
+        "Church of the Sun"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "patron_deity": "Eternal Blazing Sun (Aucuses)", "orthodox": true }
+    },
+    {
+      "canonical_name": "Church of the Earth Mother",
+      "entity_type": "organization",
+      "aliases": [
+        "Earth Mother Church",
+        "Church of Mother"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "patron_deity": "Earth Mother (Lilith, under the stolen Omebella identity)", "orthodox": true }
+    },
+    {
+      "canonical_name": "Church of the God of Combat",
+      "entity_type": "organization",
+      "aliases": [
+        "Combat Church",
+        "Church of Combat"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "patron_deity": "God of Combat (Badheil)", "orthodox": true, "note": "Established Fourth Epoch. Supported Feysac Empire." }
+    },
+    {
+      "canonical_name": "Church of the God of Knowledge and Wisdom",
+      "entity_type": "organization",
+      "aliases": [
+        "Knowledge Church",
+        "Church of Knowledge and Wisdom"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "patron_deity": "God of Knowledge and Wisdom (Herabergen)", "orthodox": true }
     },
     {
       "canonical_name": "Aurora Order",
@@ -457,7 +785,17 @@
         "Order of Aurora"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both" }
+      "meta": { "book": "both", "note": "22 Oracles; Mr. A was one." }
+    },
+    {
+      "canonical_name": "Twilight Hermit Order",
+      "entity_type": "organization",
+      "aliases": [
+        "Hermit Order",
+        "Twilight Hermits"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "both", "founded_by": "Adam (True Creator)", "note": "Fourth/Fifth Epoch faction. Not the same as Hermit Pathway." }
     },
     {
       "canonical_name": "Machinery Hivemind",
@@ -478,7 +816,87 @@
         "The Rose School of Thought"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "coi" }
+      "meta": { "book": "coi", "factions": "Temperance Faction (Reinette); Indulgence Faction" }
+    },
+    {
+      "canonical_name": "Antigonus Family",
+      "entity_type": "organization",
+      "aliases": [
+        "House of Antigonus"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "status": "destroyed", "note": "Tudor Empire aristocratic angel family that controlled the Fool Pathway. Eliminated by the Church of the Evernight Goddess during the Fourth Epoch. The Antigonus Family's Notebook is a major LOTM1 plot driver." }
+    },
+    {
+      "canonical_name": "Medici Family",
+      "entity_type": "organization",
+      "aliases": [
+        "House of Medici"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "coi", "ancestor": "Medici (Red Angel)", "note": "Albus Medici belongs to this family." }
+    },
+    {
+      "canonical_name": "Eggers Family",
+      "entity_type": "organization",
+      "aliases": [
+        "House of Eggers"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "lotm1", "founder": "Salinger", "note": "Azik Eggers is of this family." }
+    },
+    {
+      "canonical_name": "Iron and Blood Cross Order",
+      "entity_type": "organization",
+      "aliases": [
+        "Iron and Blood Cross",
+        "Cross Order"
+      ],
+      "is_spoiler": 0,
+      "meta": { "book": "coi", "note": "Albus Medici is a member. Operates in the Trier region." }
+    },
+    {
+      "canonical_name": "Demoness Sect",
+      "entity_type": "organization",
+      "aliases": [
+        "Demoness Family"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "patron_deity": "Primordial Demoness (Cheek)",
+        "status": "destroyed after Primordial Demoness's death; remnants merged with Sick Church into Church of the Ruler of Calamity",
+        "note": "Fourth Epoch was 'Demoness Family'; later Demoness Sect."
+      }
+    },
+    {
+      "canonical_name": "Sick Church",
+      "entity_type": "organization",
+      "aliases": [
+        "Church of Sickness"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "coi",
+        "leader": "Jenna / Celia Bello (Pope)",
+        "note": "Distinct from Demoness Sect. Remnants merged with Demoness Sect into Church of the Ruler of Calamity after the Primordial Demoness's death."
+      }
+    },
+    {
+      "canonical_name": "Balam Empire",
+      "entity_type": "organization",
+      "aliases": [
+        "West Balam",
+        "East Balam"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "lotm1",
+        "founder": "Salinger (Underworld Emperor)",
+        "ruler": "Death Consul Azik Eggers (historically)",
+        "location": "Southern Continent",
+        "note": "Divided into West Balam and East Balam after the War of the Four Emperors."
+      }
     },
     {
       "canonical_name": "Fool",
@@ -491,7 +909,7 @@
         "Pathway of the Seer"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0": "Lord of Mysteries", "sequence_9": "Seer", "note": "Seer is Sequence 9 tier name; folded in as alias" }
+      "meta": { "sequence_0_deity": "Klein Moretti (titled Lord of Mysteries)", "sequence_9": "Seer", "note": "Seer is SEQ9 tier name; folded in as alias." }
     },
     {
       "canonical_name": "Sun",
@@ -501,7 +919,7 @@
         "Pathway of the Sun"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0": "Sun God" }
+      "meta": { "sequence_0_deity": "Eternal Blazing Sun (Aucuses)", "note": "Formerly held by the Ancient Sun God (Third Epoch) before Aucuses took the SEQ0 seat." }
     },
     {
       "canonical_name": "Tyrant",
@@ -514,7 +932,7 @@
         "Pathway of the Sailor"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_9": "Sailor", "note": "Sailor is Sequence 9 tier name of Tyrant Pathway; folded in as alias. Alger Wilson is on this pathway." }
+      "meta": { "sequence_0_deity": "Lord of Storms (Leodero, deceased 1360)", "sequence_9": "Sailor", "note": "Sailor is SEQ9 tier name; folded in as alias. Alger Wilson was on this pathway before switching to Hanged Man in COI." }
     },
     {
       "canonical_name": "Red Priest",
@@ -525,7 +943,7 @@
         "War Pathway"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0": "War God" }
+      "meta": { "sequence_0_deity": "War God" }
     },
     {
       "canonical_name": "Hanged Man",
@@ -537,7 +955,7 @@
         "Secrets Suppliant Pathway"
       ],
       "is_spoiler": 0,
-      "meta": { "note": "Also called the Secrets Suppliant Pathway. Mr. A was on this pathway (Sequence 5). Distinct from Alger Wilson's Tarot Club codename." }
+      "meta": { "note": "Also called Secrets Suppliant. Mr. A was on this pathway (SEQ5). Alger Wilson switched to this pathway in COI." }
     },
     {
       "canonical_name": "Hermit",
@@ -549,7 +967,7 @@
         "Mystery Pryer Pathway"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_9": "Mystery Pryer", "note": "Distinct from Visionary Pathway. Cattleya (The Hermit in Tarot Club) is on this pathway." }
+      "meta": { "sequence_9": "Mystery Pryer", "note": "Distinct from Visionary Pathway. Cattleya (Tarot Club 'The Hermit') is on this pathway." }
     },
     {
       "canonical_name": "Visionary",
@@ -562,7 +980,7 @@
         "Pathway of the Spectator"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0": "Visionary", "sequence_9": "Spectator", "note": "Spectator is Sequence 9 tier name; folded in as alias. Adam and Audrey Hall are on this pathway." }
+      "meta": { "sequence_0_deity": "Adam (True Creator)", "sequence_9": "Spectator", "note": "Spectator is SEQ9 tier name. Adam and Audrey Hall are on this pathway." }
     },
     {
       "canonical_name": "Door",
@@ -575,7 +993,7 @@
         "Pathway of the Apprentice"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_9": "Apprentice", "note": "Apprentice is Sequence 9 tier name; folded in as alias. Fors Wall is on this pathway." }
+      "meta": { "sequence_9": "Apprentice", "note": "Apprentice is SEQ9 tier name. Fors Wall is on this pathway. Amon accommodated the Door Uniqueness as secondary." }
     },
     {
       "canonical_name": "Error",
@@ -585,7 +1003,7 @@
         "Pathway of Error"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0": "Error", "note": "Amon's pathway" }
+      "meta": { "sequence_0_deity": "Amon" }
     },
     {
       "canonical_name": "White Tower",
@@ -595,7 +1013,7 @@
         "Pathway of the White Tower"
       ],
       "is_spoiler": 0,
-      "meta": {}
+      "meta": { "sequence_0_deity": "God of Knowledge and Wisdom (Herabergen)" }
     },
     {
       "canonical_name": "Darkness",
@@ -608,7 +1026,7 @@
         "Pathway of the Sleepless"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_9": "Sleepless", "note": "Sleepless is Sequence 9 tier name; folded in as alias. Leonard Mitchell and Dunn Smith are on this pathway." }
+      "meta": { "sequence_0_deity": "Evernight Goddess / Amanises (titled Eternal Darkness)", "sequence_9": "Sleepless", "note": "Sleepless is SEQ9 tier name. Leonard Mitchell, Dunn Smith, and Ince Zangwill (after switch) are on this pathway." }
     },
     {
       "canonical_name": "Death",
@@ -618,7 +1036,7 @@
         "Pathway of Death"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0": "Death (Salinger)", "note": "Sequence 0 'Death' is Salinger (character entity). Azik Eggers is on this pathway at SEQ2 Death Consul; he is Salinger's son but is NOT Death." }
+      "meta": { "sequence_0_deity": "Salinger (titled Death, deceased)", "note": "SEQ0 title is 'Death' (= pathway name). Salinger held this title. Azik Eggers is on this pathway at SEQ2 Death Consul; he is Salinger's son but is NOT Death." }
     },
     {
       "canonical_name": "Twilight Giant",
@@ -628,7 +1046,7 @@
         "Pathway of the Twilight Giant"
       ],
       "is_spoiler": 0,
-      "meta": { "note": "Ryan Vitia is on this pathway." }
+      "meta": { "sequence_0_deity": "God of Combat (Badheil, deceased 1352)", "note": "Former SEQ0 Giant King Aurmir (Second Epoch). Ryan Vitia is on this pathway." }
     },
     {
       "canonical_name": "Demoness",
@@ -638,7 +1056,7 @@
         "Pathway of the Demoness"
       ],
       "is_spoiler": 0,
-      "meta": { "note": "Franca Roland and Jenna are on this pathway." }
+      "meta": { "sequence_0_deity": "Primordial Demoness (Cheek)", "note": "Franca Roland and Jenna are on this pathway. Lilith was formerly on this pathway before ascending to Mother SEQ0." }
     },
     {
       "canonical_name": "Paragon",
@@ -648,7 +1066,7 @@
         "Pathway of the Paragon"
       ],
       "is_spoiler": 0,
-      "meta": {}
+      "meta": { "sequence_0_deity": "God of Steam and Machinery (Yuggs Stiano)" }
     },
     {
       "canonical_name": "Wheel of Fortune",
@@ -659,7 +1077,7 @@
         "Fortune Pathway"
       ],
       "is_spoiler": 0,
-      "meta": { "note": "Will Auceptin is on this pathway." }
+      "meta": { "note": "Will Auceptin is on this pathway as Angel of Mercury." }
     },
     {
       "canonical_name": "Mother",
@@ -670,7 +1088,7 @@
         "Earth Mother Pathway"
       ],
       "is_spoiler": 0,
-      "meta": {}
+      "meta": { "sequence_0_deity": "Lilith (under stolen Omebella 'Earth Mother' identity; deceased 1360)" }
     },
     {
       "canonical_name": "Moon",
@@ -680,7 +1098,7 @@
         "Pathway of the Moon"
       ],
       "is_spoiler": 0,
-      "meta": { "note": "Emlyn White is on this pathway." }
+      "meta": { "sequence_0_deity": "Lilith (held Moon SEQ0 in parallel with Mother SEQ0; deceased 1360)", "note": "Emlyn White is on this pathway." }
     },
     {
       "canonical_name": "Abyss",
@@ -703,7 +1121,7 @@
         "Pathway of the Prisoner"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_9": "Prisoner", "note": "Prisoner is Sequence 9 tier name; folded in as alias. Reinette Tinekerr is on this pathway." }
+      "meta": { "sequence_9": "Prisoner", "note": "Prisoner is SEQ9 tier name. Reinette Tinekerr and Sharron are on this pathway." }
     },
     {
       "canonical_name": "Black Emperor",
@@ -713,7 +1131,7 @@
         "Pathway of the Black Emperor"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0": "Black Emperor", "note": "Roselle Gustav is on this pathway." }
+      "meta": { "sequence_0_deity": "Roselle Gustav" }
     },
     {
       "canonical_name": "Justiciar",
