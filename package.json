@@ -17,6 +17,7 @@
     "seed:entities": "tsx scripts/seed-entities.ts",
     "eval": "tsx scripts/eval.ts",
     "eval:validate": "tsx scripts/validate-eval.ts",
+    "test:retrieval": "tsx scripts/test-retrieval.ts",
     "test": "vitest run",
     "test:watch": "vitest"
   },

@@ -2,6 +2,46 @@ import { sql } from "drizzle-orm";
 import { db } from "@/lib/db/client";
 import type { BookId, ReadingPosition, RetrievedChunk } from "./types";
 
+// Question-style stopwords + common filler. Keeps content nouns (names,
+// places, pathway terms) intact. Intentionally small — `to_tsquery('english',…)`
+// already applies stemming + Postgres's own stopword dictionary on top.
+const STOPWORDS: ReadonlySet<string> = new Set([
+  "a","an","the",
+  "of","in","on","for","to","and","or","but","with","by","at","from","into","about","across","as","if","so","then","than","also",
+  "is","are","was","were","be","been","being",
+  "has","have","had","do","does","did",
+  "will","would","could","should","can","may","might",
+  "what","who","whom","whose","when","where","why","how","which",
+  "that","this","these","those",
+  "he","she","it","they","them","him","his","her","hers","its","their","theirs",
+  "i","me","my","mine","we","our","ours","us","you","your","yours",
+  "list","summarize","summarise","describe","explain","tell","give","show","mention","name",
+  "every","any","some","all","each","both","few","many",
+]);
+
+/**
+ * Tokenises a natural-language question into an OR-joined `to_tsquery` string.
+ * Returns null when the query has no content tokens (all stopwords).
+ *
+ * Why not `plainto_tsquery`? It ANDs every stemmed term, so questions like
+ * "Summarize chapter 1 of Lord of the Mysteries." require every stem in a
+ * single chunk and return zero hits (ticket 009 probe). OR-joining lets sparse
+ * contribute to RRF for natural-language queries.
+ */
+export function buildTsquery(queryText: string): string | null {
+  const tokens = queryText.toLowerCase().match(/[a-z0-9]+/g) ?? [];
+  const seen = new Set<string>();
+  const kept: string[] = [];
+  for (const t of tokens) {
+    if (t.length < 2) continue;
+    if (STOPWORDS.has(t)) continue;
+    if (seen.has(t)) continue;
+    seen.add(t);
+    kept.push(t);
+  }
+  return kept.length === 0 ? null : kept.join(" | ");
+}
+
 /**
  * Hybrid search: dense (pgvector <=>) ⊕ sparse (tsvector ts_rank) combined via
  * Reciprocal Rank Fusion. Pre-filters on reading_position (spoiler control)
@@ -32,6 +72,21 @@ export async function hybridSearch(args: {
     sql` OR `,
   );
 
+  // Content-token OR query. Null ⇒ sparse branch contributes nothing (still
+  // shape-compatible with the UNION so RRF keeps evaluating).
+  const tsqueryStr = buildTsquery(args.queryText);
+  const sparseCte = tsqueryStr
+    ? sql`
+      SELECT id, ROW_NUMBER() OVER (
+        ORDER BY ts_rank(tsv, to_tsquery('english', ${tsqueryStr})) DESC
+      ) AS r
+      FROM chunks
+      WHERE tsv @@ to_tsquery('english', ${tsqueryStr})
+        AND (${bookFilter})
+      LIMIT 20
+    `
+    : sql`SELECT NULL::int AS id, NULL::bigint AS r WHERE FALSE`;
+
   const result = await db.execute<{
     id: number;
     book_id: BookId;
@@ -49,15 +104,7 @@ export async function hybridSearch(args: {
       ORDER BY embedding <=> ${embedLiteral}::vector
       LIMIT 20
     ),
-    sparse AS (
-      SELECT id, ROW_NUMBER() OVER (
-        ORDER BY ts_rank(tsv, plainto_tsquery('english', ${args.queryText})) DESC
-      ) AS r
-      FROM chunks
-      WHERE tsv @@ plainto_tsquery('english', ${args.queryText})
-        AND (${bookFilter})
-      LIMIT 20
-    ),
+    sparse AS (${sparseCte}),
     fused AS (
       SELECT id, SUM(1.0 / (60 + r)) AS score
       FROM (SELECT id, r FROM dense UNION ALL SELECT id, r FROM sparse) u
