@@ -28,10 +28,16 @@
         "Mr. Clown",
         "Daoist Zhou",
         "The Mysterious Ruler above the Gray Fog",
-        "King of Yellow and Black"
+        "King of Yellow and Black",
+        "Klein"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "pathway": "Fool", "sequence": 0, "tarot_club": "The Fool" }
+      "meta": {
+        "book": "both",
+        "pathway": "Fool",
+        "sequence": 0,
+        "tarot_club": "The Fool"
+      }
     },
     {
       "canonical_name": "Audrey Hall",
@@ -41,10 +47,15 @@
         "Miss Justice",
         "Miss Audrey",
         "Miss Pride",
-        "Backlund's Most Dazzling Gem"
+        "Backlund's Most Dazzling Gem",
+        "Audrey"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "pathway": "Visionary", "tarot_club": "Justice" }
+      "meta": {
+        "book": "both",
+        "pathway": "Visionary",
+        "tarot_club": "Justice"
+      }
     },
     {
       "canonical_name": "Alger Wilson",
@@ -54,7 +65,8 @@
         "Mr. Hanged Man",
         "Stormbringer Alger",
         "Captain of the Blue Avenger",
-        "Lord Wilson"
+        "Lord Wilson",
+        "Alger"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -72,10 +84,15 @@
         "The Sun",
         "Mr. Sun",
         "Little Sun",
-        "Elder Berg"
+        "Elder Berg",
+        "Derrick"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "pathway": "Sun", "tarot_club": "The Sun" }
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Sun",
+        "tarot_club": "The Sun"
+      }
     },
     {
       "canonical_name": "Emlyn White",
@@ -84,10 +101,15 @@
         "The Moon",
         "Mr. Moon",
         "Son of the Moon",
-        "Bai Ailin"
+        "Bai Ailin",
+        "Emlyn"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "pathway": "Moon", "tarot_club": "The Moon" }
+      "meta": {
+        "book": "both",
+        "pathway": "Moon",
+        "tarot_club": "The Moon"
+      }
     },
     {
       "canonical_name": "Fors Wall",
@@ -99,10 +121,15 @@
         "Margaret Taylor",
         "Slacker Without a Dream",
         "Salted Fish Without Dreams",
-        "Romance Queen"
+        "Romance Queen",
+        "Fors"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "pathway": "Door", "tarot_club": "The Magician" }
+      "meta": {
+        "book": "both",
+        "pathway": "Door",
+        "tarot_club": "The Magician"
+      }
     },
     {
       "canonical_name": "Leonard Mitchell",
@@ -111,10 +138,15 @@
         "The Star",
         "Mr. Star",
         "Dear Poet",
-        "Mr. Poet"
+        "Mr. Poet",
+        "Leonard"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "pathway": "Darkness", "tarot_club": "The Star" }
+      "meta": {
+        "book": "both",
+        "pathway": "Darkness",
+        "tarot_club": "The Star"
+      }
     },
     {
       "canonical_name": "Cattleya",
@@ -125,7 +157,11 @@
         "Madam Bewitching"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "pathway": "Hermit", "tarot_club": "The Hermit" }
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Hermit",
+        "tarot_club": "The Hermit"
+      }
     },
     {
       "canonical_name": "Xio Derecha",
@@ -133,10 +169,14 @@
       "aliases": [
         "Judgement",
         "Mr. Judgement",
-        "Miss Judgement"
+        "Miss Judgement",
+        "Xio"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "tarot_club": "Judgement" }
+      "meta": {
+        "book": "lotm1",
+        "tarot_club": "Judgement"
+      }
     },
     {
       "canonical_name": "Sharron",
@@ -205,7 +245,11 @@
         "Mr. Mercury"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "pathway": "Wheel of Fortune", "affiliation": "Church of the Fool; Life School of Thought" }
+      "meta": {
+        "book": "both",
+        "pathway": "Wheel of Fortune",
+        "affiliation": "Church of the Fool; Life School of Thought"
+      }
     },
     {
       "canonical_name": "Dunn Smith",
@@ -213,20 +257,29 @@
       "aliases": [
         "Captain Dunn",
         "Captain Smith",
-        "Deng En"
+        "Deng En",
+        "Dunn"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "pathway": "Darkness", "affiliation": "Nighthawks" }
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Darkness",
+        "affiliation": "Nighthawks"
+      }
     },
     {
       "canonical_name": "Old Neil",
       "entity_type": "character",
       "aliases": [
         "Neil Eskatt",
-        "Mr. Neil"
+        "Mr. Neil",
+        "Neil"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "affiliation": "Nighthawks" }
+      "meta": {
+        "book": "lotm1",
+        "affiliation": "Nighthawks"
+      }
     },
     {
       "canonical_name": "Rozanne Bansy",
@@ -236,7 +289,10 @@
         "Miss Rozanne"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "affiliation": "Nighthawks" }
+      "meta": {
+        "book": "lotm1",
+        "affiliation": "Nighthawks"
+      }
     },
     {
       "canonical_name": "Benson Moretti",
@@ -246,7 +302,10 @@
         "Big Brother Benson"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "relation": "Klein Moretti's elder brother" }
+      "meta": {
+        "book": "lotm1",
+        "relation": "Klein Moretti's elder brother"
+      }
     },
     {
       "canonical_name": "Melissa Moretti",
@@ -256,7 +315,10 @@
         "Little Melissa"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "relation": "Klein Moretti's younger sister" }
+      "meta": {
+        "book": "lotm1",
+        "relation": "Klein Moretti's younger sister"
+      }
     },
     {
       "canonical_name": "Amon",
@@ -354,7 +416,12 @@
         "Child of the Creator"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "pathway": "Visionary", "sequence": 0, "founder_of": "Twilight Hermit Order" }
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Visionary",
+        "sequence": 0,
+        "founder_of": "Twilight Hermit Order"
+      }
     },
     {
       "canonical_name": "Medici",
@@ -396,10 +463,16 @@
         "Son of Steam",
         "Black Emperor",
         "Knowledge Emperor",
-        "First Consul of the Intis Republic"
+        "First Consul of the Intis Republic",
+        "Roselle"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "pathway": "Black Emperor", "sequence": 0, "note": "Modern-day identity Huang Tao is distinct from Zhou Mingrui — both are transmigrators, Huang Tao is Zhou Mingrui's superior at Intis Group" }
+      "meta": {
+        "book": "lotm1",
+        "pathway": "Black Emperor",
+        "sequence": 0,
+        "note": "Modern-day identity Huang Tao is distinct from Zhou Mingrui — both are transmigrators, Huang Tao is Zhou Mingrui's superior at Intis Group"
+      }
     },
     {
       "canonical_name": "Evernight Goddess",
@@ -611,10 +684,15 @@
         "Calamity of Destruction",
         "Ruler of Calamity",
         "Dual-Pathway King of Angels",
-        "Seven of Wands"
+        "Seven of Wands",
+        "Lumian"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "coi", "tarot_club": "The Chariot (Major); formerly Seven of Wands (Minor)", "protagonist": true }
+      "meta": {
+        "book": "coi",
+        "tarot_club": "The Chariot (Major); formerly Seven of Wands (Minor)",
+        "protagonist": true
+      }
     },
     {
       "canonical_name": "Ryan Vitia",
@@ -624,7 +702,11 @@
         "Ryan"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "coi", "pathway": "Twilight Giant", "affiliation": "Machinery Hivemind" }
+      "meta": {
+        "book": "coi",
+        "pathway": "Twilight Giant",
+        "affiliation": "Machinery Hivemind"
+      }
     },
     {
       "canonical_name": "Reinette Tinekerr",
@@ -635,7 +717,11 @@
         "Angel of the Holy Spirit"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "coi", "pathway": "Chained", "affiliation": "Rose School of Thought" }
+      "meta": {
+        "book": "both",
+        "pathway": "Chained",
+        "affiliation": "Rose School of Thought"
+      }
     },
     {
       "canonical_name": "Franca Roland",
@@ -651,10 +737,15 @@
         "God of Disease",
         "Malady God Queen",
         "Hidden Blade",
-        "Two of Cups"
+        "Two of Cups",
+        "Franca"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "coi", "pathway": "Demoness", "tarot_club": "The Empress (Major); formerly Two of Cups (Minor)" }
+      "meta": {
+        "book": "coi",
+        "pathway": "Demoness",
+        "tarot_club": "The Empress (Major); formerly Two of Cups (Minor)"
+      }
     },
     {
       "canonical_name": "Jenna",
@@ -683,7 +774,10 @@
         "Tarot Gathering"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "founded_by": "Klein Moretti" }
+      "meta": {
+        "book": "both",
+        "founded_by": "Klein Moretti"
+      }
     },
     {
       "canonical_name": "Nighthawks",
@@ -694,7 +788,10 @@
         "Nighthawks Squad"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "parent": "Church of the Evernight Goddess" }
+      "meta": {
+        "book": "both",
+        "parent": "Church of the Evernight Goddess"
+      }
     },
     {
       "canonical_name": "Church of the Fool",
@@ -704,7 +801,10 @@
         "Order of the Fool"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "patron_deity": "Klein Moretti / The Fool" }
+      "meta": {
+        "book": "both",
+        "patron_deity": "Klein Moretti / The Fool"
+      }
     },
     {
       "canonical_name": "Church of the Evernight Goddess",
@@ -714,7 +814,11 @@
         "Church of Evernight"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "patron_deity": "Evernight Goddess (Amanises)", "orthodox": true }
+      "meta": {
+        "book": "both",
+        "patron_deity": "Evernight Goddess (Amanises)",
+        "orthodox": true
+      }
     },
     {
       "canonical_name": "Church of the Lord of Storms",
@@ -724,7 +828,12 @@
         "Church of Storms"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "patron_deity": "Lord of Storms (Leodero)", "orthodox": true, "note": "Controls Tyrant Pathway. Alger Wilson was formerly a Cardinal here." }
+      "meta": {
+        "book": "both",
+        "patron_deity": "Lord of Storms (Leodero)",
+        "orthodox": true,
+        "note": "Controls Tyrant Pathway. Alger Wilson was formerly a Cardinal here."
+      }
     },
     {
       "canonical_name": "Church of the God of Steam and Machinery",
@@ -735,7 +844,12 @@
         "Church of the God of Craftsmanship"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "patron_deity": "God of Steam and Machinery (Yuggs Stiano)", "orthodox": true, "note": "Parent of Machinery Hivemind. Formerly 'Church of the God of Craftsmanship'." }
+      "meta": {
+        "book": "both",
+        "patron_deity": "God of Steam and Machinery (Yuggs Stiano)",
+        "orthodox": true,
+        "note": "Parent of Machinery Hivemind. Formerly 'Church of the God of Craftsmanship'."
+      }
     },
     {
       "canonical_name": "Church of the Eternal Blazing Sun",
@@ -745,7 +859,11 @@
         "Church of the Sun"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "patron_deity": "Eternal Blazing Sun (Aucuses)", "orthodox": true }
+      "meta": {
+        "book": "both",
+        "patron_deity": "Eternal Blazing Sun (Aucuses)",
+        "orthodox": true
+      }
     },
     {
       "canonical_name": "Church of the Earth Mother",
@@ -755,7 +873,11 @@
         "Church of Mother"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "patron_deity": "Earth Mother (Lilith, under the stolen Omebella identity)", "orthodox": true }
+      "meta": {
+        "book": "both",
+        "patron_deity": "Earth Mother (Lilith, under the stolen Omebella identity)",
+        "orthodox": true
+      }
     },
     {
       "canonical_name": "Church of the God of Combat",
@@ -765,7 +887,12 @@
         "Church of Combat"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "patron_deity": "God of Combat (Badheil)", "orthodox": true, "note": "Established Fourth Epoch. Supported Feysac Empire." }
+      "meta": {
+        "book": "both",
+        "patron_deity": "God of Combat (Badheil)",
+        "orthodox": true,
+        "note": "Established Fourth Epoch. Supported Feysac Empire."
+      }
     },
     {
       "canonical_name": "Church of the God of Knowledge and Wisdom",
@@ -775,7 +902,11 @@
         "Church of Knowledge and Wisdom"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "patron_deity": "God of Knowledge and Wisdom (Herabergen)", "orthodox": true }
+      "meta": {
+        "book": "both",
+        "patron_deity": "God of Knowledge and Wisdom (Herabergen)",
+        "orthodox": true
+      }
     },
     {
       "canonical_name": "Aurora Order",
@@ -785,7 +916,10 @@
         "Order of Aurora"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "note": "22 Oracles; Mr. A was one." }
+      "meta": {
+        "book": "both",
+        "note": "22 Oracles; Mr. A was one."
+      }
     },
     {
       "canonical_name": "Twilight Hermit Order",
@@ -795,7 +929,11 @@
         "Twilight Hermits"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "founded_by": "Adam (True Creator)", "note": "Fourth/Fifth Epoch faction. Not the same as Hermit Pathway." }
+      "meta": {
+        "book": "both",
+        "founded_by": "Adam (True Creator)",
+        "note": "Fourth/Fifth Epoch faction. Not the same as Hermit Pathway."
+      }
     },
     {
       "canonical_name": "Machinery Hivemind",
@@ -806,7 +944,10 @@
         "Machinery Group"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "both", "parent": "Church of the God of Steam and Machinery" }
+      "meta": {
+        "book": "both",
+        "parent": "Church of the God of Steam and Machinery"
+      }
     },
     {
       "canonical_name": "Rose School of Thought",
@@ -816,7 +957,10 @@
         "The Rose School of Thought"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "coi", "factions": "Temperance Faction (Reinette); Indulgence Faction" }
+      "meta": {
+        "book": "coi",
+        "factions": "Temperance Faction (Reinette); Indulgence Faction"
+      }
     },
     {
       "canonical_name": "Antigonus Family",
@@ -825,7 +969,11 @@
         "House of Antigonus"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "status": "destroyed", "note": "Tudor Empire aristocratic angel family that controlled the Fool Pathway. Eliminated by the Church of the Evernight Goddess during the Fourth Epoch. The Antigonus Family's Notebook is a major LOTM1 plot driver." }
+      "meta": {
+        "book": "lotm1",
+        "status": "destroyed",
+        "note": "Tudor Empire aristocratic angel family that controlled the Fool Pathway. Eliminated by the Church of the Evernight Goddess during the Fourth Epoch. The Antigonus Family's Notebook is a major LOTM1 plot driver."
+      }
     },
     {
       "canonical_name": "Medici Family",
@@ -834,7 +982,11 @@
         "House of Medici"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "coi", "ancestor": "Medici (Red Angel)", "note": "Albus Medici belongs to this family." }
+      "meta": {
+        "book": "coi",
+        "ancestor": "Medici (Red Angel)",
+        "note": "Albus Medici belongs to this family."
+      }
     },
     {
       "canonical_name": "Eggers Family",
@@ -843,7 +995,11 @@
         "House of Eggers"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "lotm1", "founder": "Salinger", "note": "Azik Eggers is of this family." }
+      "meta": {
+        "book": "lotm1",
+        "founder": "Salinger",
+        "note": "Azik Eggers is of this family."
+      }
     },
     {
       "canonical_name": "Iron and Blood Cross Order",
@@ -853,7 +1009,10 @@
         "Cross Order"
       ],
       "is_spoiler": 0,
-      "meta": { "book": "coi", "note": "Albus Medici is a member. Operates in the Trier region." }
+      "meta": {
+        "book": "coi",
+        "note": "Albus Medici is a member. Operates in the Trier region."
+      }
     },
     {
       "canonical_name": "Demoness Sect",
@@ -909,7 +1068,11 @@
         "Pathway of the Seer"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Klein Moretti (titled Lord of Mysteries)", "sequence_9": "Seer", "note": "Seer is SEQ9 tier name; folded in as alias." }
+      "meta": {
+        "sequence_0_deity": "Klein Moretti (titled Lord of Mysteries)",
+        "sequence_9": "Seer",
+        "note": "Seer is SEQ9 tier name; folded in as alias."
+      }
     },
     {
       "canonical_name": "Sun",
@@ -919,7 +1082,10 @@
         "Pathway of the Sun"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Eternal Blazing Sun (Aucuses)", "note": "Formerly held by the Ancient Sun God (Third Epoch) before Aucuses took the SEQ0 seat." }
+      "meta": {
+        "sequence_0_deity": "Eternal Blazing Sun (Aucuses)",
+        "note": "Formerly held by the Ancient Sun God (Third Epoch) before Aucuses took the SEQ0 seat."
+      }
     },
     {
       "canonical_name": "Tyrant",
@@ -932,7 +1098,11 @@
         "Pathway of the Sailor"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Lord of Storms (Leodero, deceased 1360)", "sequence_9": "Sailor", "note": "Sailor is SEQ9 tier name; folded in as alias. Alger Wilson was on this pathway before switching to Hanged Man in COI." }
+      "meta": {
+        "sequence_0_deity": "Lord of Storms (Leodero, deceased 1360)",
+        "sequence_9": "Sailor",
+        "note": "Sailor is SEQ9 tier name; folded in as alias. Alger Wilson was on this pathway before switching to Hanged Man in COI."
+      }
     },
     {
       "canonical_name": "Red Priest",
@@ -943,7 +1113,9 @@
         "War Pathway"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "War God" }
+      "meta": {
+        "sequence_0_deity": "War God"
+      }
     },
     {
       "canonical_name": "Hanged Man",
@@ -955,7 +1127,9 @@
         "Secrets Suppliant Pathway"
       ],
       "is_spoiler": 0,
-      "meta": { "note": "Also called Secrets Suppliant. Mr. A was on this pathway (SEQ5). Alger Wilson switched to this pathway in COI." }
+      "meta": {
+        "note": "Also called Secrets Suppliant. Mr. A was on this pathway (SEQ5). Alger Wilson switched to this pathway in COI."
+      }
     },
     {
       "canonical_name": "Hermit",
@@ -967,7 +1141,10 @@
         "Mystery Pryer Pathway"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_9": "Mystery Pryer", "note": "Distinct from Visionary Pathway. Cattleya (Tarot Club 'The Hermit') is on this pathway." }
+      "meta": {
+        "sequence_9": "Mystery Pryer",
+        "note": "Distinct from Visionary Pathway. Cattleya (Tarot Club 'The Hermit') is on this pathway."
+      }
     },
     {
       "canonical_name": "Visionary",
@@ -980,7 +1157,11 @@
         "Pathway of the Spectator"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Adam (True Creator)", "sequence_9": "Spectator", "note": "Spectator is SEQ9 tier name. Adam and Audrey Hall are on this pathway." }
+      "meta": {
+        "sequence_0_deity": "Adam (True Creator)",
+        "sequence_9": "Spectator",
+        "note": "Spectator is SEQ9 tier name. Adam and Audrey Hall are on this pathway."
+      }
     },
     {
       "canonical_name": "Door",
@@ -993,7 +1174,10 @@
         "Pathway of the Apprentice"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_9": "Apprentice", "note": "Apprentice is SEQ9 tier name. Fors Wall is on this pathway. Amon accommodated the Door Uniqueness as secondary." }
+      "meta": {
+        "sequence_9": "Apprentice",
+        "note": "Apprentice is SEQ9 tier name. Fors Wall is on this pathway. Amon accommodated the Door Uniqueness as secondary."
+      }
     },
     {
       "canonical_name": "Error",
@@ -1003,7 +1187,9 @@
         "Pathway of Error"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Amon" }
+      "meta": {
+        "sequence_0_deity": "Amon"
+      }
     },
     {
       "canonical_name": "White Tower",
@@ -1013,7 +1199,9 @@
         "Pathway of the White Tower"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "God of Knowledge and Wisdom (Herabergen)" }
+      "meta": {
+        "sequence_0_deity": "God of Knowledge and Wisdom (Herabergen)"
+      }
     },
     {
       "canonical_name": "Darkness",
@@ -1026,7 +1214,11 @@
         "Pathway of the Sleepless"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Evernight Goddess / Amanises (titled Eternal Darkness)", "sequence_9": "Sleepless", "note": "Sleepless is SEQ9 tier name. Leonard Mitchell, Dunn Smith, and Ince Zangwill (after switch) are on this pathway." }
+      "meta": {
+        "sequence_0_deity": "Evernight Goddess / Amanises (titled Eternal Darkness)",
+        "sequence_9": "Sleepless",
+        "note": "Sleepless is SEQ9 tier name. Leonard Mitchell, Dunn Smith, and Ince Zangwill (after switch) are on this pathway."
+      }
     },
     {
       "canonical_name": "Death",
@@ -1036,7 +1228,10 @@
         "Pathway of Death"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Salinger (titled Death, deceased)", "note": "SEQ0 title is 'Death' (= pathway name). Salinger held this title. Azik Eggers is on this pathway at SEQ2 Death Consul; he is Salinger's son but is NOT Death." }
+      "meta": {
+        "sequence_0_deity": "Salinger (titled Death, deceased)",
+        "note": "SEQ0 title is 'Death' (= pathway name). Salinger held this title. Azik Eggers is on this pathway at SEQ2 Death Consul; he is Salinger's son but is NOT Death."
+      }
     },
     {
       "canonical_name": "Twilight Giant",
@@ -1046,7 +1241,10 @@
         "Pathway of the Twilight Giant"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "God of Combat (Badheil, deceased 1352)", "note": "Former SEQ0 Giant King Aurmir (Second Epoch). Ryan Vitia is on this pathway." }
+      "meta": {
+        "sequence_0_deity": "God of Combat (Badheil, deceased 1352)",
+        "note": "Former SEQ0 Giant King Aurmir (Second Epoch). Ryan Vitia is on this pathway."
+      }
     },
     {
       "canonical_name": "Demoness",
@@ -1056,7 +1254,10 @@
         "Pathway of the Demoness"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Primordial Demoness (Cheek)", "note": "Franca Roland and Jenna are on this pathway. Lilith was formerly on this pathway before ascending to Mother SEQ0." }
+      "meta": {
+        "sequence_0_deity": "Primordial Demoness (Cheek)",
+        "note": "Franca Roland and Jenna are on this pathway. Lilith was formerly on this pathway before ascending to Mother SEQ0."
+      }
     },
     {
       "canonical_name": "Paragon",
@@ -1066,7 +1267,9 @@
         "Pathway of the Paragon"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "God of Steam and Machinery (Yuggs Stiano)" }
+      "meta": {
+        "sequence_0_deity": "God of Steam and Machinery (Yuggs Stiano)"
+      }
     },
     {
       "canonical_name": "Wheel of Fortune",
@@ -1077,7 +1280,9 @@
         "Fortune Pathway"
       ],
       "is_spoiler": 0,
-      "meta": { "note": "Will Auceptin is on this pathway as Angel of Mercury." }
+      "meta": {
+        "note": "Will Auceptin is on this pathway as Angel of Mercury."
+      }
     },
     {
       "canonical_name": "Mother",
@@ -1088,7 +1293,9 @@
         "Earth Mother Pathway"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Lilith (under stolen Omebella 'Earth Mother' identity; deceased 1360)" }
+      "meta": {
+        "sequence_0_deity": "Lilith (under stolen Omebella 'Earth Mother' identity; deceased 1360)"
+      }
     },
     {
       "canonical_name": "Moon",
@@ -1098,7 +1305,10 @@
         "Pathway of the Moon"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Lilith (held Moon SEQ0 in parallel with Mother SEQ0; deceased 1360)", "note": "Emlyn White is on this pathway." }
+      "meta": {
+        "sequence_0_deity": "Lilith (held Moon SEQ0 in parallel with Mother SEQ0; deceased 1360)",
+        "note": "Emlyn White is on this pathway."
+      }
     },
     {
       "canonical_name": "Abyss",
@@ -1121,7 +1331,10 @@
         "Pathway of the Prisoner"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_9": "Prisoner", "note": "Prisoner is SEQ9 tier name. Reinette Tinekerr and Sharron are on this pathway." }
+      "meta": {
+        "sequence_9": "Prisoner",
+        "note": "Prisoner is SEQ9 tier name. Reinette Tinekerr and Sharron are on this pathway."
+      }
     },
     {
       "canonical_name": "Black Emperor",
@@ -1131,7 +1344,9 @@
         "Pathway of the Black Emperor"
       ],
       "is_spoiler": 0,
-      "meta": { "sequence_0_deity": "Roselle Gustav" }
+      "meta": {
+        "sequence_0_deity": "Roselle Gustav"
+      }
     },
     {
       "canonical_name": "Justiciar",
@@ -1142,6 +1357,18 @@
       ],
       "is_spoiler": 0,
       "meta": {}
+    },
+    {
+      "canonical_name": "Daly Simone",
+      "entity_type": "character",
+      "aliases": [
+        "Daly",
+        "Madam Daly"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "lotm1"
+      }
     }
   ]
 }

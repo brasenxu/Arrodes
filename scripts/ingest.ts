@@ -11,7 +11,8 @@
  * Phases:
  *   chapters — parse EPUB and write `chapters` rows (ticket 003)
  *   chunks   — chunk + contextualize + embed + insert (ticket 005)
- *   (later) ner, events, summaries
+ *   ner      — per-chunk NER → entities + entity_mentions (ticket 006)
+ *   (later) events, summaries
  */
 
 // Load .env.local first (Next.js convention for local secrets), then .env as
@@ -34,6 +35,19 @@ import {
   type ChunkIngestUsage,
   type ChapterInput,
 } from "@/lib/ingest/chunks";
+import {
+  addNerUsage,
+  buildAliasIndex,
+  buildCatalogBlock,
+  EntityResolver,
+  extractChapterMentions,
+  loadEntities,
+  zeroNerUsage,
+  type ChapterMeta,
+  type ChunkInput as NerChunkInput,
+  type NerUsage,
+  type SampleRow as NerSampleRow,
+} from "@/lib/ingest/ner";
 
 // Strips a gateway-style `provider/` prefix if present so env values that were
 // originally written for AI Gateway (e.g. "anthropic/claude-haiku-4-5") still
@@ -47,8 +61,8 @@ const BOOK_TITLES: Record<BookId, string> = {
   coi: "Circle of Inevitability",
 };
 
-type Phase = "chapters" | "chunks";
-const PHASES: readonly Phase[] = ["chapters", "chunks"] as const;
+type Phase = "chapters" | "chunks" | "ner";
+const PHASES: readonly Phase[] = ["chapters", "chunks", "ner"] as const;
 
 // $/1M tokens. Tracks the model roster in .claude/plans/2026-04-21_Arrodes-DAB.md.
 // Only used for the preflight estimate and the run-end summary — not for
@@ -69,6 +83,15 @@ function estimateCost(usage: ChunkIngestUsage): number {
     (usage.context.cacheWriteTokens / 1e6) * PRICING.haikuInputCacheWrite1h +
     (usage.context.outputTokens / 1e6) * PRICING.haikuOutput +
     (usage.embedTokens / 1e6) * PRICING.embedSmall
+  );
+}
+
+function estimateNerCost(usage: NerUsage): number {
+  return (
+    (usage.noCacheInputTokens / 1e6) * PRICING.haikuInputNoCache +
+    (usage.cacheReadTokens / 1e6) * PRICING.haikuInputCacheRead +
+    (usage.cacheWriteTokens / 1e6) * PRICING.haikuInputCacheWrite1h +
+    (usage.outputTokens / 1e6) * PRICING.haikuOutput
   );
 }
 
@@ -379,6 +402,317 @@ async function ingestChunksPhase(
   console.log(`[chunks] estimated total cost: $${estimateCost(totalUsage).toFixed(2)}`);
 }
 
+// ---------------------------------------------------------------------------
+// NER phase (ticket 006): per-chunk NER via alias scan + Haiku. Shares the
+// preflight/dry-run/--yes gate shape of the chunks phase, but the sampling
+// unit is chunks (50 chunks across a few chapters) rather than whole chapters.
+// ---------------------------------------------------------------------------
+
+type NerTarget = {
+  chapter: ChapterMeta;
+  chunks: NerChunkInput[];
+};
+
+// Sampling sizes chosen so the cache-read side of the cost mix is realistic:
+// preflight drains ~50 chunks across whole chapters (matches ticket 006 AC).
+const NER_SAMPLE_CHUNK_TARGET = 50;
+const NER_PROGRESS_INTERVAL_CHAPTERS = 10;
+
+async function fetchNerTargets(bookId: BookId): Promise<NerTarget[]> {
+  const allChapters = await db
+    .select({
+      id: schema.chapters.id,
+      bookId: schema.chapters.bookId,
+      chapterNum: schema.chapters.chapterNum,
+      chapterTitle: schema.chapters.chapterTitle,
+      rawText: schema.chapters.rawText,
+    })
+    .from(schema.chapters)
+    .where(eq(schema.chapters.bookId, bookId))
+    .orderBy(asc(schema.chapters.chapterNum));
+
+  if (allChapters.length === 0) {
+    throw new Error(
+      `[ner] no chapters found for ${bookId}. Run --phase chapters first.`,
+    );
+  }
+
+  // Fetch chunks that have zero entity_mentions. Resumability is per-chunk
+  // (ticket 006 AC) — if a previous run covered some chunks in a chapter but
+  // crashed before the chapter's batch insert, those rows don't exist, so all
+  // of the chapter's chunks reappear here. In practice inserts are per-chapter
+  // atomic, so chapters are mostly all-or-nothing.
+  const res = (await db.execute(sql`
+    SELECT c.id, c.chapter_id, c.chunk_index, c.content
+    FROM chunks c
+    WHERE c.book_id = ${bookId}
+      AND NOT EXISTS (
+        SELECT 1 FROM entity_mentions em WHERE em.chunk_id = c.id
+      )
+    ORDER BY c.chapter_id, c.chunk_index
+  `)) as unknown as {
+    rows: Array<{
+      id: number;
+      chapter_id: number;
+      chunk_index: number;
+      content: string;
+    }>;
+  };
+
+  const byChapter = new Map<number, NerChunkInput[]>();
+  for (const r of res.rows ?? []) {
+    let arr = byChapter.get(r.chapter_id);
+    if (!arr) {
+      arr = [];
+      byChapter.set(r.chapter_id, arr);
+    }
+    arr.push({
+      id: r.id,
+      chunkIndex: r.chunk_index,
+      content: r.content,
+    });
+  }
+
+  const targets: NerTarget[] = [];
+  for (const ch of allChapters) {
+    const chunks = byChapter.get(ch.id);
+    if (!chunks || chunks.length === 0) continue;
+    targets.push({ chapter: ch, chunks });
+  }
+  return targets;
+}
+
+// Caps the number of chunks processed across the target chapters. Truncates
+// the last chapter's chunk list if necessary so we never exceed the cap.
+function capNerTargets(targets: NerTarget[], maxChunks: number): NerTarget[] {
+  const out: NerTarget[] = [];
+  let remaining = maxChunks;
+  for (const t of targets) {
+    if (remaining <= 0) break;
+    if (t.chunks.length <= remaining) {
+      out.push(t);
+      remaining -= t.chunks.length;
+    } else {
+      out.push({ chapter: t.chapter, chunks: t.chunks.slice(0, remaining) });
+      remaining = 0;
+    }
+  }
+  return out;
+}
+
+function countChunks(targets: NerTarget[]): number {
+  return targets.reduce((acc, t) => acc + t.chunks.length, 0);
+}
+
+function printNerSamples(samples: NerSampleRow[]): void {
+  for (const s of samples) {
+    console.log(
+      `  [chunk#${s.chunkId} idx=${s.chunkIndex} haiku=${s.calledHaiku ? "yes" : "no"}]`,
+    );
+    console.log(`       content=${JSON.stringify(s.contentPreview + "…")}`);
+    if (s.mentions.length === 0) {
+      console.log("       (no mentions)");
+    } else {
+      for (const m of s.mentions) {
+        console.log(
+          `       → ${m.canonicalName} [${m.role ?? "null"}]`,
+        );
+      }
+    }
+  }
+}
+
+async function ingestNerPhase(
+  bookId: BookId,
+  limit: number | null,
+  dryRun: boolean,
+  yes: boolean,
+): Promise<void> {
+  const contextModelEnv = process.env.INGEST_CONTEXT_MODEL;
+  if (!contextModelEnv) {
+    throw new Error("INGEST_CONTEXT_MODEL is not set in .env.local");
+  }
+  if (!process.env.ANTHROPIC_API_KEY) {
+    throw new Error("ANTHROPIC_API_KEY is not set in .env.local");
+  }
+
+  const contextModelId = bareModelId(contextModelEnv);
+  const contextModel = anthropic(contextModelId);
+  console.log(`[ner] book=${bookId} nerModel=anthropic:${contextModelId}`);
+
+  // Load entities once — the catalog block is reused across every Haiku call
+  // (byte-identical, so it cache-reads across the whole ingest after the first
+  // call writes it).
+  const entities = await loadEntities();
+  if (entities.length === 0) {
+    throw new Error(
+      "[ner] entities table is empty. Run `pnpm seed:entities` first.",
+    );
+  }
+  const aliasIndex = buildAliasIndex(entities);
+  const catalogBlock = buildCatalogBlock(entities);
+  // Dry-run and preflight paths use a dry-run resolver: novel names get
+  // negative pseudo-IDs and are NOT persisted. The real-run path below builds
+  // its own resolver that actually writes.
+  const readonlyResolver = new EntityResolver(aliasIndex, { dryRun: true });
+  console.log(
+    `[ner] loaded ${entities.length} canonical entities (${aliasIndex.patterns.length} alias patterns)`,
+  );
+
+  const allTargets = await fetchNerTargets(bookId);
+  const totalUndoneChunks = countChunks(allTargets);
+  console.log(
+    `[ner] ${allTargets.length} chapters have unprocessed chunks (${totalUndoneChunks} chunks total)`,
+  );
+
+  if (allTargets.length === 0 || totalUndoneChunks === 0) {
+    console.log("[ner] nothing to do");
+    return;
+  }
+
+  // --limit caps total chunks processed (not chapters), matching ticket 006's
+  // preflight unit. Also applies to dry-run.
+  const targets =
+    limit != null ? capNerTargets(allTargets, limit) : allTargets;
+  const targetChunkCount = countChunks(targets);
+  if (limit != null) {
+    console.log(
+      `[ner] --limit ${limit} applied: ${targets.length} chapters, ${targetChunkCount} chunks this run`,
+    );
+  }
+
+  // --- Dry run branch: real Haiku calls, no DB writes, sample dumps.
+  if (dryRun) {
+    console.log(
+      `[ner] DRY RUN — processing ${targets.length} chapters (${targetChunkCount} chunks) without DB writes`,
+    );
+    const usage = zeroNerUsage();
+    let sampledChapters = 0;
+    const SAMPLE_CHAPTERS = Math.min(3, targets.length);
+    for (let i = 0; i < targets.length; i++) {
+      const t = targets[i];
+      const r = await extractChapterMentions({
+        chapter: t.chapter,
+        chunks: t.chunks,
+        aliasIndex,
+        entityResolver: readonlyResolver,
+        model: contextModel,
+        catalogBlock,
+        dryRun: true,
+        returnSamples: i < SAMPLE_CHAPTERS,
+      });
+      addNerUsage(usage, r.usage);
+      if (i < SAMPLE_CHAPTERS && r.samples) {
+        sampledChapters++;
+        console.log(
+          `\n[ner] --- Ch${t.chapter.chapterNum} "${t.chapter.chapterTitle}" (${r.samples.length} chunks) ---`,
+        );
+        printNerSamples(r.samples);
+      }
+    }
+    const cost = estimateNerCost(usage);
+    console.log(
+      `\n[ner] dry-run complete — ${targets.length} chapters, ${targetChunkCount} chunks, ${usage.haikuCalls} Haiku calls, measured cost $${cost.toFixed(4)}`,
+    );
+    console.log(
+      `[ner] token spend: noCache=${usage.noCacheInputTokens} cacheRead=${usage.cacheReadTokens} cacheWrite=${usage.cacheWriteTokens} output=${usage.outputTokens}`,
+    );
+    console.log(
+      `[ner] (dry-run skipped DB writes; new entities were NOT created) sampled=${sampledChapters} chapters`,
+    );
+    return;
+  }
+
+  // --- Preflight branch: sample ~50 chunks across whole chapters, extrapolate,
+  // require --yes.
+  const sampleTargets = capNerTargets(targets, NER_SAMPLE_CHUNK_TARGET);
+  const sampleChunkCount = countChunks(sampleTargets);
+  console.log(
+    `[ner] preflight: sampling ${sampleChunkCount} chunks across ${sampleTargets.length} chapters for cost estimate`,
+  );
+  const sampleUsage = zeroNerUsage();
+  for (let i = 0; i < sampleTargets.length; i++) {
+    const t = sampleTargets[i];
+    const r = await extractChapterMentions({
+      chapter: t.chapter,
+      chunks: t.chunks,
+      aliasIndex,
+      entityResolver: readonlyResolver,
+      model: contextModel,
+      catalogBlock,
+      dryRun: true,
+    });
+    addNerUsage(sampleUsage, r.usage);
+    console.log(
+      `[ner]   sample ${i + 1}/${sampleTargets.length}: Ch${t.chapter.chapterNum} → ${t.chunks.length} chunks (${r.usage.haikuCalls} Haiku calls)`,
+    );
+  }
+  const sampleCost = estimateNerCost(sampleUsage);
+  const perChunkCost = sampleChunkCount > 0 ? sampleCost / sampleChunkCount : 0;
+  const projectedCost = perChunkCost * targetChunkCount;
+  console.log(
+    `[ner] sample cost: $${sampleCost.toFixed(4)} (${sampleChunkCount} chunks, ${sampleUsage.haikuCalls} Haiku calls)`,
+  );
+  console.log(
+    `[ner] Estimated cost: $${projectedCost.toFixed(2)} for ${targetChunkCount} chunks (~${Math.round((sampleUsage.haikuCalls / Math.max(sampleChunkCount, 1)) * targetChunkCount)} Haiku calls projected)`,
+  );
+
+  if (!yes) {
+    console.log(
+      "[ner] preflight complete — pass --yes to proceed with the real run",
+    );
+    return;
+  }
+
+  // --- Real run: fresh resolver (dryRun=false) so novel names actually write.
+  // The preflight resolver's pseudo-IDs are discarded; names it saw will be
+  // re-resolved (and possibly re-created) during the real pass. This is
+  // deliberate: we don't trust the pseudo-ID pool to have seen every name, and
+  // reconstructing from scratch keeps the resolver's DB state as the single
+  // source of truth.
+  const writeResolver = new EntityResolver(aliasIndex, { dryRun: false });
+  console.log(
+    `[ner] proceeding with real run on ${targets.length} chapters (${targetChunkCount} chunks)`,
+  );
+  const totalUsage = zeroNerUsage();
+  let insertedMentions = 0;
+  let processedChunks = 0;
+  let processedChapters = 0;
+  for (const t of targets) {
+    const r = await extractChapterMentions({
+      chapter: t.chapter,
+      chunks: t.chunks,
+      aliasIndex,
+      entityResolver: writeResolver,
+      model: contextModel,
+      catalogBlock,
+      dryRun: false,
+    });
+    addNerUsage(totalUsage, r.usage);
+    insertedMentions += r.mentionsInserted;
+    processedChunks += r.chunksProcessed;
+    processedChapters++;
+    if (
+      processedChapters % NER_PROGRESS_INTERVAL_CHAPTERS === 0 ||
+      processedChapters === targets.length
+    ) {
+      console.log(
+        `[ner]   ${processedChapters}/${targets.length} chapters (${processedChunks} chunks, ${insertedMentions} mentions, ${writeResolver.newEntitiesCreated()} new entities, $${estimateNerCost(totalUsage).toFixed(2)} so far)`,
+      );
+    }
+  }
+
+  console.log(
+    `[ner] DONE — ${processedChapters} chapters, ${processedChunks} chunks, ${insertedMentions} mentions inserted, ${writeResolver.newEntitiesCreated()} new entities created`,
+  );
+  console.log(
+    `[ner] token spend: noCache=${totalUsage.noCacheInputTokens} cacheRead=${totalUsage.cacheReadTokens} cacheWrite=${totalUsage.cacheWriteTokens} output=${totalUsage.outputTokens} haikuCalls=${totalUsage.haikuCalls}`,
+  );
+  console.log(
+    `[ner] estimated total cost: $${estimateNerCost(totalUsage).toFixed(2)}`,
+  );
+}
+
 async function main() {
   const args = parseArgs();
   console.log(
@@ -392,6 +726,14 @@ async function main() {
       break;
     case "chunks":
       await ingestChunksPhase(
+        args.bookId,
+        args.limit,
+        args.dryRun,
+        args.yes,
+      );
+      break;
+    case "ner":
+      await ingestNerPhase(
         args.bookId,
         args.limit,
         args.dryRun,
