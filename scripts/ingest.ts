@@ -102,6 +102,7 @@ type Args = {
   limit: number | null;
   dryRun: boolean;
   yes: boolean;
+  reset: boolean;
 };
 
 function parseArgs(): Args {
@@ -147,6 +148,7 @@ function parseArgs(): Args {
     limit,
     dryRun: rest.includes("--dry-run"),
     yes: rest.includes("--yes"),
+    reset: rest.includes("--reset"),
   };
 }
 
@@ -527,6 +529,7 @@ async function ingestNerPhase(
   limit: number | null,
   dryRun: boolean,
   yes: boolean,
+  reset: boolean,
 ): Promise<void> {
   const contextModelEnv = process.env.INGEST_CONTEXT_MODEL;
   if (!contextModelEnv) {
@@ -534,6 +537,42 @@ async function ingestNerPhase(
   }
   if (!process.env.ANTHROPIC_API_KEY) {
     throw new Error("ANTHROPIC_API_KEY is not set in .env.local");
+  }
+
+  // --reset: wipe this book's entity_mentions and any auto-created entities
+  // (entities with empty aliases AND empty meta — the shape our resolver uses
+  // for novel names) so the next run starts from a clean slate. Requires --yes
+  // to actually execute — destructive.
+  if (reset) {
+    if (!yes) {
+      throw new Error(
+        "[ner] --reset requires --yes to confirm. This will DELETE all entity_mentions for this book and all auto-created entities (non-seeded).",
+      );
+    }
+    console.log(
+      `[ner] --reset --yes: deleting entity_mentions for ${bookId} and auto-created entities`,
+    );
+    const delMentions = (await db.execute(sql`
+      DELETE FROM entity_mentions WHERE book_id = ${bookId}
+    `)) as unknown as { rowCount?: number };
+    console.log(
+      `[ner]   deleted ${delMentions.rowCount ?? "?"} entity_mentions rows`,
+    );
+    // Only drop entities that have no remaining mentions AND look auto-created
+    // (empty aliases, empty meta). Seeded rows are safe because they have
+    // populated aliases/meta.
+    const delEntities = (await db.execute(sql`
+      DELETE FROM entities
+      WHERE aliases = '[]'::jsonb
+        AND meta = '{}'::jsonb
+        AND is_spoiler = 0
+        AND NOT EXISTS (
+          SELECT 1 FROM entity_mentions em WHERE em.entity_id = entities.id
+        )
+    `)) as unknown as { rowCount?: number };
+    console.log(
+      `[ner]   deleted ${delEntities.rowCount ?? "?"} auto-created entities (no remaining mentions)`,
+    );
   }
 
   const contextModelId = bareModelId(contextModelEnv);
@@ -738,6 +777,7 @@ async function main() {
         args.limit,
         args.dryRun,
         args.yes,
+        args.reset,
       );
       break;
   }

@@ -173,12 +173,59 @@ const NER_INSTRUCTION_HEADER = `TASK: Extract named entities from a chunk of nov
 
 You are analyzing chunks from "Lord of the Mysteries" (LOTM) and its sequel "Circle of Inevitability" (COI). For each chunk you are shown, identify EVERY named entity (character, organization, pathway, location, or artifact) that is present in the chunk, plus the role that entity plays in the chunk.
 
+SPEAKER IDENTIFICATION ALGORITHM (apply this FIRST, before deciding any role):
+Before classifying any entity, scan the chunk for every quoted utterance (text enclosed in "..." or "..."). For each such utterance:
+  1. Look in the same sentence, the sentence just before, and the sentence just after for an attribution verb — said, replied, asked, muttered, whispered, chuckled, exclaimed, sighed, snapped, continued, added, began, remarked, observed, declared, hissed, laughed, shouted, murmured, answered, responded, called out, retorted, nodded (when followed by quoted speech), thought, wondered, repeated, interjected.
+  2. The named subject of that attribution verb is the SPEAKER of that utterance. Mark them as role="speaker".
+  3. If the quoted line contains a direct vocative ("Klein, listen...", "Miss Justice, what do you think?") or the attribution names a target ("said to Klein"), that named entity is the ADDRESSEE — mark role="addressee".
+
+Only after running this algorithm for every quoted utterance do you assign "mentioned" to the remaining named entities.
+
 ROLES (choose exactly one per entity, per chunk):
-- "speaker"    — the character whose direct quoted speech appears IN THIS CHUNK (the chunk itself contains the quoted line).
+- "speaker"    — the character whose direct quoted speech appears IN THIS CHUNK (the chunk itself contains the quoted line). Identified by the SPEAKER ALGORITHM above.
 - "addressee"  — a character being directly addressed in dialogue WITHIN THIS CHUNK (vocative call, "X said to Y", "Y, listen to me").
-- "mentioned"  — any other named entity that is referenced in the chunk but is not speaking or being addressed in this chunk. Use this as the default for any entity whose speaker/addressee role is not clearly established IN THIS CHUNK.
+- "mentioned"  — any other named entity that is referenced in the chunk but is not speaking or being addressed in this chunk. This is the DEFAULT ONLY AFTER speaker/addressee have been exhausted.
 
 If the chunk is pure narration referencing prior speech (e.g., "After hearing Alger's words, Klein sighed"), treat the characters as "mentioned" — neither is speaking IN THIS CHUNK; the speech happened elsewhere.
+
+ROLE BIAS CORRECTION (important):
+"mentioned" is the safest-looking default and is over-used by NER systems. Actively push against this. Under-labeling speakers and addressees is a worse error than over-labeling them; prefer speaker/addressee over mentioned whenever the chunk's quoted lines plausibly support it. If you are 50/50 on whether someone is a speaker or merely mentioned, pick speaker.
+
+HARD SKIP LIST (these strings are NEVER entities, even when capitalized):
+- Bare sequence-level references: "Sequence 0", "Sequence 1", "Sequence 2", ..., "Sequence 9", "Sequence 10", "Sequence 0-8", etc. — structural ordinal references, not entities.
+- Bare common-noun Beyonder terminology: "Beyonder", "Beyonders", "Beyonder characteristic", "Beyonder power", "potion", "ritual", "digestion", "acting method", "spirit vision", "divination", "spirit body threading" — these are system mechanics, not named entities, even when capitalized as "Beyonder" in the chapter.
+- Generic rank/role words standing alone: "Captain", "Bishop", "Professor", "Officer", "Sergeant", "Detective", "Lord", "Lady", "Madam" (unless fused with a name in the chunk: "Captain Dunn" is an entity → resolve via catalog).
+- Historical periods that are common nouns or eras not treated as a named entity in the chunk: "Iron Age", "Age of the Gods", "Fourth Epoch", "Tudor Dynasty" — skip UNLESS the chunk treats one specifically as a proper-name subject (e.g., "The Iron Age ended when..." where it is the grammatical focus, not background context). When in doubt, skip.
+- Generic plural forms of organizations: "Churches", "Kingdoms", "Orders", "Empires" — plural common nouns, not entities.
+- Generic pluralized or possessive suffixes of larger names: if the chunk mentions "Keepers of the Seas", do NOT also return "Keepers" alone — see LONGEST-MATCH.
+
+ROLE EXAMPLES (these are representative, not exhaustive — they illustrate the three role types):
+
+Example 1 — standard attributed dialogue:
+Chunk text:
+  "We need to move quickly," Klein said. Alger nodded without replying, his eyes on the ocean.
+Correct output:
+  [{"entity_name":"Klein Moretti","entity_type":"character","role":"speaker"},{"entity_name":"Alger Wilson","entity_type":"character","role":"mentioned"}]
+
+Example 2 — dialogue with a direct addressee:
+Chunk text:
+  Klein turned to Audrey. "Miss Justice, what do you think of this arrangement?"
+Correct output:
+  [{"entity_name":"Klein Moretti","entity_type":"character","role":"speaker"},{"entity_name":"Audrey Hall","entity_type":"character","role":"addressee"}]
+
+Example 3 — narration referencing speech that is not in this chunk:
+Chunk text:
+  After hearing Alger's words, Klein sighed. He had not expected the Hanged Man to be so direct.
+Correct output:
+  [{"entity_name":"Alger Wilson","entity_type":"character","role":"mentioned"},{"entity_name":"Klein Moretti","entity_type":"character","role":"mentioned"}]
+
+Example 4 — multi-speaker exchange in one chunk:
+Chunk text:
+  "I disagree," Cattleya said coldly. "The plan is reckless."
+  Audrey met her gaze. "We have no better option, Miss Hermit."
+Correct output:
+  [{"entity_name":"Cattleya","entity_type":"character","role":"speaker"},{"entity_name":"Audrey Hall","entity_type":"character","role":"speaker"}]
+(Cattleya is both speaker and addressee of Audrey's line; speaker > addressee per the tiebreaker.)
 
 OUTPUT FORMAT:
 Return a JSON array and nothing else. Each element must be an object of the shape:
@@ -189,11 +236,17 @@ Rules for the output:
 - If the chunk contains no named entities at all, return [].
 - Return each distinct entity at most once per chunk. If one entity both speaks and is addressed in the chunk, prefer "speaker".
 - Do not return pronouns ("he", "she", "they", "it") as entities.
-- Do not return common nouns or role words ("the butler", "a soldier", "the officer", "Beyonder", "Mother" as a relationship) unless the chunk treats them as a proper name for a specific entity.
-- Do not invent entities that are not in the chunk text.
+- Do not return common nouns or role words ("the butler", "a soldier", "the officer", "Beyonder", "the old man", "my father", "that bishop") unless the chunk treats them as a proper name for a specific entity.
+- Pathway-name vs common-word disambiguation. Many pathway and sequence-title names are also ordinary English words — pathways: Fool, Error, Door, Visionary, Sun, Tyrant, White Tower, Hanged Man, Darkness, Death, Twilight Giant, Demoness, Red Priest, Hermit, Paragon, Wheel of Fortune, Mother, Moon, Abyss, Chained, Black Emperor, Justiciar; sequence titles: Sailor, Prisoner, Apprentice, Hunter, Clown, Seer, Magician, Sleepless, Author, and so on. Return these as pathway entities ONLY when the chunk uses them as a pathway or sequence-title reference — signaled by capitalization in proper-noun position AND by proximity to Beyonder vocabulary ("Sequence", "pathway", "Beyonder", "demigod", "potion", "ritual", "uniqueness", "acting method"). Exclude ordinary-noun usages ("his mother cried", "the sun rose", "the door opened", "his death", "in darkness", "the sailors on deck"). Note on overlaps: "Fool" / "The Fool" resolves to Klein Moretti (Mr. Fool / Tarot Club) — the catalog alias handles this, do not return the Fool Pathway unless the chunk is explicitly discussing the pathway itself. Same treatment for "Hermit" / "The Hermit" → Cattleya, and "Magician" / "The Magician" → Fors Wall.
+- VERBATIM RULE (strict): Every entity you return must satisfy ONE of the following: (i) its exact name string appears literally in the chunk text, OR (ii) its canonical_name or one of its aliases in the CANONICAL ENTITIES catalog appears literally in the chunk text (in which case you return the canonical_name). If neither holds, do NOT return the entity — no matter how contextually plausible it seems. Specifically: do NOT fill in taxonomy-adjacent names just because they belong to the same system as something that IS in the chunk. Example: if the chunk names "Author" and "Spectator" (both sequence titles of the Visionary pathway), do NOT also return "Visionary", "Mystery Pryer", or any other Visionary sequence title — only return what the chunk actually contains. Example: if the chunk names "Klein", you may return "Klein Moretti" (the catalog lists "Klein" as an alias) but you may NOT return "Benson Moretti" just because he is Klein's brother.
 
 COMPLETENESS RULE (critical for recall):
-Return EVERY distinct named entity in the chunk. Do not omit an entity because it appears only briefly, in a list, or as a minor reference. If in doubt whether something is a proper-noun entity, include it. A chunk mentioning "the Aurora Order, the Trunsoest Empire, and Saint Samuel" should return three entities, not one.
+Return EVERY distinct named entity in the chunk. Do not omit an entity because it appears only briefly, in a list, or as a minor reference. A chunk mentioning "the Aurora Order, the Trunsoest Empire, and Saint Samuel" should return three entities, not one.
+
+When deciding whether a candidate string is a proper-noun entity, apply this test:
+(a) is the string capitalized in proper-noun position (not merely sentence-start, not a heading)? AND
+(b) does the chunk treat the string as a specific named referent (a person, org, place, pathway, artifact — not a role word like "the officer" or a common noun like "the cathedral")?
+If both hold, include it. If only (a) holds (it is capitalized but used as a common noun like "the Cathedral" referring to a generic cathedral), exclude it. Do NOT include a candidate merely because a similar entity exists elsewhere in the story — the string must be acting as a name in THIS chunk.
 
 ENTITY TYPE EXAMPLES (be generous — include any proper noun that fits any of these):
 - character  : named individuals ("Klein Moretti", "Saint Samuel", "Mr. X" when used as a name), including gods by name ("Evernight Goddess", "God of Steam and Machinery"), even if they appear only briefly or in historical/religious references.
@@ -201,12 +254,20 @@ ENTITY TYPE EXAMPLES (be generous — include any proper noun that fits any of t
 - pathway    : any of the 22 pathway names ("Fool Pathway"), or Sequence 9 title words used to refer to the pathway as an abstraction ("Apprentice", "Seer", "Sailor", "Spectator", "Mystery Pryer", "Prisoner", "Sleepless").
 - location   : nations, cities, continents, named geographic features, named buildings, named streets ("Backlund", "Tingen", "East Balam", "Sonia Sea", "Pelican Street", "Saint Samuel Cathedral").
 - artifact   : named supernatural items, sealed artifacts by code or name, named books, scriptures, named documents ("Blood-Stained Crown", "Sealed Artifact 0-08", "The Revelation of Evernight's Book of Wisdom", "Letters of the Saints").
+    • Sealed-artifact codes: strings of the form N-NN, N-NNN, or letter-number ("0-08", "1-42", "2-049", "X-05") are artifact entities. Return the bare code verbatim including the hyphen. If the chunk writes the longer form "Sealed Artifact 0-08", return the longer form per the longest-match rule; if only "0-08" appears, return "0-08".
 
 NAMING RULES (important — the index depends on this):
 1. If an entity present in the chunk also appears in the CANONICAL ENTITIES list below (under its canonical_name or any of its aliases), return the canonical_name verbatim. Example: the chunk says "Sherlock Moriarty" → return "Klein Moretti" (because Sherlock Moriarty is a listed alias of Klein Moretti).
 2. If an entity is not in the catalog, return the MOST COMPLETE form of the name that appears in the chunk or surrounding chapter. If the chapter uses "Ian" and "Ian Wright" for the same person, return "Ian Wright". If it uses "Elektra" and the title "Bishop" is not established as part of her name, return "Elektra" — do not add titles that are descriptive rather than part of the name.
 3. Do not invent canonicalizations or merge distinct nearby names (e.g., "East Balam" and "West Balam" are separate entities, not a single "Balam Empire" unless the chunk names "Balam Empire" itself).
 4. Character nicknames or titles that the chunk uses inline (e.g., "the old professor" as a known character reference) should resolve to the canonical name if one exists; otherwise return what the chunk says.
+5. LONGEST-MATCH RULE (critical — prevents double-counting). When a candidate name is a prefix, suffix, or substring of another named entity that ALSO appears in the chunk, return only the longest form. Do not also return the shorter sub-name as a separate entity. Examples:
+   - Chunk contains "Sun Brooch" → return "Sun Brooch" only. Do NOT also return "Sun".
+   - Chunk contains "Wraith Steve" → return "Wraith Steve" only. Do NOT also return "Steve".
+   - Chunk contains "Luke Sammer" → return "Luke Sammer" only. Do NOT also return "Luke".
+   - Chunk contains "Earth Mother Lilith" → return "Earth Mother Lilith" only. Do NOT also return "Earth", "Earth Mother", or "Lilith" separately.
+   - Chunk contains both "East Balam" AND "West Balam" → return BOTH ("East Balam" and "West Balam" are distinct entities — neither is a sub-string of the other).
+   Exception: if the chunk uses both forms to refer to different entities (rare — e.g., "Steve" in one sentence referring to a known character and "Wraith Steve" elsewhere referring to a different individual), return both. This exception should almost never fire; default to the longest-match collapse.
 
 CANONICAL ENTITIES (resolve chunk mentions to these canonical_name values when a match exists under canonical_name or any alias):
 `;

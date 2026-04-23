@@ -29,7 +29,12 @@
         "Daoist Zhou",
         "The Mysterious Ruler above the Gray Fog",
         "King of Yellow and Black",
-        "Klein"
+        "Klein",
+        "The World Gehrman Sparrow",
+        "Hero Bandit Black Emperor",
+        "Mr. World",
+        "The World",
+        "Mr. Klein"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -48,7 +53,8 @@
         "Miss Audrey",
         "Miss Pride",
         "Backlund's Most Dazzling Gem",
-        "Audrey"
+        "Audrey",
+        "Justice Audrey"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -66,7 +72,8 @@
         "Stormbringer Alger",
         "Captain of the Blue Avenger",
         "Lord Wilson",
-        "Alger"
+        "Alger",
+        "The Hanged Man Alger"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -85,11 +92,12 @@
         "Mr. Sun",
         "Little Sun",
         "Elder Berg",
-        "Derrick"
+        "Derrick",
+        "The Sun Derrick"
       ],
       "is_spoiler": 0,
       "meta": {
-        "book": "lotm1",
+        "book": "both",
         "pathway": "Sun",
         "tarot_club": "The Sun"
       }
@@ -102,7 +110,8 @@
         "Mr. Moon",
         "Son of the Moon",
         "Bai Ailin",
-        "Emlyn"
+        "Emlyn",
+        "The Moon Emlyn"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -122,7 +131,8 @@
         "Slacker Without a Dream",
         "Salted Fish Without Dreams",
         "Romance Queen",
-        "Fors"
+        "Fors",
+        "The Magician Fors"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -139,7 +149,9 @@
         "Mr. Star",
         "Dear Poet",
         "Mr. Poet",
-        "Leonard"
+        "Leonard",
+        "The Star Leonard",
+        "Lun Xiande"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -154,11 +166,17 @@
       "aliases": [
         "The Hermit",
         "Miss Hermit",
-        "Madam Bewitching"
+        "Madam Bewitching",
+        "The Hermit Cattleya",
+        "Admiral of Stars",
+        "Queen of Stars",
+        "Catie Huang",
+        "Huang Jiajia",
+        "Ma'am Hermit"
       ],
       "is_spoiler": 0,
       "meta": {
-        "book": "lotm1",
+        "book": "both",
         "pathway": "Hermit",
         "tarot_club": "The Hermit"
       }
@@ -168,14 +186,16 @@
       "entity_type": "character",
       "aliases": [
         "Judgement",
-        "Mr. Judgement",
+        "Ms. Judgement",
         "Miss Judgement",
-        "Xio"
+        "Xio",
+        "Judgement Xio"
       ],
       "is_spoiler": 0,
       "meta": {
-        "book": "lotm1",
-        "tarot_club": "Judgement"
+        "book": "both",
+        "tarot_club": "Judgement",
+        "pathway": "Justiciar"
       }
     },
     {
@@ -204,7 +224,8 @@
         "Mr. Azik",
         "Death Consul",
         "Baron Lamud",
-        "Angel of Death"
+        "Angel of Death",
+        "Azik"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -225,7 +246,7 @@
       ],
       "is_spoiler": 0,
       "meta": {
-        "book": "lotm1",
+        "book": "both",
         "pathway": "Death",
         "sequence": 0,
         "red_priest_uniqueness_note": "Fused the Red Priest Pathway Uniqueness (via the River of Eternal Darkness distributary) into a brand-new Great Old One path — became a Half Great Old One; madness from the fusion contributed to his Pale Era defeat. Not a second SEQ0 on Red Priest — framing should be 'absorbed Red Priest Uniqueness into Half Great Old One path'.",
@@ -242,7 +263,9 @@
         "Will Ceres",
         "Snake of Mercury",
         "Angel of Mercury",
-        "Mr. Mercury"
+        "Mr. Mercury",
+        "Mercury Will",
+        "Will"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -258,7 +281,9 @@
         "Captain Dunn",
         "Captain Smith",
         "Deng En",
-        "Dunn"
+        "Dunn",
+        "Officer Deng",
+        "Deng"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -273,7 +298,8 @@
       "aliases": [
         "Neil Eskatt",
         "Mr. Neil",
-        "Neil"
+        "Neil",
+        "Old Ai"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -282,15 +308,16 @@
       }
     },
     {
-      "canonical_name": "Rozanne Bansy",
+      "canonical_name": "Rozanne",
       "entity_type": "character",
       "aliases": [
-        "Rozanne",
-        "Miss Rozanne"
+        "Miss Rozanne",
+        "Rozanne Adelaide",
+        "Luo Shan"
       ],
       "is_spoiler": 0,
       "meta": {
-        "book": "lotm1",
+        "book": "both",
         "affiliation": "Nighthawks"
       }
     },
@@ -299,7 +326,8 @@
       "entity_type": "character",
       "aliases": [
         "Benson",
-        "Big Brother Benson"
+        "Big Brother Benson",
+        "Benson Zhou"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -312,7 +340,9 @@
       "entity_type": "character",
       "aliases": [
         "Melissa",
-        "Little Melissa"
+        "Little Melissa",
+        "Zhou Sasa",
+        "Sasa"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -386,7 +416,8 @@
       "canonical_name": "Ince Zangwill",
       "entity_type": "character",
       "aliases": [
-        "Former Archbishop of Evernight"
+        "Former Archbishop of Evernight",
+        "Ince"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -410,17 +441,16 @@
         "That Zealot",
         "He-Who-Must-Not-Be-Named",
         "Angel of Imagination",
-        "Grisha",
-        "Grisha Adam",
         "Peng Deng",
         "Child of the Creator"
       ],
       "is_spoiler": 0,
       "meta": {
-        "book": "lotm1",
+        "book": "both",
         "pathway": "Visionary",
         "sequence": 0,
-        "founder_of": "Twilight Hermit Order"
+        "founder_of": "Twilight Hermit Order",
+        "note": "Divinity Side / Eldest Son of the Ancient Sun God (whose true name was 'Grisha Adam'). 'Grisha' and 'Grisha Adam' are recorded as aliases of the Ancient Sun God entity, not Adam, even though Adam inherits the surname narratively — this split prevents NER fragmentation between pre-death (Ancient Sun God) and post-resurrection (Adam / True Creator) references. 'In Modern Day' side-story identity is Peng Deng (distinct from Zhang Yujia, which is the Ancient Sun God's modern-day identity)."
       }
     },
     {
@@ -434,7 +464,7 @@
       ],
       "is_spoiler": 0,
       "meta": {
-        "book": "lotm1",
+        "book": "both",
         "pathway": "Red Priest",
         "sequence": 1,
         "note": "Ancestor of the Medici Family — NOT the same as Albus Medici (his descendant); see separate entry"
@@ -443,7 +473,9 @@
     {
       "canonical_name": "Albus Medici",
       "entity_type": "character",
-      "aliases": [],
+      "aliases": [
+        "Albus"
+      ],
       "is_spoiler": 0,
       "meta": {
         "book": "coi",
@@ -464,11 +496,12 @@
         "Black Emperor",
         "Knowledge Emperor",
         "First Consul of the Intis Republic",
-        "Roselle"
+        "Roselle",
+        "CEO Huang"
       ],
       "is_spoiler": 0,
       "meta": {
-        "book": "lotm1",
+        "book": "both",
         "pathway": "Black Emperor",
         "sequence": 0,
         "note": "Modern-day identity Huang Tao is distinct from Zhou Mingrui — both are transmigrators, Huang Tao is Zhou Mingrui's superior at Intis Group"
@@ -485,7 +518,8 @@
         "Nether Lord",
         "Mother of Concealment",
         "Empress of Misfortune and Horror",
-        "Mistress of Repose and Silence"
+        "Mistress of Repose and Silence",
+        "the Evernight Goddess"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -525,6 +559,7 @@
       "aliases": [
         "Sanguine Ancestor Lilith",
         "Earth Mother",
+        "Earth Mother Lilith",
         "The Source of Life",
         "The Mother of All Things"
       ],
@@ -614,7 +649,8 @@
         "True Blessing",
         "Embodiment of Essence",
         "Guardian of Craftsmen",
-        "Brilliance of Technology"
+        "Brilliance of Technology",
+        "Stiano"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -685,7 +721,8 @@
         "Ruler of Calamity",
         "Dual-Pathway King of Angels",
         "Seven of Wands",
-        "Lumian"
+        "Lumian",
+        "Lumina"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -714,7 +751,8 @@
       "aliases": [
         "Reinette",
         "Miss Messenger",
-        "Angel of the Holy Spirit"
+        "Angel of the Holy Spirit",
+        "Tinekerr"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -738,7 +776,8 @@
         "Malady God Queen",
         "Hidden Blade",
         "Two of Cups",
-        "Franca"
+        "Franca",
+        "Roland"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -767,6 +806,205 @@
       }
     },
     {
+      "canonical_name": "Anthony Reid",
+      "entity_type": "character",
+      "aliases": [
+        "Four of Swords",
+        "An Ruide",
+        "Anthony",
+        "Reid",
+        "Mr. Anthony",
+        "Mr. Reid"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "coi",
+        "pathway": "Visionary",
+        "sequence": 4,
+        "tarot_club": "Four of Swords (Minor, formerly under Justice, currently under The Chariot)",
+        "affiliation": "Church of the Ruler of Calamity (Pope); Sick Church (Acting Pope); Tarot Club; Psychology Alchemists"
+      }
+    },
+    {
+      "canonical_name": "Ludwig Phil",
+      "entity_type": "character",
+      "aliases": [
+        "Ludwig",
+        "Li Lu",
+        "Idiot Eating Your Own Brain"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "coi",
+        "pathway": "Tail-Devourer",
+        "sequence": 1,
+        "affiliation": "Church of the God of Knowledge and Wisdom (sealed there, nominally); Primordial Hunger (former)",
+        "note": "Sealed Angel of the Tail-Devourer Pathway under the Primordial Hunger, presenting as a ~7–8-year-old boy. Godson of Lumian Lee, Franca Roland, and Jenna (formerly of Baron Brignais)."
+      }
+    },
+    {
+      "canonical_name": "Bethel Abraham",
+      "entity_type": "character",
+      "aliases": [
+        "Mr. Door",
+        "Yagates",
+        "Bethel",
+        "Abraham Family Ancestor"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Door",
+        "sequence": 1,
+        "status": "deceased (Fall 1352; gave up His life and apotheosis ritual to Amon, who thereby promoted to Error SEQ0)",
+        "affiliation": "Abraham Family (ancestor); Tudor Empire; Solomon Empire (former)",
+        "note": "King of Angels of the Door Pathway; held Door Uniqueness + all three SEQ1 Key of Stars Beyonder Characteristics but used Door Pathway sealing to avoid qualitative change to SEQ0. Corrupted by Mother Goddess of Depravity; banished by Evernight Goddess + Lord of Storms in the War of the Four Emperors. 'Mr. Door' is the public designation in lieu of His real name; 'Yagates' is His dream-symbol in The Fool's Dream."
+      }
+    },
+    {
+      "canonical_name": "Bernadette Gustav",
+      "entity_type": "character",
+      "aliases": [
+        "Queen Mystic",
+        "Bernie Huang",
+        "Huang Beibei",
+        "Bernadette",
+        "Pirate Queen",
+        "Miss Huang"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Hermit",
+        "sequence": 2,
+        "affiliation": "Element Dawn (founder); Emerald City; Intis Republic (former princess); Pirate Kings",
+        "relation": "Eldest daughter of Roselle Gustav; master of Cattleya",
+        "note": "Pirate King known as 'Queen Mystic'; ship is 'The Dawn'. Hermit Pathway SEQ2 Sage. Became holder of the Black Emperor's Crown (Black Emperor Pathway Uniqueness) following Roselle's Project Vortex sacrifice."
+      }
+    },
+    {
+      "canonical_name": "Sasrir",
+      "entity_type": "character",
+      "aliases": [
+        "Dark Angel",
+        "Dark Angel Sasrir",
+        "Deputy of Heaven",
+        "Sassy",
+        "Nie Zhen"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Hanged Man",
+        "sequence": 1,
+        "status": "deceased (Year 0 Fourth Epoch at the Feast of Betrayal); Evil Spirit remnant defeated Fall 1352 by Klein Moretti, Colin Iliad, Derrick Berg, and Lovia Tiffany",
+        "affiliation": "Rose Redemption (co-founder); Ancient Sun God's Kings of Angels (leader, former)",
+        "note": "Leader of the eight Kings of Angels under the Ancient Sun God; first Angel the Ancient Sun God created, from part of His personality + Authority of Degeneration + Hanged Man characteristics + one of His ribs, in order to wield the Chaos Sea and separate Himself from the Primordial God Almighty's corruption. Co-founded Rose Redemption with the Evernight Goddess to kill the Ancient Sun God. After the Feast of Betrayal, His consciousness merged into the Ancient Sun God's resurrected body as the True Creator; residual psyche / will / aura + Chaos Sea power became an Evil Spirit. Distinct entity from Ancient Sun God, Adam, and True Creator."
+      }
+    },
+    {
+      "canonical_name": "Ancient Sun God",
+      "entity_type": "character",
+      "aliases": [
+        "Grisha Adam",
+        "Grisha",
+        "Great Sun God",
+        "The Omniscient and Omnipotent",
+        "The Lord That Created Everything",
+        "The Creator",
+        "The Second Creator",
+        "Zhang Yujia"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Sun",
+        "former_pathway": "Error",
+        "sequence": "Quasi Great Old One (God Almighty)",
+        "status": "deceased (Year 0 Fourth Epoch; besieged at the Feast of Betrayal by Rose Redemption). Resurrected as Adam (Divinity Side) and True Creator (Humanity Side).",
+        "affiliation": "Forsaken Land of the Gods",
+        "note": "Third Epoch's supreme deity. True name per wiki is 'Grisha Adam' — recorded here rather than under Adam to keep pre-death references disambiguated. Father of Amon (Youngest Son) and Adam (Eldest Son / Divinity Side). Created Sasrir (Negative Side) with part of His personality + one rib + Hanged Man characteristics. After His death, consciousness resurrected in His own corpse (merged with Sasrir's consciousness) as the True Creator; separately, the Eldest Son's Divinity Side is Adam. 'Zhang Yujia' is the Ancient Sun God's 'In Modern Day' side-story identity (distinct from Adam's 'Peng Deng'). Must be kept distinct at NER time from (a) the current SEQ0 Sun deity Eternal Blazing Sun / Aucuses, who took the Sun SEQ0 seat only after the Ancient Sun God's downfall, (b) Adam, and (c) the Sasrir entity."
+      }
+    },
+    {
+      "canonical_name": "Danitz Dubois",
+      "entity_type": "character",
+      "aliases": [
+        "Blazing",
+        "Lord Oracle",
+        "Mr. 4,200 Pounds",
+        "Da Nizi",
+        "Dani",
+        "Danitz"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Red Priest",
+        "sequence": 4,
+        "former_sequence": 6,
+        "affiliation": "Church of the Fool (Oracle of the Sea God); Resistance; Golden Dream Pirates (former, Fourth Boatswain); Church of the Lord of Storms (former)",
+        "relation": "Former subordinate of Edwina Edwards on the Golden Dream",
+        "note": "Red Priest Pathway SEQ4 Iron-blooded Knight in COI (was SEQ6 Conspirer in LOTM1). Code name at Golden Dream Pirates: 'Blazing' (烈焰)."
+      }
+    },
+    {
+      "canonical_name": "Edwina Edwards",
+      "entity_type": "character",
+      "aliases": [
+        "Vice Admiral Iceberg",
+        "Edwina",
+        "Ai Nana"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "White Tower",
+        "sequence": 4,
+        "former_sequence": 5,
+        "affiliation": "Church of the God of Knowledge and Wisdom (Archbishop; Saint); Golden Dream Pirates (former captain)",
+        "relation": "Descendant of Edwards (a follower of Roselle Gustav, confirmed via Bernadette Gustav); former master of Danitz Dubois",
+        "note": "One of the seven Pirate Admirals in LOTM1 (captain of the Golden Dream). Advanced from SEQ5 Mysticism Magister to SEQ4 Prophet by COI."
+      }
+    },
+    {
+      "canonical_name": "Frank Lee",
+      "entity_type": "character",
+      "aliases": [
+        "Poison Expert",
+        "Mushroom King",
+        "The Real Mutated King of Mushrooms",
+        "Li Keji",
+        "Frank"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Mother",
+        "sequence": 5,
+        "affiliation": "The Future (first mate under Cattleya); Church of the Earth Mother (former orphan cloister)",
+        "note": "Mother Pathway SEQ5 Druid. Cross-breeding fanatic; developed the dark-growing mushrooms that sustain the Forsaken Land of the Gods."
+      }
+    },
+    {
+      "canonical_name": "Zaratul",
+      "entity_type": "character",
+      "aliases": [
+        "Zaratulstra",
+        "Lil' Zaratul"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "both",
+        "pathway": "Fool",
+        "sequence": 2,
+        "status": "deceased twice — LOTM1 Ch1353 via Law of Beyonder Characteristics Convergence; COI Ch1135 parasitised by Amon",
+        "affiliation": "Celestial Worthy of Heaven and Earth for Blessings (attendant); Secret Order (former leader)",
+        "relation": "Descendant of Zaratul Senior (killed by Bethel Abraham + Half-Fool Antigonus in the War of the Four Emperors)",
+        "note": "Klein Moretti's rival Fool-Pathway Miracle Invoker (SEQ2). Distinct from Zaratul Senior."
+      }
+    },
+    {
       "canonical_name": "Tarot Club",
       "entity_type": "organization",
       "aliases": [
@@ -785,7 +1023,8 @@
       "aliases": [
         "The Nighthawks",
         "Nighthawks Team",
-        "Nighthawks Squad"
+        "Nighthawks Squad",
+        "Nighthawk"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -966,7 +1205,8 @@
       "canonical_name": "Antigonus Family",
       "entity_type": "organization",
       "aliases": [
-        "House of Antigonus"
+        "House of Antigonus",
+        "Antigonus family"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -983,7 +1223,7 @@
       ],
       "is_spoiler": 0,
       "meta": {
-        "book": "coi",
+        "book": "both",
         "ancestor": "Medici (Red Angel)",
         "note": "Albus Medici belongs to this family."
       }
@@ -1065,7 +1305,8 @@
         "Pathway of the Fool",
         "Seer",
         "Seer Pathway",
-        "Pathway of the Seer"
+        "Pathway of the Seer",
+        "Clown"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -1154,7 +1395,8 @@
         "Pathway of the Visionary",
         "Spectator",
         "Spectator Pathway",
-        "Pathway of the Spectator"
+        "Pathway of the Spectator",
+        "Author"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -1225,7 +1467,8 @@
       "entity_type": "pathway",
       "aliases": [
         "Death Pathway",
-        "Pathway of Death"
+        "Pathway of Death",
+        "Corpse Collector"
       ],
       "is_spoiler": 0,
       "meta": {
@@ -1363,11 +1606,25 @@
       "entity_type": "character",
       "aliases": [
         "Daly",
-        "Madam Daly"
+        "Madam Daly",
+        "Dai Li"
       ],
       "is_spoiler": 0,
       "meta": {
         "book": "lotm1"
+      }
+    },
+    {
+      "canonical_name": "Elektra",
+      "entity_type": "character",
+      "aliases": [
+        "Bishop Elektra"
+      ],
+      "is_spoiler": 0,
+      "meta": {
+        "book": "lotm1",
+        "affiliation": "Church of the Evernight Goddess",
+        "note": "Bishop at Saint Samuel Cathedral, Backlund; interacts with Klein (as Dwayne Dantès) during the Aurora Order / Mr. X arc."
       }
     }
   ]

@@ -17,6 +17,7 @@
     "seed:entities": "tsx scripts/seed-entities.ts",
     "ner:sample": "tsx scripts/ner-sample.ts",
     "ner:score": "tsx scripts/ner-score.ts",
+    "ner:merge": "tsx scripts/ner-merge-collisions.ts",
     "eval": "tsx scripts/eval.ts",
     "eval:validate": "tsx scripts/validate-eval.ts",
     "test:retrieval": "tsx scripts/test-retrieval.ts",
