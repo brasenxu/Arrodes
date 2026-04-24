@@ -1,0 +1,126 @@
+{{SequenceChart/start}}
+<!-- Lord of Mysteries -->
+{{SequenceChart/mid|group=lom|rowspan = 3
+| {{Language|{{Seq|Seer}}|<br>Zhānbǔ jiā|占卜家|4}} | {{Language|{{Seq|Clown}}|<br>Xiǎochǒu|小丑|4}} | {{Language|{{Seq|Magician}}|<br>Móshù shī|魔术师|4}} | {{Language|{{Seq|Faceless}}|<br>Wú miàn rén|无面人|4}} | {{Language|{{Seq|Marionettist}}|<br>Mì ǒu dàshī|秘偶大师|4}} | {{Language|{{Seq|Bizarro Sorcerer}}|<br>Guǐ fǎshī|诡法师|4}} | {{Language|{{Seq|Scholar of Yore}}|<br>Gǔdài xuézhě|古代学者|4}} | {{Language|{{Seq|Miracle Invoker}}|<br>Qíjì shī|奇迹师|4}} | {{Language|{{Seq|Attendant of Mysteries}}|<br>Guǐmì shìzhě|诡秘侍者|4}} | {{Language|{{Seq|Fool}}|<br>Yúzhě|愚者|4}} | {{Language|{{Seq|Lord of Mysteries}}|<br>Guǐmì zhī zhǔ|诡秘之主|4}}
+}}
+{{SequenceChart/mid|group=lom 
+| {{Language|{{Seq|Marauder}}|<br>Tōudào zhě|偷盗者|4}} | {{Language|{{Seq|Swindler}}|<br>Zhàpiàn shī|诈骗师|4}} | {{Language|{{Seq|Cryptologist}}|<br>Jiěmì xuézhě|解密学者|4}} | {{Language|{{Seq|Prometheus}}|<br>Dào huǒ rén|盗火人|4}} | {{Language|{{Seq|Dream Stealer}}|<br>Qiè mèng jiā|窃梦家|4}} | {{Language|{{Seq|Parasite}}|<br>Jìshēng zhě|寄生者|4}} | {{Language|{{Seq|Mentor of Deceit}}|<br>Qīmán dǎoshī|欺瞒导师|4}} | {{Language|{{Seq|Trojan Horse of Destiny}}|<br>Mìngyùn mùmǎ|命运木马|4}} | {{Language|{{Seq|Worm of Time}}|<br>Shí zhī chóng|时之虫|4}} | {{Language|{{Seq|Error}}|<br>Cuòwù|错误|4}}
+}}
+{{SequenceChart/mid|group=lom
+| {{Language|{{Seq|Apprentice}}|<br>Xuétú|学徒|4}} | {{Language|{{Seq|Trickmaster}}|<br>Xìfǎ dàshī|戏法大师|4}} | {{Language|{{Seq|Astrologer}}|<br>Zhānxīng rén|占星人|4}} | {{Language|{{Seq|Scribe}}|<br>Jìlù guān|记录官|4}} | {{Language|{{Seq|Traveler}}|<br>Lǚ háng jiā|旅行家|4}} | {{Language|{{Seq|Secrets Sorcerer}}|<br>Mì fǎshī|秘法师|4}} | {{Language|{{Seq|Wanderer}}|<br>Mànyóu zhě|漫游者|4}} | {{Language|{{Seq|Planeswalker}}|<br>Lǚ fǎshī|旅法师|4}} | {{Language|{{Seq|Key of Stars}}|<br>Xīngzhī shi|星之匙|4}} | {{Language|{{Seq|Door}}|<br>Mén|门|4}}
+}}
+<!-- God Almighty -->
+{{SequenceChart/mid|group=ga|rowspan = 5
+| {{Language|{{Seq|Spectator}}|<br>Guānzhòng|观众|4}} | {{Language|{{Seq|Telepathist}}|<br>Dú xīn zhě|读心者|4}} | {{Language|{{Seq|Psychiatrist}}|<br>Xīnlǐ yīshēng|心理医生|4}} | {{Language|{{Seq|Hypnotist}}|<br>Cuīmián shī|催眠师|4}} | {{Language|{{Seq|Dreamwalker}}|<br>Mèngjìng xíngzhě|梦境行者|4}} | {{Language|{{Seq|Manipulator}}|<br>Cāozòng shī|操纵师|4}} | {{Language|{{Seq|Dream Weaver}}|<br>Zhī mèng rén|织梦人|4}} | {{Language|{{Seq|Discerner}}|<br>Dòngchá zhě|洞察者|4}} | {{Language|{{Seq|Author}}|<br>Zuòjiā|作家|4}} | {{Language|{{Seq|Visionary}}|<br>Kōngxiǎng jiā|空想家|4}} | {{Language|{{Seq|God Almighty}}|<br>Shàngdì|上帝|4}}
+}}
+{{SequenceChart/mid|group=ga
+| {{Language|{{Seq|Bard}}|<br>Gēsòng zhě|歌颂者|4}} | {{Language|{{Seq|Light Suppliant}}|<br>Qí guāng rén|祈光人|4}} | {{Language|{{Seq|Solar High Priest}}|<br>Tàiyáng shénguān|太阳神官|4}} | {{Language|{{Seq|Notary}}|<br>Gōngzhèng rén|公证人|4}} | {{Language|{{Seq|Priest of Light}}|<br>Guāng zhī jìsī|光之祭司|4}} | {{Language|{{Seq|Unshadowed}}|<br>Wú àn zhě|无暗者|4}} | {{Language|{{Seq|Justice Mentor}}|<br>Zhèngyì dǎoshī|正义导师|4}} | {{Language|{{Seq|Lightseeker}}|<br>Zhú guāng zhě|逐光者|4}} | {{Language|{{Seq|White Angel}}|<br>Chún bái tiānshǐ|纯白天使|4}} | {{Language|{{Seq|Sun}}|<br>Tàiyáng|太阳|4}}
+}}
+{{SequenceChart/mid|group=ga
+| {{Language|{{Seq|Sailor}}|<br>Shuǐshǒu|水手|4}} | {{Language|{{Seq|Folk of Rage}}|<br>Bàonù zhī mín|暴怒之民|4}} | {{Language|{{Seq|Seafarer}}|<br>Hánghǎi jiā|航海家|4}} | {{Language|{{Seq|Wind-blessed}}|<br>Fēng juàn zhě|风眷者|4}} | {{Language|{{Seq|Ocean Songster}}|<br>Hǎiyáng gē zhě|海洋歌者|4}} | {{Language|{{Seq|Cataclysmic Interrer}}|<br>Zāinàn zhǔjì|灾难主祭|4}} | {{Language|{{Seq|Sea King}}|<br>Hǎiwáng|海王|4}} | {{Language|{{Seq|Calamity}}|<br>Tiānzāi|天灾|4}} | {{Language|{{Seq|Thunder God}}|<br>Léishén|雷神|4}} | {{Language|{{Seq|Tyrant}}|<br>Bàojūn|暴君|4}}
+}}
+{{SequenceChart/mid|group=ga
+| {{Language|{{Seq|Reader}}|<br>Yuèdú zhě|阅读者|4}} | {{Language|{{Seq|Student of Ratiocination}}|<br>Tuīlǐ xuéyuán|推理学员|4}} | {{Language|{{Seq|Detective}}|<br>Zhēntàn|侦探|4}} | {{Language|{{Seq|Polymath}}|<br>Bó xuézhě|博学者|4}} | {{Language|{{Seq|Mysticism Magister}}|<br>Mì shù dǎoshī|秘术导师|4}} | {{Language|{{Seq|Prophet}}|<br>Yùyán jiā|预言家|4}} | {{Language|{{Seq|Cognizer}}|<br>Dòngxī zhě|洞悉者|4}} | {{Language|{{Seq|Wisdom Angel}}|<br>Zhì tiānshǐ|智天使|4}} | {{Language|{{Seq|Omniscient Eye}}|<br>Quán zhīzhī yǎn|全知之眼|4}} | {{Language|{{Seq|White Tower}}|<br>Bái tǎ|白塔|4}}
+}}
+{{SequenceChart/mid|group=ga
+| {{Language|{{Seq|Secrets Suppliant}}|<br>Mì qí rén|秘祈人|4}} | {{Language|{{Seq|Listener}}|<br>Qīngtīng zhě|倾听者|4}} | {{Language|{{Seq|Shadow Ascetic}}|<br>Yǐn xiūshì|隐修士|4}} | {{Language|{{Seq|Rose Bishop}}|<br>Qiángwēi zhǔjiào|蔷薇主教|4}} | {{Language|{{Seq|Shepherd}}|<br>Mùyáng rén|牧羊人|4}} | {{Language|{{Seq|Black Knight}}|<br>Hēi qíshì|黑骑士|4}} | {{Language|{{Seq|Trinity Templar}}|<br>Sān shǒu shèng táng|三首圣堂|4}} | {{Language|{{Seq|Profane Presbyter}}|<br>Huìyǔ zhǎnglǎo|秽语长老|4}} | {{Language|{{Seq|Dark Angel}}|<br>Àn tiānshǐ|暗天使|4}} | {{Language|{{Seq|Hanged Man}}|<br>Dào diào rén|倒吊人|4}}
+}}
+<!-- Eternal Darkness -->
+{{SequenceChart/mid|group=ed|rowspan = 3
+| {{Language|{{Seq|Sleepless}}|<br>Bùmián zhě|不眠者|4}} | {{Language|{{Seq|Midnight Poet}}|<br>Wǔyè shīrén|午夜诗人|4}} | {{Language|{{Seq|Nightmare}}|<br>Mèngyǎn|梦魇|4}} | {{Language|{{Seq|Soul Assurer}}|<br>Ān hún shī|安魂师|4}} | {{Language|{{Seq|Spirit Warlock}}|<br>Líng wū|灵巫|4}} | {{Language|{{Seq|Nightwatcher}}|<br>Shǒuyè rén|守夜人|4}} | {{Language|{{Seq|Horror Bishop}}|<br>Kǒngjù zhǔjiào|恐惧主教|4}} | {{Language|{{Seq|Servant of Concealment}}|<br>Yǐnmì zhī pū|隐秘之仆|4}} | {{Language|{{Seq|Knight of Misfortune}}|<br>Ènàn qíshì|厄难骑士|4}} | {{Language|{{Seq|Darkness}}|<br>Hēi'àn|黑暗|4}} | {{Language|{{Seq|Eternal Darkness}}|<br>Yǒnghéng zhī àn|永恒之暗|4}}
+}}
+{{SequenceChart/mid|group=ed
+| {{Language|{{Seq|Corpse Collector}}|<br>Shōushī rén|收尸人|4}} | {{Language|{{Seq|Gravedigger}}|<br>Jué mù rén|掘墓人|4}} | {{Language|{{Seq|Spirit Medium}}|<br>Tōng líng zhě|通灵者|4}} | {{Language|{{Seq|Spirit Guide}}|<br>Sǐ líng dǎoshī|死灵导师|4}} | {{Language|{{Seq|Gatekeeper}}|<br>Kān ménrén|看门人|4}} | {{Language|{{Seq|Undying}}|<br>Bù sǐzhě|不死者|4}} | {{Language|{{Seq|Ferryman}}|<br>Bǎidù rén|摆渡人|4}} | {{Language|{{Seq|Death Consul}}|<br>Sǐwáng zhízhèng guān|死亡执政官|4}} | {{Language|{{Seq|Pale Emperor}}|<br>Cāngbái huángdì|苍白皇帝|4}} | {{Language|{{Seq|Death}}|<br>Sǐshén|死神|4}}
+}}
+{{SequenceChart/mid|group=ed
+| {{Language|{{Seq|Warrior}}|<br>Zhànshì|战士|4}} | {{Language|{{Seq|Pugilist}}|<br>Gédòu jiā|格斗家|4}} | {{Language|{{Seq|Weapon Master}}|<br>Wǔqì dàshī|武器大师|4}} | {{Language|{{Seq|Dawn Paladin}}|<br>Límíng qíshì|黎明骑士|4}} | {{Language|{{Seq|Guardian}}|<br>Shǒuhù zhě|守护者|4}} | {{Language|{{Seq|Demon Hunter}}|<br>Liè mó zhě/Liè mó rén|猎魔者/猎魔人|4}} | {{Language|{{Seq|Silver Knight}}|<br>Yín qíshì|银骑士|4}} | {{Language|{{Seq|Glory}}|<br>Róngyào zhě|荣耀者|4}} | {{Language|{{Seq|Hand of God}}|<br>Shénmíng zhī shǒu|神明之手|4}} | {{Language|{{Seq|Twilight Giant}}|<br>Huánghūn jùrén|黄昏巨人|4}}
+}}
+<!-- Calamity of Destruction -->
+{{SequenceChart/mid|group=cod|rowspan = 2
+| {{Language|{{Seq|Assassin}}|<br>Cìkè|刺客|4}} | {{Language|{{Seq|Instigator}}|<br>Jiàosuō zhě|教唆者|4}} | {{Language|{{Seq|Witch}}|<br>Nǚwū|女巫|4}} | {{Language|{{Seq|Pleasure}}|<br>Huān yú|欢愉|4}} | {{Language|{{Seq|Affliction}}|<br>Tòngkǔ|痛苦|4}} | {{Language|{{Seq|Despair}}|<br>Juéwàng|绝望|4}} | {{Language|{{Seq|Unaging}}|<br>Bùlǎo|不老|4}} | {{Language|{{Seq|Catastrophe}}|<br>Zāinàn|灾难|4}} | {{Language|{{Seq|Apocalypse}}|<br>Mòrì|末日|4}} | {{Language|{{Seq|Demoness}}|<br>Mónǚ|魔女|4}} | {{Language|{{Seq|Calamity of Destruction}}|<br>Huǐmiè tiānzāi|毁灭天灾|4}}
+}}
+{{SequenceChart/mid|group=cod
+| {{Language|{{Seq|Hunter}}|<br>Lièrén|猎人|4}} | {{Language|{{Seq|Provoker}}|<br>Tiǎoxìn zhě|挑衅者|4}} | {{Language|{{Seq|Pyromaniac}}|<br>Zònghuǒ jiā|纵火家|4}} | {{Language|{{Seq|Conspirer}}|<br>Yīnmóu jiā|阴谋家|4}} | {{Language|{{Seq|Reaper}}|<br>Shōugē zhě|收割者|4}} | {{Language|{{Seq|Iron-blooded Knight}}|<br>Tiěxuè qíshì|铁血骑士|4}} | {{Language|{{Seq|War Bishop}}|<br>Zhànzhēng zhǔjiào|战争主教|4}} | {{Language|{{Seq|Weather Warlock}}|<br>Tiānqì shùshì|天气术士|4}} | {{Language|{{Seq|Conqueror}}|<br>Zhēngfú zhě|征服者|4}} | {{Language|{{Seq|Red Priest}}|<br>Hóng jìsī|红祭司|4}}
+}}
+<!-- Demon of Knowledge -->
+{{SequenceChart/mid|group=dok|rowspan = 2
+| {{Language|{{Seq|Mystery Pryer}}|<br>Kuī mì rén|窥秘人|4}} | {{Language|{{Seq|Melee Scholar}}|<br>Gédòu xuézhě|格斗学者|4}} | {{Language|{{Seq|Warlock}}|<br>Wūshī|巫师|4}} | {{Language|{{Seq|Scrolls Professor}}|<br>Juànzhóu jiàoshòu|卷轴教授|4}} | {{Language|{{Seq|Constellations Master}}|<br>Xīngxiàng shī|星象师|4}} | {{Language|{{Seq|Mysticologist}}|<br>Shénmì xué jiā|神秘学家|4}} | {{Language|{{Seq|Clairvoyant}}|<br>Yùyán dàshī|预言大师|4}} | {{Language|{{Seq|Sage}}|<br>Xián zhě|贤者|4}} | {{Language|{{Seq|Knowledge Emperor}}|<br>Zhīshì huángdì|知识皇帝|4}} | {{Language|{{Seq|Hermit}}|<br>Yǐn zhě|隐者|4}} | {{Language|{{Seq|Demon of Knowledge}}|<br>Zhīshì zhī yāo|知识之妖|4}}
+}}
+{{SequenceChart/mid|group=dok
+| {{Language|{{Seq|Savant}}|<br>Tōng shì zhě|通识者|4}} | {{Language|{{Seq|Archaeologist}}|<br>Kǎogǔ xué jiā|考古学家|4}} | {{Language|{{Seq|Appraiser}}|<br>Jiàndìng shī|鉴定师|4}} | {{Language|{{Seq|Artisan}}|<br>Gōngjiàng|工匠|4}} | {{Language|{{Seq|Astronomer}}|<br>Tiānwénxué jiā|天文学家|4}} | {{Language|{{Seq|Alchemist}}|<br>Liànjīn shùshì|炼金术士|4}} | {{Language|{{Seq|Arcane Scholar}}|<br>Àomì xuézhě|奥秘学者|4}} | {{Language|{{Seq|Knowledge Magister}}|<br>Zhīshì dǎoshī|知识导师|4}} | {{Language|{{Seq|Illuminator}}|<br>Qǐméng zhě|启蒙者|4}} | {{Language|{{Seq|Paragon}}|<br>Wánměi zhě|完美者|4}}
+}}
+<!-- Key of Light -->
+{{SequenceChart/mid|group=kol
+| {{Language|{{Seq|Monster}}|<br>Guàiwù|怪物|4}} | {{Language|{{Seq|Robot}}|<br>Jīqì|机器|4}} | {{Language|{{Seq|Lucky One}}|<br>Xìngyùn zhě|幸运者|4}} | {{Language|{{Seq|Calamity Priest}}|<br>Zāihuò jiàoshì|灾祸教士|4}} | {{Language|{{Seq|Winner}}|<br>Yíngjiā|赢家|4}} | {{Language|{{Seq|Misfortune Mage}}|<br>Èyùn fǎshī|厄运法师|4}} | {{Language|{{Seq|Chaoswalker}}|<br>Hǔnluàn xíngzhě|混乱行者|4}} | {{Language|{{Seq|Soothsayer}}|<br>Xiānzhī|先知|4}} | {{Language|{{Seq|Snake of Mercury}}|<br>Shuǐyín zhī shé|水银之蛇|4}} | {{Language|{{Seq|Wheel of Fortune}}|<br>Mìngyùn zhī lún|命运之轮|4}} | {{Language|{{Seq|Key of Light}}|<br>Guāng zhī yào|光之钥|4}}
+}}
+! colspan="11" style="background-color:#111; color:#fff;" |Originally From {{Language|[[Outer Deities]]|<br>Wàishén|外神|4}}
+|-
+<!-- Goddess of Origin -->
+{{SequenceChart/mid|group=goo|rowspan = 2
+| {{Language|{{Seq|Planter}}|<br>Gēngzhòng zhě|耕种者|4}} | {{Language|{{Seq|Doctor}}|<br>Yīshī|医师|4}} | {{Language|{{Seq|Harvest Priest}}|<br>Fēngshōu jìsī|丰收祭司|4}} | {{Language|{{Seq|Biologist}}|<br>Shēngwù xué jiā|生物学家|4}} | {{Language|{{Seq|Druid}}|<br>Dé lǔ yī|德鲁伊|4}} | {{Language|{{Seq|Ancient Alchemist}}|<br>Gǔdài liànjīn shī|古代炼金师|4}} | {{Language|{{Seq|Pallbearer}}|<br>Tái guān rén|抬棺人|4}} | {{Language|{{Seq|Desolate Matriarch}}|<br>Huāngwú zhǔ mǔ|荒芜主母|4}} | {{Language|{{Seq|Naturewalker}}|<br>Zìrán xíngzhě|自然行者|4}} | {{Language|{{Seq|Mother}}|<br>Mǔqīn|母亲|4}} | {{Language|{{Seq|Goddess of Origin}}|<br>Gēnyuán zhī shén|根源之神|4}}
+}}
+{{SequenceChart/mid|group=goo
+| {{Language|{{Seq|Apothecary}}|<br>Yàoshī|药师|4}} | {{Language|{{Seq|Beast Tamer}}|<br>Xùn shòu shī|驯兽师|4}} | {{Language|{{Seq|Vampire}}|<br>Xīxuèguǐ|吸血鬼|4}} | {{Language|{{Seq|Potions Professor}}|<br>Mó yào jiàoshòu|魔药教授|4}} | {{Language|{{Seq|Scarlet Scholar}}|<br>Shēn hóng xuézhě|深红学者|4}} | {{Language|{{Seq|Shaman King}}|<br>Wū wáng|巫王|4}} | {{Language|{{Seq|High Summoner}}|<br>Zhàohuàn dàshī|召唤大师|4}} | {{Language|{{Seq|Life-Giver}}|<br>Chuàng shēng zhě|创生者|4}} | {{Language|{{Seq|Beauty Goddess}}|<br>Měishén|美神|4}} | {{Language|{{Seq|Moon}}|<br>Yuèliàng|月亮|4}}
+}}
+<!-- Father of Devils -->
+{{SequenceChart/mid|group=fod|rowspan = 2
+| {{Language|{{Seq|Criminal}}|<br>Zuìfàn|罪犯|4}} | {{Language|{{Seq|Unwinged Angel}}|<br>Zhé yì tiānshǐ|折翼天使|4}} | {{Language|{{Seq|Serial Killer}}|<br>Liánhuán shāshǒu|连环杀手|4}} | {{Language|{{Seq|Devil}}|<br>Èmó|恶魔|4}} | {{Language|{{Seq|Desire Apostle}}|<br>Yùwàng shǐtú|欲望使徒|4}} | {{Language|{{Seq|Demon}}|<br>Móguǐ|魔鬼|4}} | {{Language|{{Seq|Blatherer}}|<br>Yìyǔ zhě|呓语者|4}} | {{Language|{{Seq|Bloody Archduke}}|<br>Xiānxiě dàgōng|鲜血大公|4}} | {{Language|{{Seq|Filthy Monarch}}|<br>Wūhuì jūnwáng|污秽君王|4}} | {{Language|{{Seq|Abyss}}|<br>Shēnyuān|深渊|4}} | {{Language|{{Seq|Father of Devils}}|<br>Èmó zhī fù|恶魔之父|4}}
+}}
+{{SequenceChart/mid|group=fod
+| {{Language|{{Seq|Prisoner}}|<br>Qiúfàn|囚犯|4}} | {{Language|{{Seq|Lunatic}}|<br>Fēngzi|疯子|4}} | {{Language|{{Seq|Werewolf}}|<br>Lángrén|狼人|4}} | {{Language|{{Seq|Zombie}}|<br>Huó shī|活尸|4}} | {{Language|{{Seq|Wraith}}|<br>Yuàn hún|怨魂|4}} | {{Language|{{Seq|Puppet}}|<br>Mù'ǒu|木偶|4}} | {{Language|{{Seq|Disciple of Silence}}|<br>Chénmò méntú|沉默门徒|4}} | {{Language|{{Seq|Ancient Bane}}|<br>Gǔdài xié wù|古代邪物|4}} | {{Language|{{Seq|Abomination}}|<br>Shén niè|神孽|4}} | {{Language|{{Seq|Chained}}|<br>Bèi fù zhě|被缚者|4}}
+}}
+<!-- The Anachy -->
+{{SequenceChart/mid|group=ta|rowspan = 2
+| {{Language|{{Seq|Lawyer}}|<br>Lǜshī|律师|4}} | {{Language|{{Seq|Barbarian}}|<br>Yěmán rén|野蛮人|4}} | {{Language|{{Seq|Briber}}|<br>Huìlù zhě|贿赂者|4}} | {{Language|{{Seq|Baron of Corruption}}|<br>Fǔhuà nánjué|腐化男爵|4}} | {{Language|{{Seq|Mentor of Disorder}}|<br>Hǔnluàn dǎoshī|混乱导师|4}} | {{Language|{{Seq|Earl of the Fallen}}|<br>Duòluò bójué|堕落伯爵|4}} | {{Language|{{Seq|Frenzied Mage}}|<br>Kuángluàn fǎshī|狂乱法师|4}} | {{Language|{{Seq|Duke of Entropy}}|<br>Shāng zhī gōngjué|熵之公爵|4}} | {{Language|{{Seq|Prince of Abolition}}|<br>Shì xù qīnwáng|弑序亲王|4}} | {{Language|{{Seq|Black Emperor}}|<br>Hēi huángdì|黑皇帝|4}} | {{Language|{{Seq|The Anarchy}}|<br>Shīxù zhě|失序者|4}}
+}}
+{{SequenceChart/mid|group=ta
+| {{Language|{{Seq|Arbiter}}|<br>Zhòngcái rén|仲裁人|4}} | {{Language|{{Seq|Sheriff}}|<br>Zhì'ān guān|治安官|4}} | {{Language|{{Seq|Interrogator}}|<br>Shěnxùn zhě|审讯者|4}} | {{Language|{{Seq|Judge}}|<br>Fǎguān|法官|4}} | {{Language|{{Seq|Disciplinary Paladin}}|<br>Chéngjiè qíshì|惩戒骑士|4}} | {{Language|{{Seq|Imperative Mage}}|<br>Lǜlìng fǎshī|律令法师|4}} | {{Language|{{Seq|Chaos Hunter}}|<br>Hǔnluàn lièshǒu|混乱猎手|4}} | {{Language|{{Seq|Balancer}}|<br>Pínghéng zhě|平衡者|4}} | {{Language|{{Seq|Hand of Order}}|<br>Zhìxù zhī shǒu|秩序之手|4}} | {{Language|{{Seq|Justiciar}}|<br>Shěnpàn zhě|审判者|4}}
+}}
+{{SequenceChart/end}}
+<noinclude>[[Category:Data Templates]]</noinclude>
+===Chart of Non-Standard Sequences===
+
+{{SequenceChart/start}}
+<!-- Circle of Inevitability -->
+{{SequenceChart/mid|group=coi
+| {{Language|{{Seq|Dancer}}|<br>Wǔdǎo jiā|舞蹈家|4}} | {{Language|{{Seq|Alms Monk}}|<br>Tuō bō sēnglǚ|托钵僧侣|4}} | {{Language|{{Seq|Contractee}}|<br>Shòu qì zhī rén|受契之人|4}} | {{Language|{{Seq|Ascetic}}|<br>Kǔ xiūshì|苦修士|4}} | {{Language|{{Seq|Fate Appropriator}}|<br>Liè mìng shī|猎命师|4}} | {{Language|{{Seq|Circle Inhabitant}}|<br>Huán zhōng rén|环中人|4}} | {{Language|{{Seq|Sufferer}}|<br>Shòunàn zhě|受难者|4}} | {{Language|{{Seq|Sinner}}|<br>Zuìrén|罪人|4}} | {{Language|{{Seq|Angel of Redemption}}|<br>Jiùshú tiānshǐ|救赎天使|4}} | {{Language|{{Seq|Eternal Aeon}}|<br>Yǒngjié zhě|永劫者|4}} | {{Language|{{Seq|Circle of Inevitability}}|<br>Sùmìng zhī huán|宿命之环|4}}
+}}
+<!-- Mother Goddess of Depravity -->
+{{SequenceChart/mid|group=mgod
+| {{Language|{{Seq|Villain}}|<br>Ègùn|恶棍|4}} | {{Language|{{Seq|Gardener}}|<br>Yuándīng|园丁|4}} | {{Language|{{Seq|Heretic Spellmaster}}|<br>Xié shù shī|邪术师|4}} | {{Language|{{Seq|Sower}}|<br>Bōzhòng zhě|播种者|4}} | {{Language|{{Seq|Banshee}}|<br>Nǚ yāo|女妖|4}} | {{Language|{{Seq|Madame}}|<br>Fūrén|夫人|4}} | {{Language|{{Seq|Divine Mother}}|<br>Yùn shén zhě|孕神者|4}} | {{Language|{{Seq|The Supreme}}|<br>Zhìgāo zhě|至高者|4}} | {{Language|{{Seq|Valley God}}|<br>Gǔ shén|谷神|4}} | {{Language|{{Seq|Chaos Primogenitor}}|<br>Hùndùn yuán tāi|混沌原胎|4}} | {{Language|{{Seq|Mother Goddess of Depravity}}|<br>Duòluò mǔ shén|堕落母神|4}}
+}}
+<!-- Mother Tree of Desire -->
+{{SequenceChart/mid|group=mtod
+| {{Language|{{Seq|Scrooge}}|<br>Lìnsè guǐ|吝啬鬼|4}} | {{Language|{{Seq|Sex Addict}}|<br>Xìng yǐn bìngrén|性瘾病人|4}} | {{Language|{{Seq|Actor}}|<br>Yǎnyuán|演员|4}} | {{Language|{{Seq|Recipient}}|<br>Shòu xūn zhě|受勋者|4}} | {{Language|{{Seq|Fallen Tree Spirit}}|<br> Duòluò shù jīng|堕落树精|4}} | {{Language|{{Seq|Tree Supplicant}}|<br>Qí shù rén|祈树人|4}} | {{Language|{{Seq|Desire Priest}}|<br>Yùwàng jìsì|欲望祭祀|4}} | {{Language|{{Seq|Cupid}}|<br>Ài shén|爱神|4}} | {{Language|{{Seq|Leviathan}}|<br>Lì wéi tǎn|利维坦|4}} | {{Language|{{Seq|Patriarch}}|<br>Zhǔfù|主父|4}} | {{Language|{{Seq|Mother Tree of Desire}}|<br>Yùwàng mǔshù|欲望母树|4}}
+
+}}
+<!-- Uncertain Mist -->
+{{SequenceChart/mid|group=soc
+| {{Language|{{Seq|Broker}}|<br>Qiánkè|掮客|4}} | {{Language|{{Seq|Shadow Merchant}}|<br>Yīnyǐng shāngrén|阴影商人|4}} | {{Language|{{Seq|Prosecutor}}|<br>Gōngsùrén|公诉人|4}} | {{Language|{{Seq|Ambitionist}}|<br>Yěxīn jiā|野心家|4}} | {{Language|{{Seq|Under the Table}}|<br>Ànxiāng|暗箱|4}} | {{Language|{{Seq|Overseer}}|<br>Jiāndū zhě|监督者|4}} | {{Language|{{Seq|Vortex Weaver}}|<br>Xuànwō Biānzhīzhě|漩涡编织者|4}} | {{Language|{{Seq|Blasphemer}}|<br>Xièdúzhě|亵渎者|4}} | {{Language|{{Seq|Truth}}|<br>Zhēnlǐ|真理|4}} | {{Language|{{Seq|Chaos Mist}}|<br>Hùndùn Míwù|混沌迷雾|4}} | {{Language|{{Seq|Uncertain Mist}}|<br>Bùdìng zhī wù|不定之雾|4}}
+}}
+<!-- Primordial Hunger -->
+{{SequenceChart/mid|group=ph
+| {{Language|{{Seq|Tramp}}|<br>Liúlàng hàn|流浪汉|4}} | {{Language|{{Seq|Glutton}}|<br>Tān chī zhě|贪吃者|4}} | {{Language|{{Seq|Gourmet}}|<br>Měishíjiā|美食家|4}} | {{Language|{{Seq|Chef}}|<br>Chúshī|厨师|4}} | {{Language|{{Seq|Depriver}}|<br>Bōduó zhě|剥夺者|4}} | {{Language|{{Seq|Sea Monster}}|<br>Hǎi guài|海怪|4}} | {{Language|{{Seq|Hydra}}|<br>Jiǔ tóu shé|九头蛇|4}} | {{Language|{{Seq|Angel of Devouring}}|<br>Shìzhī tiānshǐ|噬之天使|4}} | {{Language|{{Seq|Chaos Gastric Juices}}|<br>Hùndùn wèiyè|混沌胃液|4}} | {{Language|{{Seq|Tail-Devourer}}|<br>Tūn wěi zhě|吞尾者|4}} | {{Language|{{Seq|Primordial Hunger}}|<br>Yuánchū jī'è|原初饥饿|4}}
+}}
+<!-- Supernova Dominator -->
+{{SequenceChart/mid|group=sd
+| {{Language|{{Seq|Astronomy Aficionado}}|<br>Tiānwén àihào zhě|天文爱好者|4}} | {{Language|{{Seq|Star Worshipper}}|<br>Bài xīngrén|拜星人|4}} | {{Language|{{Seq|Star Sacrificer}}|<br>Jì xīng shī|祭星师|4}} | {{Language|{{Seq|Navigator}}|<br>Lǐngháng yuán|领航员|4}} | {{Language|{{Seq|Tidal Scholar}}|<br>Cháoxī xuézhě|潮汐学者|4}} | {{Language|{{Seq|Heavybringer}}|<br>Chénzhòng zhě|沉重者|4}} | {{Language|{{Seq|Star Shepherd}}|<br>Mù xīngrén|牧星人|4}} | {{Language|{{Seq|Radiant Angel}}|<br>Cuǐcàn tiānshǐ|璀璨天使|4}} | {{Language|{{Seq|Star Dragon}}|<br>Xīngzhī jù lóng|星之巨龙|4}} | {{Language|{{Seq|Condenser}}|<br>Zhìmì zhě|致密者|4}} | {{Language|{{Seq|Supernova Dominator}}|<br>Chāoxīng zhǔzǎi|超星主宰|4}}
+}}
+<!-- Inextinguishable Ravings -->
+{{SequenceChart/mid|group=ir
+|{{Language|{{Seq|Initiator}}|<br>Rùmén zhě|入门者|4}} | {{Language|{{Seq|Commentator}}|<br>Pínglùn rén|评论人|4}} | {{Language|{{Seq|Orator}}|<br>Yǎnjiǎng zhě|演讲者|4}} | {{Language|{{Seq|Singer}}|<br>Gēchàng jiā|歌唱家|4}} | {{Language|{{Seq|Secret Transmitter}}|<br>Chuánmì rén|传密人|4}} | {{Language|{{Seq|Philosopher}}|<br>Zhéxué jiā|哲学家|4}} | {{Language|{{Seq|Messenger of God}}|<br>Shén zhī xìnshǐ|神之信使|4}} | {{Language|{{Seq|Great Old One Attendant}}|<br>Jiù rì shìzhě|旧日侍者|4}} | {{Language|{{Seq|Voice of the Heart}}|<br>Xīn zhī shēng|心之声|4}} | {{Language|{{Seq|Everlasting}}|<br>Bùxiǔ zhě|不朽者|4}} | {{Language|{{Seq|Inextinguishable Ravings}}|<br>Bù xī de yìyǔ|不熄的呓语|4}}
+}}
+<!-- Monarch of Decay -->
+{{SequenceChart/mid|group=mod
+| {{Language|{{Seq|Patient}}|<br>Bìng huàn|病患|4}} | {{Language|{{Seq|Secretary}}|<br>Mìshū|秘书|4}} | {{Language|{{Seq|Vermin}}|<br>Zhùchóng|蛀虫|4}} | {{Language|{{Seq|Disease Envoy}}|<br>Jíbìng shǐzhě|疾病使者|4}} | {{Language|{{Seq|Child of Decay}}|<br>Fǔlàn zhīzǐ|腐烂之子|4}} | {{Language|{{Seq|Doomed One}}|<br>Bìsǐ zhī rén|必死之人|4}} | {{Language|{{Seq|Left Hand of Decay}}|<br>Shuāibài zuóshǒu|衰败左手|4}} | {{Language|{{Seq|Time Giant}}|<br>Shíguāng jùrén|时光巨人|4}} | {{Language|{{Seq|God of Decay}}|<br>Shuāilăo zhī shén|衰老之神|4}} | {{Language|{{Seq|Second Law}}|<br>Dì èr dìnglǜ|第二定律|4}} | {{Language|{{Seq|Monarch of Decay}}|<br>Shuāibài jūnwáng|衰败君王|4}}
+}}
+<!-- High-Dimensional Overseer -->
+{{SequenceChart/mid|group=hdo
+| {{Language|{{Seq|Shaman}}|<br>Sà mǎn|萨满|4}} | {{Language|{{Seq|Reporter}}|<br>Jìzhě|记者|4}} | {{Language|{{Seq|Painter}}|<br>Huàjiā|画家|4}} | {{Language|{{Seq|Literary Aficionado}}|<br>Wénxué àihào zhě|文学爱好者|4}} | {{Language|{{Seq|Pixie}}|<br>Yāojing|妖精|4}} | {{Language|{{Seq|Visitor}}|<br>Lǚkè|旅客|4}} | {{Language|{{Seq|String Player}}|<br>Xián zhī tán zòu zhě|弦之弹奏者|4}} | {{Language|{{Seq|Dimensional Shadow}}|<br>Wéidù zhī yǐng|维度之影|4}} | {{Language|{{Seq|Observer}}|<br>Guānchá zhě|观察者|4}} | {{Language|{{Seq|Sublunary Eye}}|<br>Chénshì zhī yǎn|尘世之眼|4}} | {{Language|{{Seq|High-Dimensional Overseer}}|<br>Gāo wéi fǔshì zhě|高维俯视者|4}}
+}}
+<!-- Goddess of Fate -->
+{{SequenceChart/mid|group=gof
+| {{Language|{{Seq|Dreamless}}|<br>Shī mèng rén|失梦人|4}} | {{Language|{{Seq|Musician}}|<br>Yuèshī|乐师|4}} | {{Language|{{Seq|Fate Pryer}}|<br>Kuī mìng shī|窥命师|4}} | {{Language|{{Seq|Mute}}|<br>Yǎbā|哑巴|4}} | {{Language|{{Seq|Deceased}}|<br>Shì zhě|逝者|4}} | {{Language|{{Seq|Fatebender}}|<br>Gǎi mìng rén|改命人|4}} | {{Language|{{Seq|Fate's Attendant}}|<br>Mìngyùn shìzhě|命运侍者|4}} | {{Language|{{Seq|Web Weaver}}|<br>Zhī wǎng rén|织网人|4}} | {{Language|{{Seq|Blade of Fate}}|<br>Mìngyùn zhī rèn|命运之刃|4}} | {{Language|{{Seq|Eternal Edict}}|<br>Yǒngshēng lǜ|永生律|4}} | {{Language|{{Seq|Goddess of Fate}}|<br>Mìngyùn nǔshén|命运女神|4}}
+}}
+{{SequenceChart/end}}
+<noinclude>[[Category:Data Templates]]</noinclude>

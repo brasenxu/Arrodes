@@ -1,0 +1,1826 @@
+[
+  {
+    "pathway": "Fool",
+    "category": "standard",
+    "true_god": "Fool",
+    "great_old_one": "Lord of Mysteries",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Seer"
+      },
+      {
+        "tier": 8,
+        "title": "Clown"
+      },
+      {
+        "tier": 7,
+        "title": "Magician"
+      },
+      {
+        "tier": 6,
+        "title": "Faceless"
+      },
+      {
+        "tier": 5,
+        "title": "Marionettist"
+      },
+      {
+        "tier": 4,
+        "title": "Bizarro Sorcerer"
+      },
+      {
+        "tier": 3,
+        "title": "Scholar of Yore"
+      },
+      {
+        "tier": 2,
+        "title": "Miracle Invoker"
+      },
+      {
+        "tier": 1,
+        "title": "Attendant of Mysteries"
+      },
+      {
+        "tier": 0,
+        "title": "Fool"
+      }
+    ]
+  },
+  {
+    "pathway": "Error",
+    "category": "standard",
+    "true_god": "Error",
+    "great_old_one": "Lord of Mysteries",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Marauder"
+      },
+      {
+        "tier": 8,
+        "title": "Swindler"
+      },
+      {
+        "tier": 7,
+        "title": "Cryptologist"
+      },
+      {
+        "tier": 6,
+        "title": "Prometheus"
+      },
+      {
+        "tier": 5,
+        "title": "Dream Stealer"
+      },
+      {
+        "tier": 4,
+        "title": "Parasite"
+      },
+      {
+        "tier": 3,
+        "title": "Mentor of Deceit"
+      },
+      {
+        "tier": 2,
+        "title": "Trojan Horse of Destiny"
+      },
+      {
+        "tier": 1,
+        "title": "Worm of Time"
+      },
+      {
+        "tier": 0,
+        "title": "Error"
+      }
+    ]
+  },
+  {
+    "pathway": "Door",
+    "category": "standard",
+    "true_god": "Door",
+    "great_old_one": "Lord of Mysteries",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Apprentice"
+      },
+      {
+        "tier": 8,
+        "title": "Trickmaster"
+      },
+      {
+        "tier": 7,
+        "title": "Astrologer"
+      },
+      {
+        "tier": 6,
+        "title": "Scribe"
+      },
+      {
+        "tier": 5,
+        "title": "Traveler"
+      },
+      {
+        "tier": 4,
+        "title": "Secrets Sorcerer"
+      },
+      {
+        "tier": 3,
+        "title": "Wanderer"
+      },
+      {
+        "tier": 2,
+        "title": "Planeswalker"
+      },
+      {
+        "tier": 1,
+        "title": "Key of Stars"
+      },
+      {
+        "tier": 0,
+        "title": "Door"
+      }
+    ]
+  },
+  {
+    "pathway": "Visionary",
+    "category": "standard",
+    "true_god": "Visionary",
+    "great_old_one": "God Almighty",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Spectator"
+      },
+      {
+        "tier": 8,
+        "title": "Telepathist"
+      },
+      {
+        "tier": 7,
+        "title": "Psychiatrist"
+      },
+      {
+        "tier": 6,
+        "title": "Hypnotist"
+      },
+      {
+        "tier": 5,
+        "title": "Dreamwalker"
+      },
+      {
+        "tier": 4,
+        "title": "Manipulator"
+      },
+      {
+        "tier": 3,
+        "title": "Dream Weaver"
+      },
+      {
+        "tier": 2,
+        "title": "Discerner"
+      },
+      {
+        "tier": 1,
+        "title": "Author"
+      },
+      {
+        "tier": 0,
+        "title": "Visionary"
+      }
+    ]
+  },
+  {
+    "pathway": "Sun",
+    "category": "standard",
+    "true_god": "Sun",
+    "great_old_one": "God Almighty",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Bard"
+      },
+      {
+        "tier": 8,
+        "title": "Light Suppliant"
+      },
+      {
+        "tier": 7,
+        "title": "Solar High Priest"
+      },
+      {
+        "tier": 6,
+        "title": "Notary"
+      },
+      {
+        "tier": 5,
+        "title": "Priest of Light"
+      },
+      {
+        "tier": 4,
+        "title": "Unshadowed"
+      },
+      {
+        "tier": 3,
+        "title": "Justice Mentor"
+      },
+      {
+        "tier": 2,
+        "title": "Lightseeker"
+      },
+      {
+        "tier": 1,
+        "title": "White Angel"
+      },
+      {
+        "tier": 0,
+        "title": "Sun"
+      }
+    ]
+  },
+  {
+    "pathway": "Tyrant",
+    "category": "standard",
+    "true_god": "Tyrant",
+    "great_old_one": "God Almighty",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Sailor"
+      },
+      {
+        "tier": 8,
+        "title": "Folk of Rage"
+      },
+      {
+        "tier": 7,
+        "title": "Seafarer"
+      },
+      {
+        "tier": 6,
+        "title": "Wind-blessed"
+      },
+      {
+        "tier": 5,
+        "title": "Ocean Songster"
+      },
+      {
+        "tier": 4,
+        "title": "Cataclysmic Interrer"
+      },
+      {
+        "tier": 3,
+        "title": "Sea King"
+      },
+      {
+        "tier": 2,
+        "title": "Calamity"
+      },
+      {
+        "tier": 1,
+        "title": "Thunder God"
+      },
+      {
+        "tier": 0,
+        "title": "Tyrant"
+      }
+    ]
+  },
+  {
+    "pathway": "White Tower",
+    "category": "standard",
+    "true_god": "White Tower",
+    "great_old_one": "God Almighty",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Reader"
+      },
+      {
+        "tier": 8,
+        "title": "Student of Ratiocination"
+      },
+      {
+        "tier": 7,
+        "title": "Detective"
+      },
+      {
+        "tier": 6,
+        "title": "Polymath"
+      },
+      {
+        "tier": 5,
+        "title": "Mysticism Magister"
+      },
+      {
+        "tier": 4,
+        "title": "Prophet"
+      },
+      {
+        "tier": 3,
+        "title": "Cognizer"
+      },
+      {
+        "tier": 2,
+        "title": "Wisdom Angel"
+      },
+      {
+        "tier": 1,
+        "title": "Omniscient Eye"
+      },
+      {
+        "tier": 0,
+        "title": "White Tower"
+      }
+    ]
+  },
+  {
+    "pathway": "Hanged Man",
+    "category": "standard",
+    "true_god": "Hanged Man",
+    "great_old_one": "God Almighty",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Secrets Suppliant"
+      },
+      {
+        "tier": 8,
+        "title": "Listener"
+      },
+      {
+        "tier": 7,
+        "title": "Shadow Ascetic"
+      },
+      {
+        "tier": 6,
+        "title": "Rose Bishop"
+      },
+      {
+        "tier": 5,
+        "title": "Shepherd"
+      },
+      {
+        "tier": 4,
+        "title": "Black Knight"
+      },
+      {
+        "tier": 3,
+        "title": "Trinity Templar"
+      },
+      {
+        "tier": 2,
+        "title": "Profane Presbyter"
+      },
+      {
+        "tier": 1,
+        "title": "Dark Angel"
+      },
+      {
+        "tier": 0,
+        "title": "Hanged Man"
+      }
+    ]
+  },
+  {
+    "pathway": "Darkness",
+    "category": "standard",
+    "true_god": "Darkness",
+    "great_old_one": "Eternal Darkness",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Sleepless"
+      },
+      {
+        "tier": 8,
+        "title": "Midnight Poet"
+      },
+      {
+        "tier": 7,
+        "title": "Nightmare"
+      },
+      {
+        "tier": 6,
+        "title": "Soul Assurer"
+      },
+      {
+        "tier": 5,
+        "title": "Spirit Warlock"
+      },
+      {
+        "tier": 4,
+        "title": "Nightwatcher"
+      },
+      {
+        "tier": 3,
+        "title": "Horror Bishop"
+      },
+      {
+        "tier": 2,
+        "title": "Servant of Concealment"
+      },
+      {
+        "tier": 1,
+        "title": "Knight of Misfortune"
+      },
+      {
+        "tier": 0,
+        "title": "Darkness"
+      }
+    ]
+  },
+  {
+    "pathway": "Death",
+    "category": "standard",
+    "true_god": "Death",
+    "great_old_one": "Eternal Darkness",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Corpse Collector"
+      },
+      {
+        "tier": 8,
+        "title": "Gravedigger"
+      },
+      {
+        "tier": 7,
+        "title": "Spirit Medium"
+      },
+      {
+        "tier": 6,
+        "title": "Spirit Guide"
+      },
+      {
+        "tier": 5,
+        "title": "Gatekeeper"
+      },
+      {
+        "tier": 4,
+        "title": "Undying"
+      },
+      {
+        "tier": 3,
+        "title": "Ferryman"
+      },
+      {
+        "tier": 2,
+        "title": "Death Consul"
+      },
+      {
+        "tier": 1,
+        "title": "Pale Emperor"
+      },
+      {
+        "tier": 0,
+        "title": "Death"
+      }
+    ]
+  },
+  {
+    "pathway": "Twilight Giant",
+    "category": "standard",
+    "true_god": "Twilight Giant",
+    "great_old_one": "Eternal Darkness",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Warrior"
+      },
+      {
+        "tier": 8,
+        "title": "Pugilist"
+      },
+      {
+        "tier": 7,
+        "title": "Weapon Master"
+      },
+      {
+        "tier": 6,
+        "title": "Dawn Paladin"
+      },
+      {
+        "tier": 5,
+        "title": "Guardian"
+      },
+      {
+        "tier": 4,
+        "title": "Demon Hunter"
+      },
+      {
+        "tier": 3,
+        "title": "Silver Knight"
+      },
+      {
+        "tier": 2,
+        "title": "Glory"
+      },
+      {
+        "tier": 1,
+        "title": "Hand of God"
+      },
+      {
+        "tier": 0,
+        "title": "Twilight Giant"
+      }
+    ]
+  },
+  {
+    "pathway": "Demoness",
+    "category": "standard",
+    "true_god": "Demoness",
+    "great_old_one": "Calamity of Destruction",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Assassin"
+      },
+      {
+        "tier": 8,
+        "title": "Instigator"
+      },
+      {
+        "tier": 7,
+        "title": "Witch"
+      },
+      {
+        "tier": 6,
+        "title": "Pleasure"
+      },
+      {
+        "tier": 5,
+        "title": "Affliction"
+      },
+      {
+        "tier": 4,
+        "title": "Despair"
+      },
+      {
+        "tier": 3,
+        "title": "Unaging"
+      },
+      {
+        "tier": 2,
+        "title": "Catastrophe"
+      },
+      {
+        "tier": 1,
+        "title": "Apocalypse"
+      },
+      {
+        "tier": 0,
+        "title": "Demoness"
+      }
+    ]
+  },
+  {
+    "pathway": "Red Priest",
+    "category": "standard",
+    "true_god": "Red Priest",
+    "great_old_one": "Calamity of Destruction",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Hunter"
+      },
+      {
+        "tier": 8,
+        "title": "Provoker"
+      },
+      {
+        "tier": 7,
+        "title": "Pyromaniac"
+      },
+      {
+        "tier": 6,
+        "title": "Conspirer"
+      },
+      {
+        "tier": 5,
+        "title": "Reaper"
+      },
+      {
+        "tier": 4,
+        "title": "Iron-blooded Knight"
+      },
+      {
+        "tier": 3,
+        "title": "War Bishop"
+      },
+      {
+        "tier": 2,
+        "title": "Weather Warlock"
+      },
+      {
+        "tier": 1,
+        "title": "Conqueror"
+      },
+      {
+        "tier": 0,
+        "title": "Red Priest"
+      }
+    ]
+  },
+  {
+    "pathway": "Hermit",
+    "category": "standard",
+    "true_god": "Hermit",
+    "great_old_one": "Demon of Knowledge",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Mystery Pryer"
+      },
+      {
+        "tier": 8,
+        "title": "Melee Scholar"
+      },
+      {
+        "tier": 7,
+        "title": "Warlock"
+      },
+      {
+        "tier": 6,
+        "title": "Scrolls Professor"
+      },
+      {
+        "tier": 5,
+        "title": "Constellations Master"
+      },
+      {
+        "tier": 4,
+        "title": "Mysticologist"
+      },
+      {
+        "tier": 3,
+        "title": "Clairvoyant"
+      },
+      {
+        "tier": 2,
+        "title": "Sage"
+      },
+      {
+        "tier": 1,
+        "title": "Knowledge Emperor"
+      },
+      {
+        "tier": 0,
+        "title": "Hermit"
+      }
+    ]
+  },
+  {
+    "pathway": "Paragon",
+    "category": "standard",
+    "true_god": "Paragon",
+    "great_old_one": "Demon of Knowledge",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Savant"
+      },
+      {
+        "tier": 8,
+        "title": "Archaeologist"
+      },
+      {
+        "tier": 7,
+        "title": "Appraiser"
+      },
+      {
+        "tier": 6,
+        "title": "Artisan"
+      },
+      {
+        "tier": 5,
+        "title": "Astronomer"
+      },
+      {
+        "tier": 4,
+        "title": "Alchemist"
+      },
+      {
+        "tier": 3,
+        "title": "Arcane Scholar"
+      },
+      {
+        "tier": 2,
+        "title": "Knowledge Magister"
+      },
+      {
+        "tier": 1,
+        "title": "Illuminator"
+      },
+      {
+        "tier": 0,
+        "title": "Paragon"
+      }
+    ]
+  },
+  {
+    "pathway": "Wheel of Fortune",
+    "category": "standard",
+    "true_god": "Wheel of Fortune",
+    "great_old_one": "Key of Light",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Monster"
+      },
+      {
+        "tier": 8,
+        "title": "Robot"
+      },
+      {
+        "tier": 7,
+        "title": "Lucky One"
+      },
+      {
+        "tier": 6,
+        "title": "Calamity Priest"
+      },
+      {
+        "tier": 5,
+        "title": "Winner"
+      },
+      {
+        "tier": 4,
+        "title": "Misfortune Mage"
+      },
+      {
+        "tier": 3,
+        "title": "Chaoswalker"
+      },
+      {
+        "tier": 2,
+        "title": "Soothsayer"
+      },
+      {
+        "tier": 1,
+        "title": "Snake of Mercury"
+      },
+      {
+        "tier": 0,
+        "title": "Wheel of Fortune"
+      }
+    ]
+  },
+  {
+    "pathway": "Mother",
+    "category": "standard",
+    "true_god": "Mother",
+    "great_old_one": "Goddess of Origin",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Planter"
+      },
+      {
+        "tier": 8,
+        "title": "Doctor"
+      },
+      {
+        "tier": 7,
+        "title": "Harvest Priest"
+      },
+      {
+        "tier": 6,
+        "title": "Biologist"
+      },
+      {
+        "tier": 5,
+        "title": "Druid"
+      },
+      {
+        "tier": 4,
+        "title": "Ancient Alchemist"
+      },
+      {
+        "tier": 3,
+        "title": "Pallbearer"
+      },
+      {
+        "tier": 2,
+        "title": "Desolate Matriarch"
+      },
+      {
+        "tier": 1,
+        "title": "Naturewalker"
+      },
+      {
+        "tier": 0,
+        "title": "Mother"
+      }
+    ]
+  },
+  {
+    "pathway": "Mother",
+    "category": "outer-deity",
+    "true_god": "Mother",
+    "great_old_one": "Goddess of Origin",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Planter"
+      },
+      {
+        "tier": 8,
+        "title": "Doctor"
+      },
+      {
+        "tier": 7,
+        "title": "Harvest Priest"
+      },
+      {
+        "tier": 6,
+        "title": "Biologist"
+      },
+      {
+        "tier": 5,
+        "title": "Druid"
+      },
+      {
+        "tier": 4,
+        "title": "Ancient Alchemist"
+      },
+      {
+        "tier": 3,
+        "title": "Pallbearer"
+      },
+      {
+        "tier": 2,
+        "title": "Desolate Matriarch"
+      },
+      {
+        "tier": 1,
+        "title": "Naturewalker"
+      },
+      {
+        "tier": 0,
+        "title": "Mother"
+      }
+    ]
+  },
+  {
+    "pathway": "Moon",
+    "category": "standard",
+    "true_god": "Moon",
+    "great_old_one": "Goddess of Origin",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Apothecary"
+      },
+      {
+        "tier": 8,
+        "title": "Beast Tamer"
+      },
+      {
+        "tier": 7,
+        "title": "Vampire"
+      },
+      {
+        "tier": 6,
+        "title": "Potions Professor"
+      },
+      {
+        "tier": 5,
+        "title": "Scarlet Scholar"
+      },
+      {
+        "tier": 4,
+        "title": "Shaman King"
+      },
+      {
+        "tier": 3,
+        "title": "High Summoner"
+      },
+      {
+        "tier": 2,
+        "title": "Life-Giver"
+      },
+      {
+        "tier": 1,
+        "title": "Beauty Goddess"
+      },
+      {
+        "tier": 0,
+        "title": "Moon"
+      }
+    ]
+  },
+  {
+    "pathway": "Moon",
+    "category": "outer-deity",
+    "true_god": "Moon",
+    "great_old_one": "Goddess of Origin",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Apothecary"
+      },
+      {
+        "tier": 8,
+        "title": "Beast Tamer"
+      },
+      {
+        "tier": 7,
+        "title": "Vampire"
+      },
+      {
+        "tier": 6,
+        "title": "Potions Professor"
+      },
+      {
+        "tier": 5,
+        "title": "Scarlet Scholar"
+      },
+      {
+        "tier": 4,
+        "title": "Shaman King"
+      },
+      {
+        "tier": 3,
+        "title": "High Summoner"
+      },
+      {
+        "tier": 2,
+        "title": "Life-Giver"
+      },
+      {
+        "tier": 1,
+        "title": "Beauty Goddess"
+      },
+      {
+        "tier": 0,
+        "title": "Moon"
+      }
+    ]
+  },
+  {
+    "pathway": "Abyss",
+    "category": "standard",
+    "true_god": "Abyss",
+    "great_old_one": "Father of Devils",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Criminal"
+      },
+      {
+        "tier": 8,
+        "title": "Unwinged Angel"
+      },
+      {
+        "tier": 7,
+        "title": "Serial Killer"
+      },
+      {
+        "tier": 6,
+        "title": "Devil"
+      },
+      {
+        "tier": 5,
+        "title": "Desire Apostle"
+      },
+      {
+        "tier": 4,
+        "title": "Demon"
+      },
+      {
+        "tier": 3,
+        "title": "Blatherer"
+      },
+      {
+        "tier": 2,
+        "title": "Bloody Archduke"
+      },
+      {
+        "tier": 1,
+        "title": "Filthy Monarch"
+      },
+      {
+        "tier": 0,
+        "title": "Abyss"
+      }
+    ]
+  },
+  {
+    "pathway": "Abyss",
+    "category": "outer-deity",
+    "true_god": "Abyss",
+    "great_old_one": "Father of Devils",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Criminal"
+      },
+      {
+        "tier": 8,
+        "title": "Unwinged Angel"
+      },
+      {
+        "tier": 7,
+        "title": "Serial Killer"
+      },
+      {
+        "tier": 6,
+        "title": "Devil"
+      },
+      {
+        "tier": 5,
+        "title": "Desire Apostle"
+      },
+      {
+        "tier": 4,
+        "title": "Demon"
+      },
+      {
+        "tier": 3,
+        "title": "Blatherer"
+      },
+      {
+        "tier": 2,
+        "title": "Bloody Archduke"
+      },
+      {
+        "tier": 1,
+        "title": "Filthy Monarch"
+      },
+      {
+        "tier": 0,
+        "title": "Abyss"
+      }
+    ]
+  },
+  {
+    "pathway": "Chained",
+    "category": "standard",
+    "true_god": "Chained",
+    "great_old_one": "Father of Devils",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Prisoner"
+      },
+      {
+        "tier": 8,
+        "title": "Lunatic"
+      },
+      {
+        "tier": 7,
+        "title": "Werewolf"
+      },
+      {
+        "tier": 6,
+        "title": "Zombie"
+      },
+      {
+        "tier": 5,
+        "title": "Wraith"
+      },
+      {
+        "tier": 4,
+        "title": "Puppet"
+      },
+      {
+        "tier": 3,
+        "title": "Disciple of Silence"
+      },
+      {
+        "tier": 2,
+        "title": "Ancient Bane"
+      },
+      {
+        "tier": 1,
+        "title": "Abomination"
+      },
+      {
+        "tier": 0,
+        "title": "Chained"
+      }
+    ]
+  },
+  {
+    "pathway": "Chained",
+    "category": "outer-deity",
+    "true_god": "Chained",
+    "great_old_one": "Father of Devils",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Prisoner"
+      },
+      {
+        "tier": 8,
+        "title": "Lunatic"
+      },
+      {
+        "tier": 7,
+        "title": "Werewolf"
+      },
+      {
+        "tier": 6,
+        "title": "Zombie"
+      },
+      {
+        "tier": 5,
+        "title": "Wraith"
+      },
+      {
+        "tier": 4,
+        "title": "Puppet"
+      },
+      {
+        "tier": 3,
+        "title": "Disciple of Silence"
+      },
+      {
+        "tier": 2,
+        "title": "Ancient Bane"
+      },
+      {
+        "tier": 1,
+        "title": "Abomination"
+      },
+      {
+        "tier": 0,
+        "title": "Chained"
+      }
+    ]
+  },
+  {
+    "pathway": "Black Emperor",
+    "category": "standard",
+    "true_god": "Black Emperor",
+    "great_old_one": "The Anarchy",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Lawyer"
+      },
+      {
+        "tier": 8,
+        "title": "Barbarian"
+      },
+      {
+        "tier": 7,
+        "title": "Briber"
+      },
+      {
+        "tier": 6,
+        "title": "Baron of Corruption"
+      },
+      {
+        "tier": 5,
+        "title": "Mentor of Disorder"
+      },
+      {
+        "tier": 4,
+        "title": "Earl of the Fallen"
+      },
+      {
+        "tier": 3,
+        "title": "Frenzied Mage"
+      },
+      {
+        "tier": 2,
+        "title": "Duke of Entropy"
+      },
+      {
+        "tier": 1,
+        "title": "Prince of Abolition"
+      },
+      {
+        "tier": 0,
+        "title": "Black Emperor"
+      }
+    ]
+  },
+  {
+    "pathway": "Black Emperor",
+    "category": "outer-deity",
+    "true_god": "Black Emperor",
+    "great_old_one": "The Anarchy",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Lawyer"
+      },
+      {
+        "tier": 8,
+        "title": "Barbarian"
+      },
+      {
+        "tier": 7,
+        "title": "Briber"
+      },
+      {
+        "tier": 6,
+        "title": "Baron of Corruption"
+      },
+      {
+        "tier": 5,
+        "title": "Mentor of Disorder"
+      },
+      {
+        "tier": 4,
+        "title": "Earl of the Fallen"
+      },
+      {
+        "tier": 3,
+        "title": "Frenzied Mage"
+      },
+      {
+        "tier": 2,
+        "title": "Duke of Entropy"
+      },
+      {
+        "tier": 1,
+        "title": "Prince of Abolition"
+      },
+      {
+        "tier": 0,
+        "title": "Black Emperor"
+      }
+    ]
+  },
+  {
+    "pathway": "Justiciar",
+    "category": "standard",
+    "true_god": "Justiciar",
+    "great_old_one": "The Anarchy",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Arbiter"
+      },
+      {
+        "tier": 8,
+        "title": "Sheriff"
+      },
+      {
+        "tier": 7,
+        "title": "Interrogator"
+      },
+      {
+        "tier": 6,
+        "title": "Judge"
+      },
+      {
+        "tier": 5,
+        "title": "Disciplinary Paladin"
+      },
+      {
+        "tier": 4,
+        "title": "Imperative Mage"
+      },
+      {
+        "tier": 3,
+        "title": "Chaos Hunter"
+      },
+      {
+        "tier": 2,
+        "title": "Balancer"
+      },
+      {
+        "tier": 1,
+        "title": "Hand of Order"
+      },
+      {
+        "tier": 0,
+        "title": "Justiciar"
+      }
+    ]
+  },
+  {
+    "pathway": "Justiciar",
+    "category": "outer-deity",
+    "true_god": "Justiciar",
+    "great_old_one": "The Anarchy",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Arbiter"
+      },
+      {
+        "tier": 8,
+        "title": "Sheriff"
+      },
+      {
+        "tier": 7,
+        "title": "Interrogator"
+      },
+      {
+        "tier": 6,
+        "title": "Judge"
+      },
+      {
+        "tier": 5,
+        "title": "Disciplinary Paladin"
+      },
+      {
+        "tier": 4,
+        "title": "Imperative Mage"
+      },
+      {
+        "tier": 3,
+        "title": "Chaos Hunter"
+      },
+      {
+        "tier": 2,
+        "title": "Balancer"
+      },
+      {
+        "tier": 1,
+        "title": "Hand of Order"
+      },
+      {
+        "tier": 0,
+        "title": "Justiciar"
+      }
+    ]
+  },
+  {
+    "pathway": "Eternal Aeon",
+    "category": "non-standard",
+    "true_god": "Eternal Aeon",
+    "great_old_one": "Circle of Inevitability",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Dancer"
+      },
+      {
+        "tier": 8,
+        "title": "Alms Monk"
+      },
+      {
+        "tier": 7,
+        "title": "Contractee"
+      },
+      {
+        "tier": 6,
+        "title": "Ascetic"
+      },
+      {
+        "tier": 5,
+        "title": "Fate Appropriator"
+      },
+      {
+        "tier": 4,
+        "title": "Circle Inhabitant"
+      },
+      {
+        "tier": 3,
+        "title": "Sufferer"
+      },
+      {
+        "tier": 2,
+        "title": "Sinner"
+      },
+      {
+        "tier": 1,
+        "title": "Angel of Redemption"
+      },
+      {
+        "tier": 0,
+        "title": "Eternal Aeon"
+      }
+    ]
+  },
+  {
+    "pathway": "Chaos Primogenitor",
+    "category": "non-standard",
+    "true_god": "Chaos Primogenitor",
+    "great_old_one": "Mother Goddess of Depravity",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Villain"
+      },
+      {
+        "tier": 8,
+        "title": "Gardener"
+      },
+      {
+        "tier": 7,
+        "title": "Heretic Spellmaster"
+      },
+      {
+        "tier": 6,
+        "title": "Sower"
+      },
+      {
+        "tier": 5,
+        "title": "Banshee"
+      },
+      {
+        "tier": 4,
+        "title": "Madame"
+      },
+      {
+        "tier": 3,
+        "title": "Divine Mother"
+      },
+      {
+        "tier": 2,
+        "title": "The Supreme"
+      },
+      {
+        "tier": 1,
+        "title": "Valley God"
+      },
+      {
+        "tier": 0,
+        "title": "Chaos Primogenitor"
+      }
+    ]
+  },
+  {
+    "pathway": "Patriarch",
+    "category": "non-standard",
+    "true_god": "Patriarch",
+    "great_old_one": "Mother Tree of Desire",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Scrooge"
+      },
+      {
+        "tier": 8,
+        "title": "Sex Addict"
+      },
+      {
+        "tier": 7,
+        "title": "Actor"
+      },
+      {
+        "tier": 6,
+        "title": "Recipient"
+      },
+      {
+        "tier": 5,
+        "title": "Fallen Tree Spirit"
+      },
+      {
+        "tier": 4,
+        "title": "Tree Supplicant"
+      },
+      {
+        "tier": 3,
+        "title": "Desire Priest"
+      },
+      {
+        "tier": 2,
+        "title": "Cupid"
+      },
+      {
+        "tier": 1,
+        "title": "Leviathan"
+      },
+      {
+        "tier": 0,
+        "title": "Patriarch"
+      }
+    ]
+  },
+  {
+    "pathway": "Chaos Mist",
+    "category": "non-standard",
+    "true_god": "Chaos Mist",
+    "great_old_one": "Uncertain Mist",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Broker"
+      },
+      {
+        "tier": 8,
+        "title": "Shadow Merchant"
+      },
+      {
+        "tier": 7,
+        "title": "Prosecutor"
+      },
+      {
+        "tier": 6,
+        "title": "Ambitionist"
+      },
+      {
+        "tier": 5,
+        "title": "Under the Table"
+      },
+      {
+        "tier": 4,
+        "title": "Overseer"
+      },
+      {
+        "tier": 3,
+        "title": "Vortex Weaver"
+      },
+      {
+        "tier": 2,
+        "title": "Blasphemer"
+      },
+      {
+        "tier": 1,
+        "title": "Truth"
+      },
+      {
+        "tier": 0,
+        "title": "Chaos Mist"
+      }
+    ]
+  },
+  {
+    "pathway": "Tail-Devourer",
+    "category": "non-standard",
+    "true_god": "Tail-Devourer",
+    "great_old_one": "Primordial Hunger",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Tramp"
+      },
+      {
+        "tier": 8,
+        "title": "Glutton"
+      },
+      {
+        "tier": 7,
+        "title": "Gourmet"
+      },
+      {
+        "tier": 6,
+        "title": "Chef"
+      },
+      {
+        "tier": 5,
+        "title": "Depriver"
+      },
+      {
+        "tier": 4,
+        "title": "Sea Monster"
+      },
+      {
+        "tier": 3,
+        "title": "Hydra"
+      },
+      {
+        "tier": 2,
+        "title": "Angel of Devouring"
+      },
+      {
+        "tier": 1,
+        "title": "Chaos Gastric Juices"
+      },
+      {
+        "tier": 0,
+        "title": "Tail-Devourer"
+      }
+    ]
+  },
+  {
+    "pathway": "Condenser",
+    "category": "non-standard",
+    "true_god": "Condenser",
+    "great_old_one": "Supernova Dominator",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Astronomy Aficionado"
+      },
+      {
+        "tier": 8,
+        "title": "Star Worshipper"
+      },
+      {
+        "tier": 7,
+        "title": "Star Sacrificer"
+      },
+      {
+        "tier": 6,
+        "title": "Navigator"
+      },
+      {
+        "tier": 5,
+        "title": "Tidal Scholar"
+      },
+      {
+        "tier": 4,
+        "title": "Heavybringer"
+      },
+      {
+        "tier": 3,
+        "title": "Star Shepherd"
+      },
+      {
+        "tier": 2,
+        "title": "Radiant Angel"
+      },
+      {
+        "tier": 1,
+        "title": "Star Dragon"
+      },
+      {
+        "tier": 0,
+        "title": "Condenser"
+      }
+    ]
+  },
+  {
+    "pathway": "Everlasting",
+    "category": "non-standard",
+    "true_god": "Everlasting",
+    "great_old_one": "Inextinguishable Ravings",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Initiator"
+      },
+      {
+        "tier": 8,
+        "title": "Commentator"
+      },
+      {
+        "tier": 7,
+        "title": "Orator"
+      },
+      {
+        "tier": 6,
+        "title": "Singer"
+      },
+      {
+        "tier": 5,
+        "title": "Secret Transmitter"
+      },
+      {
+        "tier": 4,
+        "title": "Philosopher"
+      },
+      {
+        "tier": 3,
+        "title": "Messenger of God"
+      },
+      {
+        "tier": 2,
+        "title": "Great Old One Attendant"
+      },
+      {
+        "tier": 1,
+        "title": "Voice of the Heart"
+      },
+      {
+        "tier": 0,
+        "title": "Everlasting"
+      }
+    ]
+  },
+  {
+    "pathway": "Second Law",
+    "category": "non-standard",
+    "true_god": "Second Law",
+    "great_old_one": "Monarch of Decay",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Patient"
+      },
+      {
+        "tier": 8,
+        "title": "Secretary"
+      },
+      {
+        "tier": 7,
+        "title": "Vermin"
+      },
+      {
+        "tier": 6,
+        "title": "Disease Envoy"
+      },
+      {
+        "tier": 5,
+        "title": "Child of Decay"
+      },
+      {
+        "tier": 4,
+        "title": "Doomed One"
+      },
+      {
+        "tier": 3,
+        "title": "Left Hand of Decay"
+      },
+      {
+        "tier": 2,
+        "title": "Time Giant"
+      },
+      {
+        "tier": 1,
+        "title": "God of Decay"
+      },
+      {
+        "tier": 0,
+        "title": "Second Law"
+      }
+    ]
+  },
+  {
+    "pathway": "Sublunary Eye",
+    "category": "non-standard",
+    "true_god": "Sublunary Eye",
+    "great_old_one": "High-Dimensional Overseer",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Shaman"
+      },
+      {
+        "tier": 8,
+        "title": "Reporter"
+      },
+      {
+        "tier": 7,
+        "title": "Painter"
+      },
+      {
+        "tier": 6,
+        "title": "Literary Aficionado"
+      },
+      {
+        "tier": 5,
+        "title": "Pixie"
+      },
+      {
+        "tier": 4,
+        "title": "Visitor"
+      },
+      {
+        "tier": 3,
+        "title": "String Player"
+      },
+      {
+        "tier": 2,
+        "title": "Dimensional Shadow"
+      },
+      {
+        "tier": 1,
+        "title": "Observer"
+      },
+      {
+        "tier": 0,
+        "title": "Sublunary Eye"
+      }
+    ]
+  },
+  {
+    "pathway": "Eternal Edict",
+    "category": "non-standard",
+    "true_god": "Eternal Edict",
+    "great_old_one": "Goddess of Fate",
+    "sequences": [
+      {
+        "tier": 9,
+        "title": "Dreamless"
+      },
+      {
+        "tier": 8,
+        "title": "Musician"
+      },
+      {
+        "tier": 7,
+        "title": "Fate Pryer"
+      },
+      {
+        "tier": 6,
+        "title": "Mute"
+      },
+      {
+        "tier": 5,
+        "title": "Deceased"
+      },
+      {
+        "tier": 4,
+        "title": "Fatebender"
+      },
+      {
+        "tier": 3,
+        "title": "Fate's Attendant"
+      },
+      {
+        "tier": 2,
+        "title": "Web Weaver"
+      },
+      {
+        "tier": 1,
+        "title": "Blade of Fate"
+      },
+      {
+        "tier": 0,
+        "title": "Eternal Edict"
+      }
+    ]
+  }
+]
