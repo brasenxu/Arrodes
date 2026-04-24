@@ -110,36 +110,26 @@ async function main() {
   const BATCH_SIZE = 500;
   for (let i = 0; i < updates.length; i += BATCH_SIZE) {
     const batch = updates.slice(i, i + BATCH_SIZE);
-    // CASE-based bulk UPDATE keyed on id. Neon HTTP doesn't do multi-statement
-    // transactions, so one statement per batch is the pragmatic upper bound.
-    const ids = batch.map((u) => u.id);
-    const volumeCases = sql.join(
-      batch.map((u) => sql`WHEN ${u.id} THEN ${u.volume}`),
-      sql` `,
-    );
-    const volumeNameCases = sql.join(
-      batch.map((u) => sql`WHEN ${u.id} THEN ${u.volumeName}`),
-      sql` `,
-    );
-    const arcCases = sql.join(
-      batch.map((u) => sql`WHEN ${u.id} THEN ${u.arc}`),
-      sql` `,
-    );
-    const arcNameCases = sql.join(
-      batch.map((u) => sql`WHEN ${u.id} THEN ${u.arcName}`),
-      sql` `,
-    );
-    const idList = sql.join(
-      ids.map((id) => sql`${id}`),
-      sql`, `,
-    );
+    // UPDATE ... FROM (VALUES ...) AS v(...) WHERE c.id = v.id. The first row
+    // carries explicit ::int / ::text casts so Postgres can type the columns
+    // without having to resolve parameter types through a bare CASE (which
+    // Neon was rejecting with "column \"volume\" is of type integer but
+    // expression is of type text" — all parameters default to text otherwise).
+    const valueRows = batch.map((u, idx) => {
+      if (idx === 0) {
+        return sql`(${u.id}::int, ${u.volume}::int, ${u.volumeName}::text, ${u.arc}::int, ${u.arcName}::text)`;
+      }
+      return sql`(${u.id}, ${u.volume}, ${u.volumeName}, ${u.arc}, ${u.arcName})`;
+    });
+    const valuesClause = sql.join(valueRows, sql`, `);
     await db.execute(sql`
-      UPDATE chapters SET
-        volume = CASE id ${volumeCases} END,
-        volume_name = CASE id ${volumeNameCases} END,
-        arc = CASE id ${arcCases} END,
-        arc_name = CASE id ${arcNameCases} END
-      WHERE id IN (${idList})
+      UPDATE chapters AS c SET
+        volume = v.volume,
+        volume_name = v.volume_name,
+        arc = v.arc,
+        arc_name = v.arc_name
+      FROM (VALUES ${valuesClause}) AS v(id, volume, volume_name, arc, arc_name)
+      WHERE c.id = v.id
     `);
     console.log(
       `[backfill-arcs]   updated ${Math.min(i + batch.length, updates.length)}/${updates.length}`,
