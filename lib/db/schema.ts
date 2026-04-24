@@ -46,6 +46,13 @@ export const chapters = pgTable(
       .references(() => books.id),
     volume: integer("volume").notNull(),
     volumeName: text("volume_name").notNull(),
+    // arc/arcName subdivide a volume into narrative sub-plots (ticket 021).
+    // 1-based within (book_id, volume); side/bonus rows at volume=0 carry
+    // sequential arc indices and arcName == volumeName. Default 0/'' exists
+    // only so the migration can add NOT NULL columns safely; backfill rewrites
+    // every row via scripts/backfill-arcs.ts before the column is consumed.
+    arc: integer("arc").notNull().default(0),
+    arcName: text("arc_name").notNull().default(""),
     chapterNum: integer("chapter_num").notNull(),
     chapterTitle: text("chapter_title").notNull(),
     rawText: text("raw_text").notNull(),
@@ -53,7 +60,10 @@ export const chapters = pgTable(
       .notNull()
       .default("main"),
   },
-  (t) => [uniqueIndex("chapters_book_chapter_idx").on(t.bookId, t.chapterNum)],
+  (t) => [
+    uniqueIndex("chapters_book_chapter_idx").on(t.bookId, t.chapterNum),
+    index("chapters_book_volume_arc_idx").on(t.bookId, t.volume, t.arc),
+  ],
 );
 
 export const chunks = pgTable(

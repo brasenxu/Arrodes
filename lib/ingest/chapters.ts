@@ -6,6 +6,8 @@ export type ChapterRecord = {
   bookId: BookId;
   volume: number;
   volumeName: string;
+  arc: number;
+  arcName: string;
   chapterNum: number;
   chapterTitle: string;
   rawText: string;
@@ -119,13 +121,18 @@ export async function extractChapters(
     }
     seen.add(chapterNum);
 
-    const { volume, volumeName, contentKind } = assignArc(bookId, chapterNum);
+    const { volume, volumeName, arc, arcName, contentKind } = assignArc(
+      bookId,
+      chapterNum,
+    );
     const rawText = cleanChapterBody(section.htmlString, title);
 
     records.push({
       bookId,
       volume,
       volumeName,
+      arc,
+      arcName,
       chapterNum,
       chapterTitle: title,
       rawText,

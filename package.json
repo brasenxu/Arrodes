@@ -13,6 +13,7 @@
     "db:migrate": "drizzle-kit migrate",
     "db:studio": "drizzle-kit studio",
     "ingest": "tsx scripts/ingest.ts",
+    "backfill:arcs": "tsx scripts/backfill-arcs.ts",
     "mcp:wiki": "tsx tools/wiki-mcp/src/server.ts",
     "probe": "tsx scripts/probe-epub.ts",
     "refresh:lore": "tsx scripts/refresh-lore.ts",

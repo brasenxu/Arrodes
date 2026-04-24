@@ -7,12 +7,14 @@
  *   pnpm ingest --book lotm1 --phase chunks                     # preflight only
  *   pnpm ingest --book lotm1 --phase chunks --limit 3 --dry-run # sample + skip DB
  *   pnpm ingest --book lotm1 --phase chunks --yes               # full real run
+ *   pnpm ingest --book lotm1 --phase events --yes               # full real run
  *
  * Phases:
  *   chapters — parse EPUB and write `chapters` rows (ticket 003)
  *   chunks   — chunk + contextualize + embed + insert (ticket 005)
  *   ner      — per-chunk NER → entities + entity_mentions (ticket 006)
- *   (later) events, summaries
+ *   events   — per-chunk event extraction → events table (ticket 007)
+ *   (later) summaries
  */
 
 // Load .env.local first (Next.js convention for local secrets), then .env as
@@ -48,6 +50,17 @@ import {
   type NerUsage,
   type SampleRow as NerSampleRow,
 } from "@/lib/ingest/ner";
+import {
+  addEventUsage,
+  buildEventCatalogBlock,
+  EventResolver,
+  extractChapterEvents,
+  loadChapterEntityTypes,
+  zeroEventUsage,
+  type ChunkInput as EventsChunkInput,
+  type EventNerUsage,
+  type ResolverEntity,
+} from "@/lib/ingest/events";
 
 // Strips a gateway-style `provider/` prefix if present so env values that were
 // originally written for AI Gateway (e.g. "anthropic/claude-haiku-4-5") still
@@ -61,8 +74,8 @@ const BOOK_TITLES: Record<BookId, string> = {
   coi: "Circle of Inevitability",
 };
 
-type Phase = "chapters" | "chunks" | "ner";
-const PHASES: readonly Phase[] = ["chapters", "chunks", "ner"] as const;
+type Phase = "chapters" | "chunks" | "ner" | "events";
+const PHASES: readonly Phase[] = ["chapters", "chunks", "ner", "events"] as const;
 
 // $/1M tokens. Tracks the model roster in .claude/plans/2026-04-21_Arrodes-DAB.md.
 // Only used for the preflight estimate and the run-end summary — not for
@@ -87,6 +100,15 @@ function estimateCost(usage: ChunkIngestUsage): number {
 }
 
 function estimateNerCost(usage: NerUsage): number {
+  return (
+    (usage.noCacheInputTokens / 1e6) * PRICING.haikuInputNoCache +
+    (usage.cacheReadTokens / 1e6) * PRICING.haikuInputCacheRead +
+    (usage.cacheWriteTokens / 1e6) * PRICING.haikuInputCacheWrite1h +
+    (usage.outputTokens / 1e6) * PRICING.haikuOutput
+  );
+}
+
+function estimateEventsCost(usage: EventNerUsage): number {
   return (
     (usage.noCacheInputTokens / 1e6) * PRICING.haikuInputNoCache +
     (usage.cacheReadTokens / 1e6) * PRICING.haikuInputCacheRead +
@@ -184,6 +206,8 @@ async function ingestChapters(epubPath: string, bookId: BookId): Promise<void> {
     bookId: r.bookId,
     volume: r.volume,
     volumeName: r.volumeName,
+    arc: r.arc,
+    arcName: r.arcName,
     chapterNum: r.chapterNum,
     chapterTitle: r.chapterTitle,
     rawText: r.rawText,
@@ -752,6 +776,309 @@ async function ingestNerPhase(
   );
 }
 
+// ---------------------------------------------------------------------------
+// Events phase (ticket 007): per-chunk event extraction via 3-stage gating
+// (entity-type → keyword → Haiku). Mirrors the NER phase shape.
+// ---------------------------------------------------------------------------
+
+type EventsTarget = {
+  chapter: ChapterMeta;
+  chunks: EventsChunkInput[];
+};
+
+const EVENTS_SAMPLE_CHUNK_TARGET = 50;
+const EVENTS_PROGRESS_INTERVAL_CHAPTERS = 10;
+
+async function fetchEventsTargets(bookId: BookId): Promise<EventsTarget[]> {
+  const allChapters = await db
+    .select({
+      id: schema.chapters.id,
+      bookId: schema.chapters.bookId,
+      chapterNum: schema.chapters.chapterNum,
+      chapterTitle: schema.chapters.chapterTitle,
+      rawText: schema.chapters.rawText,
+    })
+    .from(schema.chapters)
+    .where(eq(schema.chapters.bookId, bookId))
+    .orderBy(asc(schema.chapters.chapterNum));
+
+  if (allChapters.length === 0) {
+    throw new Error(
+      `[events] no chapters found for ${bookId}. Run --phase chapters first.`,
+    );
+  }
+
+  // Resumability: fetch chunks that have ZERO event rows.
+  const res = (await db.execute(sql`
+    SELECT c.id, c.chapter_id, c.chunk_index, c.content
+    FROM chunks c
+    WHERE c.book_id = ${bookId}
+      AND NOT EXISTS (
+        SELECT 1 FROM events e WHERE e.evidence_chunk_id = c.id
+      )
+    ORDER BY c.chapter_id, c.chunk_index
+  `)) as unknown as {
+    rows: Array<{
+      id: number;
+      chapter_id: number;
+      chunk_index: number;
+      content: string;
+    }>;
+  };
+
+  const byChapter = new Map<number, EventsChunkInput[]>();
+  for (const r of res.rows ?? []) {
+    let arr = byChapter.get(r.chapter_id);
+    if (!arr) {
+      arr = [];
+      byChapter.set(r.chapter_id, arr);
+    }
+    arr.push({
+      id: r.id,
+      chunkIndex: r.chunk_index,
+      content: r.content,
+    });
+  }
+
+  const targets: EventsTarget[] = [];
+  for (const ch of allChapters) {
+    const chunks = byChapter.get(ch.id);
+    if (!chunks || chunks.length === 0) continue;
+    targets.push({ chapter: ch, chunks });
+  }
+  return targets;
+}
+
+function capEventsTargets(
+  targets: EventsTarget[],
+  maxChunks: number,
+): EventsTarget[] {
+  const out: EventsTarget[] = [];
+  let remaining = maxChunks;
+  for (const t of targets) {
+    if (remaining <= 0) break;
+    if (t.chunks.length <= remaining) {
+      out.push(t);
+      remaining -= t.chunks.length;
+    } else {
+      out.push({ chapter: t.chapter, chunks: t.chunks.slice(0, remaining) });
+      remaining = 0;
+    }
+  }
+  return out;
+}
+
+function countEventsChunks(targets: EventsTarget[]): number {
+  return targets.reduce((acc, t) => acc + t.chunks.length, 0);
+}
+
+async function ingestEventsPhase(
+  bookId: BookId,
+  limit: number | null,
+  dryRun: boolean,
+  yes: boolean,
+  reset: boolean,
+): Promise<void> {
+  const contextModelEnv = process.env.INGEST_CONTEXT_MODEL;
+  if (!contextModelEnv) {
+    throw new Error("INGEST_CONTEXT_MODEL is not set in .env.local");
+  }
+  if (!process.env.ANTHROPIC_API_KEY) {
+    throw new Error("ANTHROPIC_API_KEY is not set in .env.local");
+  }
+
+  // --reset: wipe this book's event rows. Requires --yes.
+  if (reset) {
+    if (!yes) {
+      throw new Error(
+        "[events] --reset requires --yes to confirm. This will DELETE all events for this book.",
+      );
+    }
+    console.log(`[events] --reset --yes: deleting events for ${bookId}`);
+    const delEvents = (await db.execute(sql`
+      DELETE FROM events WHERE book_id = ${bookId}
+    `)) as unknown as { rowCount?: number };
+    console.log(`[events]   deleted ${delEvents.rowCount ?? "?"} event rows`);
+  }
+
+  const contextModelId = bareModelId(contextModelEnv);
+  const contextModel = anthropic(contextModelId);
+  console.log(
+    `[events] book=${bookId} eventsModel=anthropic:${contextModelId}`,
+  );
+
+  // Load entities once — catalog block reused across the whole ingest.
+  const entitiesRaw = await loadEntities();
+  if (entitiesRaw.length === 0) {
+    throw new Error(
+      "[events] entities table is empty. Run `pnpm seed:entities` first.",
+    );
+  }
+  const entities: ResolverEntity[] = entitiesRaw.map((e) => ({
+    id: e.id,
+    canonicalName: e.canonicalName,
+    entityType: e.entityType,
+    aliases: e.aliases,
+  }));
+  const resolver = new EventResolver(entities);
+  const catalogBlock = buildEventCatalogBlock(entities);
+  console.log(`[events] loaded ${entities.length} canonical entities`);
+
+  const allTargets = await fetchEventsTargets(bookId);
+  const totalUndoneChunks = countEventsChunks(allTargets);
+  console.log(
+    `[events] ${allTargets.length} chapters have unprocessed chunks (${totalUndoneChunks} chunks total)`,
+  );
+
+  if (allTargets.length === 0 || totalUndoneChunks === 0) {
+    console.log("[events] nothing to do");
+    return;
+  }
+
+  const targets =
+    limit != null ? capEventsTargets(allTargets, limit) : allTargets;
+  const targetChunkCount = countEventsChunks(targets);
+  if (limit != null) {
+    console.log(
+      `[events] --limit ${limit} applied: ${targets.length} chapters, ${targetChunkCount} chunks this run`,
+    );
+  }
+
+  // --- Dry run: real Haiku calls (where Stages 1+2 pass), no DB writes.
+  if (dryRun) {
+    console.log(
+      `[events] DRY RUN — processing ${targets.length} chapters (${targetChunkCount} chunks) without DB writes`,
+    );
+    const usage = zeroEventUsage();
+    let totalGated = 0;
+    let totalRows = 0;
+    for (const t of targets) {
+      const entityTypeMap = await loadChapterEntityTypes(
+        t.chapter.bookId,
+        t.chapter.chapterNum,
+      );
+      const r = await extractChapterEvents({
+        chapter: t.chapter,
+        chunks: t.chunks,
+        entityTypeMap,
+        resolver,
+        model: contextModel,
+        catalogBlock,
+        dryRun: true,
+      });
+      addEventUsage(usage, r.usage);
+      totalGated += r.chunksGated;
+      totalRows += r.rowsInserted;
+    }
+    const cost = estimateEventsCost(usage);
+    console.log(
+      `\n[events] dry-run complete — ${targets.length} chapters, ${targetChunkCount} chunks (${totalGated} gated out), ${usage.haikuCalls} Haiku calls, ${totalRows} events extracted (not written), measured cost $${cost.toFixed(4)}`,
+    );
+    console.log(
+      `[events] token spend: noCache=${usage.noCacheInputTokens} cacheRead=${usage.cacheReadTokens} cacheWrite=${usage.cacheWriteTokens} output=${usage.outputTokens}`,
+    );
+    return;
+  }
+
+  // --- Preflight: sample ~50 chunks, extrapolate cost.
+  const sampleTargets = capEventsTargets(targets, EVENTS_SAMPLE_CHUNK_TARGET);
+  const sampleChunkCount = countEventsChunks(sampleTargets);
+  console.log(
+    `[events] preflight: sampling ${sampleChunkCount} chunks across ${sampleTargets.length} chapters for cost estimate`,
+  );
+  const sampleUsage = zeroEventUsage();
+  let sampleGated = 0;
+  for (let i = 0; i < sampleTargets.length; i++) {
+    const t = sampleTargets[i];
+    const entityTypeMap = await loadChapterEntityTypes(
+      t.chapter.bookId,
+      t.chapter.chapterNum,
+    );
+    const r = await extractChapterEvents({
+      chapter: t.chapter,
+      chunks: t.chunks,
+      entityTypeMap,
+      resolver,
+      model: contextModel,
+      catalogBlock,
+      dryRun: true,
+    });
+    addEventUsage(sampleUsage, r.usage);
+    sampleGated += r.chunksGated;
+    console.log(
+      `[events]   sample ${i + 1}/${sampleTargets.length}: Ch${t.chapter.chapterNum} → ${t.chunks.length} chunks (${t.chunks.length - r.chunksGated} called Haiku, ${r.rowsInserted} events)`,
+    );
+  }
+  const sampleCost = estimateEventsCost(sampleUsage);
+  const perChunkCost = sampleChunkCount > 0 ? sampleCost / sampleChunkCount : 0;
+  const projectedCost = perChunkCost * targetChunkCount;
+  const projectedHaikuCalls =
+    sampleChunkCount > 0
+      ? Math.round((sampleUsage.haikuCalls / sampleChunkCount) * targetChunkCount)
+      : 0;
+  console.log(
+    `[events] sample: cost $${sampleCost.toFixed(4)}, ${sampleChunkCount - sampleGated}/${sampleChunkCount} called Haiku (${(((sampleChunkCount - sampleGated) / Math.max(sampleChunkCount, 1)) * 100).toFixed(1)}% gating pass-through)`,
+  );
+  console.log(
+    `[events] Estimated cost: $${projectedCost.toFixed(2)} for ${targetChunkCount} chunks (~${projectedHaikuCalls} Haiku calls projected)`,
+  );
+
+  if (!yes) {
+    console.log(
+      "[events] preflight complete — pass --yes to proceed with the real run",
+    );
+    return;
+  }
+
+  // --- Real run.
+  console.log(
+    `[events] proceeding with real run on ${targets.length} chapters (${targetChunkCount} chunks)`,
+  );
+  const totalUsage = zeroEventUsage();
+  let insertedRows = 0;
+  let processedChunks = 0;
+  let gatedChunks = 0;
+  let processedChapters = 0;
+  for (const t of targets) {
+    const entityTypeMap = await loadChapterEntityTypes(
+      t.chapter.bookId,
+      t.chapter.chapterNum,
+    );
+    const r = await extractChapterEvents({
+      chapter: t.chapter,
+      chunks: t.chunks,
+      entityTypeMap,
+      resolver,
+      model: contextModel,
+      catalogBlock,
+      dryRun: false,
+    });
+    addEventUsage(totalUsage, r.usage);
+    insertedRows += r.rowsInserted;
+    processedChunks += r.chunksProcessed;
+    gatedChunks += r.chunksGated;
+    processedChapters++;
+    if (
+      processedChapters % EVENTS_PROGRESS_INTERVAL_CHAPTERS === 0 ||
+      processedChapters === targets.length
+    ) {
+      console.log(
+        `[events]   ${processedChapters}/${targets.length} chapters (${processedChunks} chunks, ${gatedChunks} gated, ${insertedRows} events, $${estimateEventsCost(totalUsage).toFixed(2)} so far)`,
+      );
+    }
+  }
+
+  console.log(
+    `[events] DONE — ${processedChapters} chapters, ${processedChunks} chunks (${gatedChunks} gated out), ${insertedRows} events inserted`,
+  );
+  console.log(
+    `[events] token spend: noCache=${totalUsage.noCacheInputTokens} cacheRead=${totalUsage.cacheReadTokens} cacheWrite=${totalUsage.cacheWriteTokens} output=${totalUsage.outputTokens} haikuCalls=${totalUsage.haikuCalls}`,
+  );
+  console.log(
+    `[events] estimated total cost: $${estimateEventsCost(totalUsage).toFixed(2)}`,
+  );
+}
+
 async function main() {
   const args = parseArgs();
   console.log(
@@ -773,6 +1100,15 @@ async function main() {
       break;
     case "ner":
       await ingestNerPhase(
+        args.bookId,
+        args.limit,
+        args.dryRun,
+        args.yes,
+        args.reset,
+      );
+      break;
+    case "events":
+      await ingestEventsPhase(
         args.bookId,
         args.limit,
         args.dryRun,

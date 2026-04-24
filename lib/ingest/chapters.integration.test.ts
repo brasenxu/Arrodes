@@ -49,6 +49,16 @@ describe.runIf(haveEpubs)("extractChapters — LOTM1 real EPUB", () => {
     });
   });
 
+  test("arc metadata is populated: 37 distinct arc names, every main row has arc>=1", () => {
+    const arcNames = new Set<string>();
+    for (const r of records) {
+      expect(r.arc).toBeGreaterThanOrEqual(1);
+      expect(r.arcName.length).toBeGreaterThan(0);
+      arcNames.add(r.arcName);
+    }
+    expect(arcNames.size).toBe(37);
+  });
+
   test("every record has non-empty chapter title and raw text", () => {
     for (const r of records) {
       expect(r.chapterTitle.length).toBeGreaterThan(0);
@@ -97,6 +107,19 @@ describe.runIf(haveEpubs)("extractChapters — COI real EPUB", () => {
     expect(r.chapterNum).toBe(1181);
     expect(r.contentKind).toBe("side_story");
     expect(r.volumeName).toBe("Daily Life in Cordu");
+  });
+
+  test("arc metadata is populated: 34 distinct arc names, The Fool's Dream covers 131 chapters", () => {
+    const arcNames = new Set<string>();
+    let foolsDream = 0;
+    for (const r of records) {
+      expect(r.arc).toBeGreaterThanOrEqual(1);
+      expect(r.arcName.length).toBeGreaterThan(0);
+      arcNames.add(r.arcName);
+      if (r.arcName === "The Fool's Dream") foolsDream++;
+    }
+    expect(arcNames.size).toBe(34);
+    expect(foolsDream).toBe(131);
   });
 
   test("every record has non-empty chapter title and raw text", () => {
