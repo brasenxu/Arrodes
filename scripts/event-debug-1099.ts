@@ -2,7 +2,7 @@ import { config as loadEnv } from "dotenv";
 loadEnv({ path: ".env.local" });
 loadEnv();
 import { sql } from "drizzle-orm";
-import { anthropic } from "@ai-sdk/anthropic";
+import { createOpenAI } from "@ai-sdk/openai";
 import { db } from "@/lib/db/client";
 import { loadEntities } from "@/lib/ingest/ner";
 import {
@@ -16,10 +16,22 @@ import {
   parseEventJson,
 } from "@/lib/ingest/events";
 
+function deepseekProvider() {
+  return createOpenAI({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    baseURL: "https://api.deepseek.com/v1",
+  });
+}
+
 async function main() {
-  const model = anthropic(
-    process.env.INGEST_CONTEXT_MODEL!.split("/").slice(-1)[0],
-  );
+  if (!process.env.INGEST_CONTEXT_MODEL) {
+    throw new Error("INGEST_CONTEXT_MODEL is not set in .env.local");
+  }
+  if (!process.env.DEEPSEEK_API_KEY) {
+    throw new Error("DEEPSEEK_API_KEY is not set in .env.local");
+  }
+  const contextModelId = process.env.INGEST_CONTEXT_MODEL.split("/").slice(-1)[0];
+  const model = deepseekProvider().chat(contextModelId);
   const ents = await loadEntities();
   const resolverEntities = ents.map((e) => ({
     id: e.id,

@@ -29,7 +29,7 @@ loadEnv({ path: ".env.local" });
 loadEnv();
 
 import { readFileSync, existsSync } from "fs";
-import { anthropic } from "@ai-sdk/anthropic";
+import { createOpenAI } from "@ai-sdk/openai";
 import { inArray, sql } from "drizzle-orm";
 import { db, schema } from "@/lib/db/client";
 import {
@@ -63,6 +63,13 @@ type GoldEntry = {
 
 function bareModelId(envValue: string): string {
   return envValue.includes("/") ? envValue.split("/").slice(-1)[0] : envValue;
+}
+
+function deepseekProvider() {
+  return createOpenAI({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    baseURL: "https://api.deepseek.com/v1",
+  });
 }
 
 function parseArgs() {
@@ -170,11 +177,10 @@ async function main(): Promise<void> {
   if (!contextModelEnv) {
     throw new Error("INGEST_CONTEXT_MODEL is not set in .env.local");
   }
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not set in .env.local");
+  if (!process.env.DEEPSEEK_API_KEY) {
+    throw new Error("DEEPSEEK_API_KEY is not set in .env.local");
   }
-  const contextModelId = bareModelId(contextModelEnv);
-  const model = anthropic(contextModelId);
+  const model = deepseekProvider().chat(bareModelId(contextModelEnv));
 
   const entities = await loadEntities();
   const aliasIndex = buildAliasIndex(entities);

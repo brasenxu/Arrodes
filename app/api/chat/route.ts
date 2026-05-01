@@ -10,7 +10,7 @@ import type { ReadingPosition } from "@/lib/rag/types";
 export const runtime = "nodejs"; // Fluid Compute (not Edge — AI SDK + pgvector work best on Node)
 export const maxDuration = 60;
 
-const CHAT_MODEL = process.env.CHAT_MODEL ?? "anthropic/claude-sonnet-4-6";
+const CHAT_MODEL = process.env.CHAT_MODEL ?? "google/gemini-2.5-flash";
 
 const SYSTEM_PROMPT = `You are Arrodes, a RAG assistant grounded in Lord of the Mysteries (LOTM1) and Circle of Inevitability (COI).
 

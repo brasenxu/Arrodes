@@ -25,8 +25,7 @@ loadEnv({ path: ".env.local" });
 loadEnv();
 
 import { asc, eq, sql } from "drizzle-orm";
-import { anthropic } from "@ai-sdk/anthropic";
-import { openai } from "@ai-sdk/openai";
+import { createOpenAI, openai } from "@ai-sdk/openai";
 import { db, schema } from "@/lib/db/client";
 import { extractChapters } from "@/lib/ingest/chapters";
 import type { BookId } from "@/lib/ingest/arc-map";
@@ -69,6 +68,13 @@ function bareModelId(envValue: string): string {
   return envValue.includes("/") ? envValue.split("/").slice(-1)[0] : envValue;
 }
 
+function deepseekProvider() {
+  return createOpenAI({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    baseURL: "https://api.deepseek.com/v1",
+  });
+}
+
 const BOOK_TITLES: Record<BookId, string> = {
   lotm1: "Lord of the Mysteries",
   coi: "Circle of Inevitability",
@@ -82,38 +88,38 @@ const PHASES: readonly Phase[] = ["chapters", "chunks", "ner", "events"] as cons
 // billing. If INGEST_CONTEXT_MODEL or INGEST_EMBED_MODEL is swapped, update
 // these before trusting the number.
 const PRICING = {
-  haikuInputNoCache: 1.0,
-  haikuInputCacheRead: 0.1,
-  haikuInputCacheWrite1h: 2.0,
-  haikuOutput: 5.0,
+  contextInputNoCache: 0.14,
+  contextInputCacheRead: 0.028,
+  contextInputCacheWrite1h: 0.14,
+  contextOutput: 0.28,
   embedSmall: 0.02,
 } as const;
 
 function estimateCost(usage: ChunkIngestUsage): number {
   return (
-    (usage.context.noCacheInputTokens / 1e6) * PRICING.haikuInputNoCache +
-    (usage.context.cacheReadTokens / 1e6) * PRICING.haikuInputCacheRead +
-    (usage.context.cacheWriteTokens / 1e6) * PRICING.haikuInputCacheWrite1h +
-    (usage.context.outputTokens / 1e6) * PRICING.haikuOutput +
+    (usage.context.noCacheInputTokens / 1e6) * PRICING.contextInputNoCache +
+    (usage.context.cacheReadTokens / 1e6) * PRICING.contextInputCacheRead +
+    (usage.context.cacheWriteTokens / 1e6) * PRICING.contextInputCacheWrite1h +
+    (usage.context.outputTokens / 1e6) * PRICING.contextOutput +
     (usage.embedTokens / 1e6) * PRICING.embedSmall
   );
 }
 
 function estimateNerCost(usage: NerUsage): number {
   return (
-    (usage.noCacheInputTokens / 1e6) * PRICING.haikuInputNoCache +
-    (usage.cacheReadTokens / 1e6) * PRICING.haikuInputCacheRead +
-    (usage.cacheWriteTokens / 1e6) * PRICING.haikuInputCacheWrite1h +
-    (usage.outputTokens / 1e6) * PRICING.haikuOutput
+    (usage.noCacheInputTokens / 1e6) * PRICING.contextInputNoCache +
+    (usage.cacheReadTokens / 1e6) * PRICING.contextInputCacheRead +
+    (usage.cacheWriteTokens / 1e6) * PRICING.contextInputCacheWrite1h +
+    (usage.outputTokens / 1e6) * PRICING.contextOutput
   );
 }
 
 function estimateEventsCost(usage: EventNerUsage): number {
   return (
-    (usage.noCacheInputTokens / 1e6) * PRICING.haikuInputNoCache +
-    (usage.cacheReadTokens / 1e6) * PRICING.haikuInputCacheRead +
-    (usage.cacheWriteTokens / 1e6) * PRICING.haikuInputCacheWrite1h +
-    (usage.outputTokens / 1e6) * PRICING.haikuOutput
+    (usage.noCacheInputTokens / 1e6) * PRICING.contextInputNoCache +
+    (usage.cacheReadTokens / 1e6) * PRICING.contextInputCacheRead +
+    (usage.cacheWriteTokens / 1e6) * PRICING.contextInputCacheWrite1h +
+    (usage.outputTokens / 1e6) * PRICING.contextOutput
   );
 }
 
@@ -249,8 +255,8 @@ async function ingestChunksPhase(
   if (!embedModelEnv) {
     throw new Error("INGEST_EMBED_MODEL is not set in .env.local");
   }
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not set in .env.local");
+  if (!process.env.DEEPSEEK_API_KEY) {
+    throw new Error("DEEPSEEK_API_KEY is not set in .env.local");
   }
   if (!process.env.OPENAI_API_KEY) {
     throw new Error("OPENAI_API_KEY is not set in .env.local");
@@ -260,11 +266,11 @@ async function ingestChunksPhase(
   // AI Gateway variant. Both model ID formats are accepted.
   const contextModelId = bareModelId(contextModelEnv);
   const embedModelId = bareModelId(embedModelEnv);
-  const contextModel = anthropic(contextModelId);
+  const contextModel = deepseekProvider().chat(contextModelId);
   const embedModel = openai.embedding(embedModelId);
 
   console.log(
-    `[chunks] book=${bookId} contextModel=anthropic:${contextModelId} embedModel=openai:${embedModelId}`,
+    `[chunks] book=${bookId} contextModel=deepseek:${contextModelId} embedModel=openai:${embedModelId}`,
   );
 
   const allChapters = await db
@@ -559,8 +565,8 @@ async function ingestNerPhase(
   if (!contextModelEnv) {
     throw new Error("INGEST_CONTEXT_MODEL is not set in .env.local");
   }
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not set in .env.local");
+  if (!process.env.DEEPSEEK_API_KEY) {
+    throw new Error("DEEPSEEK_API_KEY is not set in .env.local");
   }
 
   // --reset: wipe this book's entity_mentions and any auto-created entities
@@ -600,8 +606,8 @@ async function ingestNerPhase(
   }
 
   const contextModelId = bareModelId(contextModelEnv);
-  const contextModel = anthropic(contextModelId);
-  console.log(`[ner] book=${bookId} nerModel=anthropic:${contextModelId}`);
+  const contextModel = deepseekProvider().chat(contextModelId);
+  console.log(`[ner] book=${bookId} nerModel=deepseek:${contextModelId}`);
 
   // Load entities once — the catalog block is reused across every Haiku call
   // (byte-identical, so it cache-reads across the whole ingest after the first
@@ -883,8 +889,8 @@ async function ingestEventsPhase(
   if (!contextModelEnv) {
     throw new Error("INGEST_CONTEXT_MODEL is not set in .env.local");
   }
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not set in .env.local");
+  if (!process.env.DEEPSEEK_API_KEY) {
+    throw new Error("DEEPSEEK_API_KEY is not set in .env.local");
   }
 
   // --reset: wipe this book's event rows. Requires --yes.
@@ -902,9 +908,9 @@ async function ingestEventsPhase(
   }
 
   const contextModelId = bareModelId(contextModelEnv);
-  const contextModel = anthropic(contextModelId);
+  const contextModel = deepseekProvider().chat(contextModelId);
   console.log(
-    `[events] book=${bookId} eventsModel=anthropic:${contextModelId}`,
+    `[events] book=${bookId} eventsModel=deepseek:${contextModelId}`,
   );
 
   // Load entities once — catalog block reused across the whole ingest.

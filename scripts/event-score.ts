@@ -14,7 +14,7 @@ loadEnv();
 
 import { readFileSync } from "node:fs";
 import { sql } from "drizzle-orm";
-import { anthropic } from "@ai-sdk/anthropic";
+import { createOpenAI } from "@ai-sdk/openai";
 import { db } from "@/lib/db/client";
 import { loadEntities } from "@/lib/ingest/ner";
 import {
@@ -32,6 +32,13 @@ import { EVENT_TYPES, type EventType } from "@/lib/rag/types";
 // Copied from scripts/ner-score.ts — scripts don't share helpers.
 function bareModelId(envValue: string): string {
   return envValue.includes("/") ? envValue.split("/").slice(-1)[0] : envValue;
+}
+
+function deepseekProvider() {
+  return createOpenAI({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    baseURL: "https://api.deepseek.com/v1",
+  });
 }
 
 const GOLD_PATH = "data/eval/event-gold.jsonl";
@@ -109,10 +116,10 @@ async function main() {
   if (!contextModelEnv) {
     throw new Error("INGEST_CONTEXT_MODEL is not set in .env.local");
   }
-  if (!process.env.ANTHROPIC_API_KEY) {
-    throw new Error("ANTHROPIC_API_KEY is not set in .env.local");
+  if (!process.env.DEEPSEEK_API_KEY) {
+    throw new Error("DEEPSEEK_API_KEY is not set in .env.local");
   }
-  const model = anthropic(bareModelId(contextModelEnv));
+  const model = deepseekProvider().chat(bareModelId(contextModelEnv));
 
   const lines = readFileSync(GOLD_PATH, "utf8").split("\n").filter(Boolean);
   const gold: GoldChunk[] = lines

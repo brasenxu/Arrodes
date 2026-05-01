@@ -16,7 +16,7 @@ loadEnv();
 
 import { readFileSync, writeFileSync } from "node:fs";
 import { sql } from "drizzle-orm";
-import { anthropic } from "@ai-sdk/anthropic";
+import { createOpenAI } from "@ai-sdk/openai";
 import { db } from "@/lib/db/client";
 import { loadEntities } from "@/lib/ingest/ner";
 import {
@@ -33,6 +33,13 @@ import { type EventType } from "@/lib/rag/types";
 
 function bareModelId(envValue: string): string {
   return envValue.includes("/") ? envValue.split("/").slice(-1)[0] : envValue;
+}
+
+function deepseekProvider() {
+  return createOpenAI({
+    apiKey: process.env.DEEPSEEK_API_KEY,
+    baseURL: "https://api.deepseek.com/v1",
+  });
 }
 
 const GOLD_PATH = "data/eval/event-gold.jsonl";
@@ -99,8 +106,8 @@ function formatTuples(tuples: Tuple[]): string {
 async function main() {
   const contextModelEnv = process.env.INGEST_CONTEXT_MODEL;
   if (!contextModelEnv) throw new Error("INGEST_CONTEXT_MODEL not set");
-  if (!process.env.ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY not set");
-  const model = anthropic(bareModelId(contextModelEnv));
+  if (!process.env.DEEPSEEK_API_KEY) throw new Error("DEEPSEEK_API_KEY not set");
+  const model = deepseekProvider().chat(bareModelId(contextModelEnv));
 
   const lines = readFileSync(GOLD_PATH, "utf8").split("\n").filter(Boolean);
   const gold: GoldChunk[] = lines
