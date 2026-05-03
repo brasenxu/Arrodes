@@ -1,5 +1,5 @@
 /**
- * One-shot ingestion: EPUB -> chapters -> contextual chunks -> entities -> embeddings.
+ * One-shot ingestion: EPUB -> chapters -> contextual chunks -> entities -> events -> summaries.
  *
  * Run:
  *   pnpm ingest data/epub/LOTM.epub --book lotm1 --phase chapters
@@ -8,13 +8,14 @@
  *   pnpm ingest --book lotm1 --phase chunks --limit 3 --dry-run # sample + skip DB
  *   pnpm ingest --book lotm1 --phase chunks --yes               # full real run
  *   pnpm ingest --book lotm1 --phase events --yes               # full real run
+ *   pnpm ingest --book lotm1 --phase summaries --yes            # full real run
  *
  * Phases:
  *   chapters — parse EPUB and write `chapters` rows (ticket 003)
  *   chunks   — chunk + contextualize + embed + insert (ticket 005)
  *   ner      — per-chunk NER → entities + entity_mentions (ticket 006)
  *   events   — per-chunk event extraction → events table (ticket 007)
- *   (later) summaries
+ *   summaries — chapter/arc/volume/series summaries (ticket 008)
  */
 
 // Load .env.local first (Next.js convention for local secrets), then .env as
@@ -60,6 +61,33 @@ import {
   type EventNerUsage,
   type ResolverEntity,
 } from "@/lib/ingest/events";
+import {
+  addSummaryUsage,
+  assertCompleteChunkCoverage,
+  buildArcTargets,
+  buildChapterTargets,
+  countTargetsByLevel,
+  deleteSummariesForBook,
+  estimateSummaryCost,
+  insertSummaryRow,
+  limitChapterTargetsForArcPreflight,
+  loadChapterSourceRows,
+  loadExistingSummaryKeys,
+  loadSummaryChunkCoverage,
+  loadSummaryRows,
+  makeEmbedder,
+  makeModelSummaryGenerator,
+  makeSummaryKey,
+  planNextSummaryTargets,
+  resolveDeepSeekSummaryModelId,
+  selectRepresentativeArcChapterGroups,
+  SUMMARY_ARC_PREFLIGHT_MAX_CHAPTERS_PER_ARC,
+  summaryRowFromChapterTarget,
+  summarizeOneTarget,
+  zeroSummaryUsage,
+  type SummaryLevel,
+  type SummaryRow,
+} from "@/lib/ingest/summaries";
 
 // Strips a gateway-style `provider/` prefix if present so env values that were
 // originally written for AI Gateway (e.g. "anthropic/claude-haiku-4-5") still
@@ -80,8 +108,14 @@ const BOOK_TITLES: Record<BookId, string> = {
   coi: "Circle of Inevitability",
 };
 
-type Phase = "chapters" | "chunks" | "ner" | "events";
-const PHASES: readonly Phase[] = ["chapters", "chunks", "ner", "events"] as const;
+type Phase = "chapters" | "chunks" | "ner" | "events" | "summaries";
+const PHASES: readonly Phase[] = [
+  "chapters",
+  "chunks",
+  "ner",
+  "events",
+  "summaries",
+] as const;
 
 // $/1M tokens. Tracks the model roster in .claude/plans/2026-04-21_Arrodes-DAB.md.
 // Only used for the preflight estimate and the run-end summary — not for
@@ -1085,6 +1119,302 @@ async function ingestEventsPhase(
   );
 }
 
+// ---------------------------------------------------------------------------
+// Summaries phase (ticket 008): level-by-level chapter/arc/volume/series
+// summaries. Re-run after a level completes to unlock the next rollup level.
+// ---------------------------------------------------------------------------
+
+const SUMMARY_PROGRESS_INTERVAL_TARGETS = 10;
+
+function selectedSummaryModelEnv(): {
+  value: string | undefined;
+  source: "INGEST_SUMMARY_MODEL" | "CHAT_MODEL";
+} {
+  if (process.env.INGEST_SUMMARY_MODEL) {
+    return { value: process.env.INGEST_SUMMARY_MODEL, source: "INGEST_SUMMARY_MODEL" };
+  }
+
+  return { value: process.env.CHAT_MODEL, source: "CHAT_MODEL" };
+}
+
+function formatSummaryLevelCounts(counts: Record<SummaryLevel, number>): string {
+  return `chapter=${counts.chapter} arc=${counts.arc} volume=${counts.volume} series=${counts.series}`;
+}
+
+function printSummaryTokenSpend(prefix: string, usage: ReturnType<typeof zeroSummaryUsage>): void {
+  console.log(
+    `${prefix} context(noCache=${usage.context.noCacheInputTokens} cacheRead=${usage.context.cacheReadTokens} cacheWrite=${usage.context.cacheWriteTokens} output=${usage.context.outputTokens} calls=${usage.context.calls}) summary(noCache=${usage.summary.noCacheInputTokens} cacheRead=${usage.summary.cacheReadTokens} cacheWrite=${usage.summary.cacheWriteTokens} output=${usage.summary.outputTokens} calls=${usage.summary.calls}) embed=${usage.embedTokens}`,
+  );
+}
+
+async function ingestSummariesPhase(
+  bookId: BookId,
+  limit: number | null,
+  dryRun: boolean,
+  yes: boolean,
+  reset: boolean,
+): Promise<void> {
+  const contextModelEnv = process.env.INGEST_CONTEXT_MODEL;
+  const summaryModelEnv = selectedSummaryModelEnv();
+  const embedModelEnv = process.env.INGEST_EMBED_MODEL;
+  if (!contextModelEnv) {
+    throw new Error("INGEST_CONTEXT_MODEL is not set in .env.local");
+  }
+  if (!summaryModelEnv.value) {
+    throw new Error("INGEST_SUMMARY_MODEL or CHAT_MODEL must be set in .env.local");
+  }
+  if (!embedModelEnv) {
+    throw new Error("INGEST_EMBED_MODEL is not set in .env.local");
+  }
+  if (!process.env.DEEPSEEK_API_KEY) {
+    throw new Error("DEEPSEEK_API_KEY is not set in .env.local");
+  }
+  if (!process.env.OPENAI_API_KEY) {
+    throw new Error("OPENAI_API_KEY is not set in .env.local");
+  }
+
+  if (reset && dryRun) {
+    throw new Error("[summaries] --reset cannot be combined with --dry-run");
+  }
+
+  if (reset) {
+    if (!yes) {
+      throw new Error(
+        "[summaries] --reset requires --yes to confirm. This will DELETE all summaries for this book.",
+      );
+    }
+    console.log(`[summaries] --reset --yes: deleting summaries for ${bookId}`);
+    const deleted = await deleteSummariesForBook(bookId);
+    console.log(`[summaries]   deleted ${deleted ?? "?"} summary rows`);
+  }
+
+  const contextModelId = bareModelId(contextModelEnv);
+  const summaryModelId = resolveDeepSeekSummaryModelId(summaryModelEnv.value);
+  const embedModelId = bareModelId(embedModelEnv);
+  const deepseek = deepseekProvider();
+  const contextModel = deepseek.chat(contextModelId);
+  const summaryModel = deepseek.chat(summaryModelId);
+  const embedModel = openai.embedding(embedModelId);
+  const generate = makeModelSummaryGenerator({ contextModel, summaryModel });
+  const embed = makeEmbedder(embedModel);
+
+  console.log(
+    `[summaries] book=${bookId} contextModel=deepseek:${contextModelId} summaryModel=deepseek:${summaryModelId} embedModel=openai:${embedModelId}`,
+  );
+  if (summaryModelEnv.source === "CHAT_MODEL") {
+    console.log("[summaries] using CHAT_MODEL fallback; set INGEST_SUMMARY_MODEL to override");
+  }
+
+  const coverage = await loadSummaryChunkCoverage(bookId);
+  assertCompleteChunkCoverage(bookId, coverage);
+
+  const chapterSourceRows = await loadChapterSourceRows(bookId);
+  if (chapterSourceRows.length === 0) {
+    throw new Error(
+      `[summaries] no chapter chunk rows found for ${bookId}. Run --phase chunks first.`,
+    );
+  }
+
+  const chapterTargets = buildChapterTargets(chapterSourceRows);
+  const existingKeys = await loadExistingSummaryKeys(bookId);
+  const [chapterSummaries, arcSummaries, volumeSummaries] = await Promise.all([
+    loadSummaryRows(bookId, "chapter"),
+    loadSummaryRows(bookId, "arc"),
+    loadSummaryRows(bookId, "volume"),
+  ]);
+  const pendingTargets = planNextSummaryTargets({
+    chapterTargets,
+    chapterSummaries,
+    arcSummaries,
+    volumeSummaries,
+    bookTitles: BOOK_TITLES,
+    existingKeys,
+    limit: null,
+  });
+  const pendingCounts = countTargetsByLevel(pendingTargets);
+  const targets = limit != null ? pendingTargets.slice(0, limit) : pendingTargets;
+  const targetCounts = countTargetsByLevel(targets);
+
+  console.log(
+    `[summaries] ${chapterTargets.length} chapter targets, ${existingKeys.size} existing summaries`,
+  );
+  console.log(`[summaries] pending: ${formatSummaryLevelCounts(pendingCounts)}`);
+  if (limit != null) {
+    console.log(
+      `[summaries] --limit ${limit} applied: ${formatSummaryLevelCounts(targetCounts)} targeted this run`,
+    );
+  }
+
+  if (targets.length === 0) {
+    console.log("[summaries] nothing to do");
+    return;
+  }
+
+  const selectedLevel = targets[0].level;
+  if (dryRun || !yes) {
+    const sampleSize =
+      selectedLevel === "chapter"
+        ? Math.min(20, targets.length)
+        : Math.min(3, targets.length);
+    console.log(
+      `[summaries] preflight: sampling ${sampleSize} ${selectedLevel} target${sampleSize === 1 ? "" : "s"} for cost estimate`,
+    );
+    const targetSampleUsage = zeroSummaryUsage();
+    const arcPrepChapterUsage = zeroSummaryUsage();
+    const arcSampleUsage = zeroSummaryUsage();
+    const sampledChapterRows = new Map<string, SummaryRow>();
+    let sampledTargetSummaries = 0;
+    let sampledArcPrepChapters = 0;
+    for (let i = 0; i < sampleSize; i++) {
+      const target = targets[i];
+      const result = await summarizeOneTarget({ target, generate, embed });
+      addSummaryUsage(targetSampleUsage, result.usage);
+      sampledTargetSummaries++;
+      if (target.level === "chapter") {
+        sampledChapterRows.set(
+          makeSummaryKey(target),
+          summaryRowFromChapterTarget(target, result.row.content),
+        );
+      }
+      console.log(
+        `[summaries]   sample ${i + 1}/${sampleSize}: ${target.level} ${target.rangeStart}-${target.rangeEnd} "${target.label}" (${result.row.content.length} chars)`,
+      );
+    }
+
+    let sampledArcSummaries = 0;
+    let projectedArcTargets = 0;
+    if (selectedLevel === "chapter" && chapterSummaries.length === 0) {
+      const representativeGroups = selectRepresentativeArcChapterGroups(chapterTargets, 3);
+      const representativeRows: SummaryRow[] = [];
+      for (const group of representativeGroups) {
+        const capped = limitChapterTargetsForArcPreflight(
+          group,
+          SUMMARY_ARC_PREFLIGHT_MAX_CHAPTERS_PER_ARC,
+        );
+        if (capped.length < group.length) {
+          const arcLabel = group[0]?.arcName ?? "?";
+          console.log(
+            `[summaries]   arc prep: using first ${capped.length} of ${group.length} chapters for "${arcLabel}" (preflight cap ${SUMMARY_ARC_PREFLIGHT_MAX_CHAPTERS_PER_ARC})`,
+          );
+        }
+        for (const chapterTarget of capped) {
+          const key = makeSummaryKey(chapterTarget);
+          let row = sampledChapterRows.get(key);
+          if (!row) {
+            const result = await summarizeOneTarget({
+              target: chapterTarget,
+              generate,
+              embed,
+            });
+            addSummaryUsage(arcPrepChapterUsage, result.usage);
+            row = summaryRowFromChapterTarget(chapterTarget, result.row.content);
+            sampledChapterRows.set(key, row);
+            sampledArcPrepChapters++;
+            console.log(
+              `[summaries]   arc prep chapter: ${chapterTarget.rangeStart}-${chapterTarget.rangeEnd} "${chapterTarget.label}" (${result.row.content.length} chars, in memory)`,
+            );
+          }
+          representativeRows.push(row);
+        }
+      }
+
+      const arcSampleTargets = buildArcTargets(representativeRows).slice(0, 3);
+      const allArcTargets = buildArcTargets(
+        chapterTargets.map((target) =>
+          summaryRowFromChapterTarget(target, "[preflight placeholder]"),
+        ),
+      );
+      projectedArcTargets = allArcTargets.length;
+      if (arcSampleTargets.length > 0) {
+        console.log(
+          `[summaries] preflight: sampling ${arcSampleTargets.length} in-memory arc target${arcSampleTargets.length === 1 ? "" : "s"} for summary-model cost estimate (no DB writes)`,
+        );
+      }
+      for (let i = 0; i < arcSampleTargets.length; i++) {
+        const target = arcSampleTargets[i];
+        const result = await summarizeOneTarget({ target, generate, embed });
+        addSummaryUsage(arcSampleUsage, result.usage);
+        sampledArcSummaries++;
+        console.log(
+          `[summaries]   arc sample ${i + 1}/${arcSampleTargets.length}: ${target.rangeStart}-${target.rangeEnd} "${target.label}" (${result.row.content.length} chars, in memory)`,
+        );
+      }
+    }
+
+    const sampleUsage = zeroSummaryUsage();
+    addSummaryUsage(sampleUsage, targetSampleUsage);
+    addSummaryUsage(sampleUsage, arcPrepChapterUsage);
+    addSummaryUsage(sampleUsage, arcSampleUsage);
+    const targetSampleCost = estimateSummaryCost(targetSampleUsage);
+    const arcPrepChapterCost = estimateSummaryCost(arcPrepChapterUsage);
+    const arcSampleCost = estimateSummaryCost(arcSampleUsage);
+    const projectedCurrentRunCost =
+      sampledTargetSummaries > 0
+        ? (targetSampleCost / sampledTargetSummaries) * targets.length
+        : 0;
+    const projectedArcCost =
+      sampledArcSummaries > 0
+        ? (arcSampleCost / sampledArcSummaries) * projectedArcTargets
+        : 0;
+    const sampleCost = targetSampleCost + arcPrepChapterCost + arcSampleCost;
+    const projectedCost = projectedCurrentRunCost + projectedArcCost;
+    console.log(
+      `[summaries] sample cost: $${sampleCost.toFixed(4)} (${sampledTargetSummaries} target summaries${sampledArcPrepChapters > 0 ? ` + ${sampledArcPrepChapters} arc-prep chapter summaries` : ""}${sampledArcSummaries > 0 ? ` + ${sampledArcSummaries} in-memory arc summaries` : ""})`,
+    );
+    console.log(
+      `[summaries] Estimated cost: $${projectedCurrentRunCost.toFixed(2)} for current run (${targets.length} ${selectedLevel} targets)${projectedArcTargets > 0 ? `; +$${projectedArcCost.toFixed(2)} for ~${projectedArcTargets} future arc targets; total ~$${projectedCost.toFixed(2)}` : ""}`,
+    );
+    printSummaryTokenSpend("[summaries] sample token spend:", sampleUsage);
+
+    if (dryRun) {
+      console.log(
+        "[summaries] dry-run complete — preflight samples generated and embedded; skipped DB writes",
+      );
+      return;
+    }
+
+    console.log(
+      "[summaries] preflight complete — pass --yes to proceed with the real run",
+    );
+    return;
+  }
+
+  console.log("[summaries] --yes supplied; skipping paid preflight sampling");
+
+  console.log(
+    `[summaries] proceeding with real run on ${targets.length} ${selectedLevel} targets`,
+  );
+  const totalUsage = zeroSummaryUsage();
+  let insertedRows = 0;
+  let processedTargets = 0;
+  for (const target of targets) {
+    const result = await summarizeOneTarget({ target, generate, embed });
+    const inserted = await insertSummaryRow(result.row);
+    addSummaryUsage(totalUsage, result.usage);
+    if (inserted) {
+      insertedRows++;
+    }
+    processedTargets++;
+
+    if (
+      processedTargets % SUMMARY_PROGRESS_INTERVAL_TARGETS === 0 ||
+      processedTargets === targets.length
+    ) {
+      console.log(
+        `[summaries]   ${processedTargets}/${targets.length} targets (${insertedRows} inserted, $${estimateSummaryCost(totalUsage).toFixed(2)} so far)`,
+      );
+    }
+  }
+
+  console.log(
+    `[summaries] DONE — ${processedTargets} ${selectedLevel} targets processed, ${insertedRows} summaries inserted`,
+  );
+  printSummaryTokenSpend("[summaries] token spend:", totalUsage);
+  console.log(
+    `[summaries] estimated total cost: $${estimateSummaryCost(totalUsage).toFixed(2)}`,
+  );
+}
+
 async function main() {
   const args = parseArgs();
   console.log(
@@ -1115,6 +1445,15 @@ async function main() {
       break;
     case "events":
       await ingestEventsPhase(
+        args.bookId,
+        args.limit,
+        args.dryRun,
+        args.yes,
+        args.reset,
+      );
+      break;
+    case "summaries":
+      await ingestSummariesPhase(
         args.bookId,
         args.limit,
         args.dryRun,
