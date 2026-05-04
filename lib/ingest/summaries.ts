@@ -679,7 +679,17 @@ export async function summarizeOneTarget(opts: {
   const usage = zeroSummaryUsage();
   const prompt = buildSummaryPrompt(target);
   const bucket = target.level === "chapter" ? usage.context : usage.summary;
-  const content = await generate({ target, prompt, bucket });
+  let content = "";
+  for (let attempt = 1; attempt <= 2; attempt += 1) {
+    const generated = (await generate({ target, prompt, bucket })).trim();
+    if (generated.length > 0) {
+      content = generated;
+      break;
+    }
+  }
+  if (content.length === 0) {
+    content = `Summary unavailable for ${target.label} (${target.rangeStart}-${target.rangeEnd}).`;
+  }
   const embedded = await embed([content]);
 
   if (embedded.embeddings.length !== 1) {

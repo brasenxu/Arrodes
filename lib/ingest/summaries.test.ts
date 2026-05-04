@@ -715,6 +715,25 @@ describe("summarizeOneTarget", () => {
       "summary embed returned 0 vectors for 1 input",
     );
   });
+
+  it("retries once for empty generated content and then uses fallback text", async () => {
+    const [target] = buildChapterTargets(chapterRows);
+    let calls = 0;
+    const generate: SummaryGenerateFn = async () => {
+      calls += 1;
+      return " \n ";
+    };
+    const embed: SummaryEmbedFn = async (values) => {
+      expect(values[0]).toContain("Summary unavailable for");
+      return { embeddings: [[0.2, 0.3]], tokensUsed: 5 };
+    };
+
+    const result = await summarizeOneTarget({ target, generate, embed });
+
+    expect(calls).toBe(2);
+    expect(result.row.content).toContain("Summary unavailable for");
+    expect(result.usage.embedTokens).toBe(5);
+  });
 });
 
 describe("makeModelSummaryGenerator", () => {
