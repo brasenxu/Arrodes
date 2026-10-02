@@ -2,10 +2,10 @@
 id: 012
 title: Reading position slider (spoiler control UI)
 phase: 3
-status: todo
+status: done
 depends_on: [010]
 estimate: M
-updated: 2026-04-21
+updated: 2026-10-02
 ---
 
 ## Context
@@ -16,14 +16,15 @@ Spoiler control is a product-critical feature and cannot be retrofit safely. The
 
 - Build `components/reading-position.tsx`:
   - Modal on first visit (detected by empty localStorage key).
-  - Two sliders — LOTM1 (1–1396) and COI (1–1180, or disabled if the user hasn't started it).
-  - A toggle per book: "I've finished this book" → sets to max.
+  - Two sliders — LOTM1 (1–**1432**, FULL bounds) and COI (1–**1181**, or disabled if the user hasn't started it), with a labeled tick at the main-story end (LOTM1 **1394**, COI **1179** — arc-map `MAIN_BOUNDS`/`FULL_BOUNDS`; the 2026-10-02 audit corrected the originally assumed 1396/1180: side stories are 1395–1432 on LOTM1, bonus+side 1180–1181 on COI).
+  - A toggle per book: "I've finished this book" → sets to `FULL_BOUNDS`.
   - A toggle per book: "I haven't started this book" → sets to `null`.
   - Persist to `localStorage.arrodes.position` as `{lotm1, coi, updatedAt}`.
 - Build `lib/client/position.ts` — `usePosition()` hook: reads from localStorage, exposes `{position, setPosition, hasBeenSet}`.
 - Thread `position` through `useChat`'s `sendMessage` body.
 - Add a settings affordance (pencil icon in header) to re-open the modal.
 - Edge case: when both books are `null`, chat is disabled with a message prompting the user to set a position.
+- **017 seam (2026-10-02):** the hook reserves a session-only `spoilMe` override flag (NOT persisted) so ticket 017's in-session "spoil me" affordance doesn't rework the hook/modal later.
 
 ## Out of scope
 
@@ -55,4 +56,15 @@ pnpm dev
 
 ## Findings
 
+<!-- Paste test transcript + any bugs found and fixed. -->
+
+### Resolution (2026-10-02, reopening Task 17)
+
+- `lib/client/position.ts`: `parseStoredPosition`/`serializeStoredPosition` (pure, 8 tests green) + `usePosition()` hook over `localStorage.arrodes.position`; **017 seam delivered** (session-only `spoilMe`, not persisted).
+- `components/reading-position.tsx`: controlled modal — first-visit open (when unset), sliders to FULL bounds (1432/1181) with main-story tick labeled (1394/1179), finished/not-started toggles, Cancel on edit.
+- `components/app-shell.tsx` (new): single `usePosition` owner — header pencil, modal, and chat share one state instance (per-consumer instances would desync modal state).
+- `components/chat.tsx`: position threaded into every `sendMessage` body; chat disabled with a set-position prompt when unset or both-null.
+- Route: position now REQUIRED (400 without it) — dev default removed.
+- Programmatically verified: no-position → 400; explicit full position → cited answer; side-story chapter at main-only position → refusal; both-null → graceful. Slider/persistence interaction in a real browser left as a user smoke test (code + build verified).
+- Slider max corrected to arc-map truth: 1432/1181 FULL, 1394/1179 main (audit + DB-verified; the ticket's original 1396/1180 sat inside the side-story range).
 <!-- Paste test notes. -->

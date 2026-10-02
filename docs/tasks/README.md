@@ -41,7 +41,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 
 | # | Ticket | Status | Est | Depends on |
 |---|---|---|---|---|
-| 012 | [Reading position slider (spoiler control UI)](012-reading-position-ui.md) | todo | M | 010 |
+| 012 | [Reading position slider (spoiler control UI)](012-reading-position-ui.md) | done | M | 010 |
 | 013 | [Inline citation rendering](013-citation-rendering.md) | todo | S | 010 |
 | 029 | [Chat UX basics — stop, regenerate, error retry](029-chat-ux-basics.md) | todo | S/M | 010 |
 

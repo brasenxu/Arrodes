@@ -8,8 +8,7 @@ import { buildTools } from "@/lib/rag/tools";
 import { resolveChatModel } from "@/lib/rag/chat-model";
 import { SYSTEM_PROMPT } from "@/lib/rag/system-prompt";
 import { isValidPosition } from "@/lib/rag/schemas";
-import { FULL_BOUNDS, MAIN_BOUNDS } from "@/lib/ingest/arc-map";
-import type { ReadingPosition } from "@/lib/rag/types";
+import { FULL_BOUNDS } from "@/lib/ingest/arc-map";
 
 export const runtime = "nodejs"; // Fluid Compute (not Edge — AI SDK + pgvector work best on Node)
 export const maxDuration = 60;
@@ -20,15 +19,8 @@ const CHAT_MODEL = resolveChatModel();
 // depends on this casing: (LOTM1 Ch.N) / (COI Ch.N). The prompt itself lives
 // in lib/rag/system-prompt.ts (ticket 011 — byte-stable cacheable prefix).
 
-// Dev default until ticket 012 ships the position UI: fully-read MAIN story.
-// Side_story/bonus chapters stay gated — the UI will expose FULL bounds via
-// an explicit slider position, not this default.
-// TODO: require position (400 without it) once 012 lands; server-side
-// session position comes with ticket 031.
-const DEV_POSITION: ReadingPosition = {
-  lotm1: MAIN_BOUNDS.lotm1,
-  coi: MAIN_BOUNDS.coi,
-};
+// Dev default removed with ticket 012: the UI always sends position; requests
+// without a valid one are rejected. (Server-side session position: ticket 031.)
 
 export async function POST(req: Request) {
   let body: { messages?: UIMessage[]; position?: unknown };
@@ -52,19 +44,16 @@ export async function POST(req: Request) {
     return Response.json({ error: "messages array required" }, { status: 400 });
   }
 
-  // Position: validated shape + clamped to FULL_BOUNDS (audit defects 3-4).
-  let position: ReadingPosition;
-  if (body.position === undefined) {
-    position = DEV_POSITION;
-  } else if (!isValidPosition(body.position)) {
-    return Response.json({ error: "Invalid position" }, { status: 400 });
-  } else {
-    const p = body.position;
-    position = {
-      lotm1: p.lotm1 === null ? null : Math.min(p.lotm1, FULL_BOUNDS.lotm1),
-      coi: p.coi === null ? null : Math.min(p.coi, FULL_BOUNDS.coi),
-    };
+  // Position: REQUIRED since ticket 012 — validated shape + clamped to
+  // FULL_BOUNDS (audit defects 3-4).
+  if (!isValidPosition(body.position)) {
+    return Response.json({ error: "Invalid or missing position" }, { status: 400 });
   }
+  const p = body.position;
+  const position = {
+    lotm1: p.lotm1 === null ? null : Math.min(p.lotm1, FULL_BOUNDS.lotm1),
+    coi: p.coi === null ? null : Math.min(p.coi, FULL_BOUNDS.coi),
+  };
 
   const result = streamText({
     model: CHAT_MODEL,
