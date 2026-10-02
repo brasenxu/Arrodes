@@ -1,4 +1,8 @@
 /**
+ * STATUS: repair tool — KEEP documented. Run after any aliases.json expansion.
+ * WHY: migrates mentions orphaned by seed-canonical merges to the proper entity.
+ * SAFE-TO-RUN? Yes — idempotent by design.
+ *
  * Merges auto-created entity rows into their proper seed-canonical targets.
  *
  * When the NER run encountered a name that wasn't yet in the alias seed (e.g.,

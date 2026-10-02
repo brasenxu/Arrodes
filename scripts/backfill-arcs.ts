@@ -1,4 +1,9 @@
 /**
+ * STATUS: repair tool (ticket 021 one-shot) — APPLIED 2026-04-24, idempotent.
+ * WHY: backfilled chapters.arc/arc_name without cascading deletes.
+ * SAFE-TO-RUN? Yes — re-runs are no-ops (needsUpdate check). Archive note: no
+ * future run expected unless arc definitions change (see ticket 030's hazard note).
+ *
  * Ticket 021 backfill: populate chapters.arc, chapters.arc_name, and (for
  * COI) corrected chapters.volume/volume_name on existing rows, without
  * touching the chunks/NER/events already ingested against them.

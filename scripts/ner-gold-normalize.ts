@@ -12,6 +12,12 @@
  *
  * Backups the original file to ner-gold.jsonl.bak before writing.
  *
+/**
+ * STATUS: repair tool (one-shot normalization, already applied 2026-05) — KEEP archived.
+ * WHY: rewrites data/eval/ner-gold.jsonl in place; a naive re-run would clobber its
+ * own .bak and the pre-normalization snapshot is lost. Timestamped backups now.
+ * SAFE-TO-RUN? Only with a reason; refuses same-day re-run without --force.
+ *
  * Run:
  *   pnpm tsx scripts/ner-gold-normalize.ts
  */
@@ -19,7 +25,8 @@
 import { config as loadEnv } from "dotenv";
 loadEnv({ path: ".env.local" });
 loadEnv();
-import { readFileSync, writeFileSync, copyFileSync } from "fs";
+import { readFileSync, writeFileSync, copyFileSync, readdirSync } from "fs";
+import { dirname } from "path";
 import { sql } from "drizzle-orm";
 import { db, schema } from "@/lib/db/client";
 import { buildAliasIndex, loadEntities } from "@/lib/ingest/ner";
@@ -81,8 +88,27 @@ async function main() {
     if (rows[0]) chapterByKey.set(key, rows[0].rawText);
   }
 
-  copyFileSync(IN_PATH, BACKUP_PATH);
-  console.log(`[normalize] backed up original to ${BACKUP_PATH}`);
+  // Timestamped backup — a plain overwrite would replace the only pre-run
+  // snapshot on every re-run (audit finding 19). Refuse same-day re-runs
+  // unless --force.
+  const stamp = new Date().toISOString().slice(0, 16).replace(/[-:T]/g, ""); // YYYYMMDDHHmm
+  const backupPath = `${BACKUP_PATH}-${stamp}`;
+  if (!process.argv.includes("--force")) {
+    const todayStamp = new Date().toISOString().slice(0, 10).replace(/-/g, ""); // YYYYMMDD
+    const dir = dirname(IN_PATH);
+    const sameDay = readdirSync(dir).some(
+      (f) => f.startsWith("ner-gold.jsonl.bak-") && f.slice(-12, -4) === todayStamp,
+    );
+    if (sameDay) {
+      console.error(
+        "[refusing] a backup from today already exists — re-running now would normalize already-normalized gold.\n" +
+          "Pass --force if this is intentional.",
+      );
+      process.exit(1);
+    }
+  }
+  copyFileSync(IN_PATH, backupPath);
+  console.log(`[normalize] backed up original to ${backupPath}`);
 
   let kept = 0;
   let replaced = 0;
