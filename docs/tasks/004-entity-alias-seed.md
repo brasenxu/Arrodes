@@ -1,12 +1,14 @@
 ---
 
-## id: 004
+id: 004
 title: Entity alias seed data
 phase: 1
 status: done
 depends_on: []
 estimate: M
 updated: 2026-04-22
+
+---
 
 ## Context
 

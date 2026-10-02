@@ -1,11 +1,11 @@
 ---
 id: 023
 title: Summaries dedupe hardening (DB unique key)
-phase: 1
-status: todo
+phase: 5
+status: done
 depends_on: [008]
 estimate: M
-updated: 2026-05-04
+updated: 2026-10-02
 ---
 
 ## Context
@@ -35,3 +35,7 @@ Ticket 008 dedupes inserts with `INSERT ... WHERE NOT EXISTS`, which is sufficie
 - Concurrent duplicate insert attempts cannot produce duplicate summary rows.
 - Existing single-run behavior and progress logging remain correct.
 - `pnpm typecheck` and relevant tests pass.
+
+## Resolution
+
+Superseded by ticket **030** before execution — the 2026-10-02 audit showed `entity_mentions` and `events` share this ticket's missing-unique-key problem, so the scope expanded to a single three-table migration under 030. No code was written under this ticket.
