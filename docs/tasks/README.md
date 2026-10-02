@@ -1,0 +1,96 @@
+# Arrodes Task Tracker
+
+One ticket per file in this directory: `{NNN}-{kebab-slug}.md`. Each ticket has YAML frontmatter with `status`; update this index whenever a status changes.
+
+Statuses: `todo` | `in-progress` | `blocked` | `review` | `done`.
+
+Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
+
+## Phase 1 — Ingestion & retrieval core
+
+| # | Ticket | Status | Est | Depends on |
+|---|---|---|---|---|
+| 001 | [Neon provisioning & env wiring](001-neon-provisioning.md) | done | S | — |
+| 002 | [EPUB sanity probe](002-epub-sanity-probe.md) | done | S | — |
+| 003 | [Chapter extraction pipeline](003-chapter-extraction.md) | done | M | 002 |
+| 004 | [Entity alias seed data](004-entity-alias-seed.md) | done | M | — |
+| 005 | [Contextual retrieval + embed + chunk insert](005-contextual-retrieval-ingest.md) | done | L | 001, 003 |
+| 006 | [NER pass → entities, entity_mentions](006-ner-entity-mentions.md) | done | M | 004, 005 |
+| 007 | [Event extraction → events table](007-event-extraction.md) | done | M | 006 |
+| 008 | [Hierarchical summaries](008-hierarchical-summaries.md) | done | M | 005, 021 |
+| 009 | [Hybrid retrieval integration test](009-hybrid-retrieval-test.md) | done | S | 005 |
+| 019 | [Speaker attribution preprocessor](019-speaker-attribution-preprocessor.md) | todo | M | 006 |
+| 021 | [Arc-level metadata schema](021-arc-metadata-schema.md) | done | M | 005 |
+
+## Phase 2 — Chat backend
+
+| # | Ticket | Status | Est | Depends on |
+|---|---|---|---|---|
+| 010 | [Chat route — live tool wiring](010-chat-tools-live.md) | todo | M | 005, 006, 007, 009 |
+| 011 | [Prompt caching (system + glossary)](011-prompt-caching.md) | todo | S | 010 |
+
+## Phase 3 — Frontend
+
+| # | Ticket | Status | Est | Depends on |
+|---|---|---|---|---|
+| 012 | [Reading position slider (spoiler control UI)](012-reading-position-ui.md) | todo | M | 010 |
+| 013 | [Inline citation rendering](013-citation-rendering.md) | todo | S | 010 |
+
+## Phase 4 — Eval + deploy
+
+| # | Ticket | Status | Est | Depends on |
+|---|---|---|---|---|
+| 014 | [Eval verification sweep + baseline run](014-eval-verification.md) | todo | L | 003, 005, 009 |
+| 015 | [Vercel deploy (Hobby tier)](015-vercel-deploy.md) | todo | S | 010, 012, 014 |
+
+## Phase 5 — Later
+
+| # | Ticket | Status | Est | Depends on |
+|---|---|---|---|---|
+| 016 | [Wiki + source-priority + cross-encoder rerank](016-wiki-and-rerank.md) | todo | L | 014 |
+| 020 | [Provider migration — Anthropic → DeepSeek V4 / Gemini](020-provider-migration-gemini.md) | done | S | — |
+| 022 | [Summaries rollup provider flexibility](022-summaries-rollup-provider-flexibility.md) | todo | S | 008, 020 |
+| 023 | [Summaries dedupe hardening (DB unique key)](023-summaries-dedupe-unique-key.md) | todo | M | 008 |
+| 024 | [Summaries semantic sanity baseline](024-summaries-semantic-sanity-baseline.md) | todo | S | 008, 014 |
+
+## Backlog (deferred)
+
+| # | Ticket | Status | Est | Depends on | Notes |
+|---|---|---|---|---|---|
+| 017 | [Entity-level reveal gating](017-entity-reveal-gating.md) | deferred | M | 004, 006, 012 | Schema change. Un-defer if app goes public. |
+| 018 | [Entity consolidation (aliases, canonical coverage, type gaps)](018-entity-consolidation.md) | todo | M | 006 | Identified during 006. Adds artifact + location rows, completes sequence-title aliases, resolves Tarot/pathway name overlaps. |
+| 025 | [NER gold audit + targeted dialogue expansion](025-ner-gold-audit-and-dialogue-expansion.md) | todo | M | 014, 019 | Audit current 26-chunk gold, re-adjudicate ambiguous roles, and expand dialogue-heavy eval coverage. |
+
+---
+
+## Dependency graph (quick view)
+
+```
+001 ──────────┐
+002 ──► 003 ──┼─► 005 ──┬─► 006 ──► 007 ──┐
+004 ──────────┘         ├─► 021 ──► 008   │
+                        └─► 009 ──────────┤
+                                         ▼
+                                        010 ──┬─► 011
+                                              ├─► 012 ──► 015
+                                              └─► 013
+                                         014 ──► 015
+                                         014 ──► 016
+                                         003 ──► 014
+
+backlog: 017 (entity reveal gating) — depends on 004, 006, 012
+         018 (entity consolidation) — depends on 006
+         019 (speaker attribution preprocessor) — depends on 006, slots before 010
+         021 (arc-level metadata schema) — depends on 005, blocks 008
+         022 (summaries rollup provider flexibility) — depends on 008, 020
+         023 (summaries dedupe hardening) — depends on 008
+         024 (summaries semantic sanity baseline) — depends on 008, 014
+         025 (NER gold audit + targeted dialogue expansion) — depends on 014, 019
+```
+
+## Conventions
+
+- When starting a ticket: set `status: in-progress`, update the date, update this index.
+- When blocked: set `status: blocked`, add a `## Blocker` section to the ticket body.
+- When done: set `status: done`, add a `## Resolution` section with the PR links (if any), file diffs summary, and anything deviant from the original plan.
+- Deviations: if scope expanded or shrank mid-ticket, document in the ticket body before closing — do not silently re-scope.
