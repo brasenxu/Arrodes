@@ -11,7 +11,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 | # | Ticket | Status | Est | Depends on |
 |---|---|---|---|---|
 | 027 | [Tooling port — OpenCode MCP + curated AGENTS.md](027-tooling-port-opencode.md) | done | S | — |
-| 028 | [Docs + script hygiene (audit findings 13-14 + script guards)](028-docs-and-script-hygiene.md) | in-progress | S | — |
+| 028 | [Docs + script hygiene (audit findings 13-14 + script guards)](028-docs-and-script-hygiene.md) | done | S | — |
 
 ## Phase 1 — Ingestion & retrieval core
 
