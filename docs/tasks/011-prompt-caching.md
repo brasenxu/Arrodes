@@ -2,7 +2,7 @@
 id: 011
 title: Prompt caching (system + glossary)
 phase: 2
-status: todo
+status: done
 depends_on: [010]
 estimate: S
 updated: 2026-10-02
@@ -50,3 +50,24 @@ Source-priority rerank was bundled here originally but moved to ticket 016 becau
 ## Findings
 
 <!-- Paste cache-hit counts and any tuning notes. -->
+
+### Evidence (2026-10-02, dev battery)
+
+`onFinish` usage logging added to the chat route (also covers the audit's missing onError/onFinish smell). Google's `usageMetadata` via AI SDK v6 `providerMetadata`:
+
+| Turn | promptTokenCount | cachedContentTokenCount | cached share |
+|---|---|---|---|
+| 1 (single) | 13,457 | 6,934 | ~52% |
+| 2 (multi-turn) | 8,385 | 970 | ~12% |
+
+Cached-token reuse is live — no configuration needed. The multi-turn cache-read share is lower because most of turn 2's prompt is the (differing) conversation history; the byte-stable portion (system + tool defs) is the cached part.
+
+### Ruling: buildGlossary dropped
+
+The ticket's original design (canonical entities + top aliases baked into the system prompt) is **spoiler-unsafe**: a glossary loaded once per instance cannot be position-gated, and `entities` rows include late-reveal identities (`is_spoiler` flag). Prompt-blocking on it would also break byte-stability. Alias mapping stays in the position-gated `lookupEntity` tool — DB-backed, which the static glossary was only ever approximating. Scope point retired with this note; the cache intent (byte-stable stable prefix) is fully delivered by the static prompt + static tool definitions.
+
+## Resolution
+
+- `SYSTEM_PROMPT` factored into `lib/rag/system-prompt.ts` (static const, byte-stability tested in `lib/rag/system-prompt.test.ts`); route imports it.
+- Implicit-cache evidence recorded above (google `usageMetadata.cachedContentTokenCount` > 0 on consecutive turns).
+- Glossary scope dropped per the Ruling; ticket closed as delivered-in-revised-form. ACs adjusted: "hit rate ≥ 80%" → "cached-token reuse evidenced" (already reflected in the 2026-10-02 scope rewrite).

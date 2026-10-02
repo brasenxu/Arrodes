@@ -35,7 +35,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 |---|---|---|---|---|
 | 010 | [Chat route — live tool wiring](010-chat-tools-live.md) | done | M | 005, 006, 007, 009 |
 | 026 | [Summary retrieval tool (lookupSummary)](026-summary-retrieval-tool.md) | done | M | 008, 010 |
-| 011 | [Prompt caching (system + glossary)](011-prompt-caching.md) | todo | S | 010 |
+| 011 | [Prompt caching (system + glossary)](011-prompt-caching.md) | done | S | 010 |
 
 ## Phase 3 — Frontend
 

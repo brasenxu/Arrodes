@@ -6,6 +6,7 @@ import {
 } from "ai";
 import { buildTools } from "@/lib/rag/tools";
 import { resolveChatModel } from "@/lib/rag/chat-model";
+import { SYSTEM_PROMPT } from "@/lib/rag/system-prompt";
 import { isValidPosition } from "@/lib/rag/schemas";
 import { FULL_BOUNDS, MAIN_BOUNDS } from "@/lib/ingest/arc-map";
 import type { ReadingPosition } from "@/lib/rag/types";
@@ -16,16 +17,8 @@ export const maxDuration = 60;
 const CHAT_MODEL = resolveChatModel();
 
 // Citation format is pinned exactly — components/citation parsing (ticket 013)
-// depends on this casing: (LOTM1 Ch.N) / (COI Ch.N).
-const SYSTEM_PROMPT = `You are Arrodes, a RAG assistant grounded in Lord of the Mysteries (LOTM1) and Circle of Inevitability (COI).
-
-Rules:
-- Ground every factual claim in a retrieved chunk. Cite inline as (LOTM1 Ch.N) or (COI Ch.N) — exactly this format, after every factual claim, including entity lookups and event lists.
-- Never speculate past the user's reading position. If a chunk you'd need is past their position, say so — don't reason around it.
-- Call at most 3 tools before answering. If a search returns empty results, do NOT repeat the same query — answer honestly with what you have.
-- For "summarize chapter N" questions, call lookupSummary first with scope="chapter" and that chapterNum — don't searchBook for chapter recaps. For arc/volume/series overview questions ("what is the Red Priest arc about?"), call lookupSummary with that name first.
-- For list / count / "all X" questions, call aggregateEvents first. For named-entity questions, call lookupEntity first.
-- If retrieval returns nothing useful, say so. Don't fall back to training-data knowledge.`;
+// depends on this casing: (LOTM1 Ch.N) / (COI Ch.N). The prompt itself lives
+// in lib/rag/system-prompt.ts (ticket 011 — byte-stable cacheable prefix).
 
 // Dev default until ticket 012 ships the position UI: fully-read MAIN story.
 // Side_story/bonus chapters stay gated — the UI will expose FULL bounds via
@@ -81,6 +74,16 @@ export async function POST(req: Request) {
     // 3 tool rounds + an answer step. q07/q09 battery showed the model can
     // burn every step on repeated searches and never answer without this headroom.
     stopWhen: stepCountIs(8),
+    // Ticket 011 evidence: log per-request usage so implicit-cache behavior
+    // (cached-token reuse across turns with a stable prefix) is observable
+    // in the server console.
+    onFinish: ({ usage, providerMetadata }) => {
+      console.log(
+        "[chat] usage:",
+        JSON.stringify(usage),
+        providerMetadata?.google ? `google: ${JSON.stringify(providerMetadata.google).slice(0, 300)}` : "",
+      );
+    },
   });
 
   return result.toUIMessageStreamResponse();
