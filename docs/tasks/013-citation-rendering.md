@@ -2,10 +2,10 @@
 id: 013
 title: Inline citation rendering
 phase: 3
-status: todo
+status: done
 depends_on: [010]
 estimate: S
-updated: 2026-04-21
+updated: 2026-10-02
 ---
 
 ## Context
@@ -39,6 +39,14 @@ The assistant emits citations like `(LOTM1 Ch.245)`. The UI currently renders th
 - In a test session: assistant emits `(LOTM1 Ch.245)` inline, UI shows it as a styled pill, hover shows the chapter excerpt.
 - Two citations on the same chapter render correctly.
 - Stream doesn't flicker — partial citation tokens (e.g., `(LOTM1 Ch.2` mid-stream) render as plain text until complete.
+
+## Resolution (2026-10-02, reopening Task 18)
+
+- `lib/client/citations.ts`: `parseCitations` (10 tests green) + `buildCitationIndex` correlator — searchBook results keyed by exact `(book, chapterNum)` with highest score winning, lookupSummary rows keyed by every chapter they cover (summary-sourced citations show the summary as the ground).
+- **Parser tolerates the observed model drift** `(LOTM1 Ch. 245)` (optional space after `Ch.`) in addition to the pinned format — the q05 battery showed Gemini emits the spaced variant regardless of prompt pinning.
+- `components/citation.tsx`: hover/click popover (chapter title + ~200-char excerpt, "copy link" placeholder disabled until an external reader exists).
+- `chat.tsx`: text parts render through the parser; the index is built per message from that message's tool parts. Mid-stream partials render as plain text (tested).
+- "Copy link" left as a documented placeholder (out of scope per this ticket).
 
 ## Verification
 

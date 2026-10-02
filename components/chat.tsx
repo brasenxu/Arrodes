@@ -2,6 +2,28 @@
 
 import { useChat } from "@ai-sdk/react";
 import { useState } from "react";
+import { Citation } from "@/components/citation";
+import { buildCitationIndex, parseCitations, type CitationToken } from "@/lib/client/citations";
+
+function TextPart({ text, parts }: { text: string; parts: ReturnType<typeof useChat>["messages"][number]["parts"] }) {
+  const index = buildCitationIndex(parts);
+  return (
+    <>
+      {parseCitations(text).map((token: CitationToken, i: number) =>
+        token.kind === "text" ? (
+          <span key={i}>{token.value}</span>
+        ) : (
+          <Citation
+            key={i}
+            book={token.book}
+            chapterNum={token.chapterNum}
+            info={index.get(`${token.book}:${token.chapterNum}`)}
+          />
+        ),
+      )}
+    </>
+  );
+}
 
 export function Chat({
   position,
@@ -28,7 +50,15 @@ export function Chat({
             </div>
             <div className="whitespace-pre-wrap text-sm">
               {m.parts.map((part, i) => {
-                if (part.type === "text") return <span key={i}>{part.text}</span>;
+                if (part.type === "text") {
+                  return (
+                    <TextPart
+                      key={i}
+                      text={part.text}
+                      parts={m.parts}
+                    />
+                  );
+                }
                 if (part.type.startsWith("tool-")) {
                   const st = (
                     part as { state?: string; errorText?: string }
