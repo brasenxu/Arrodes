@@ -43,7 +43,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 |---|---|---|---|---|
 | 012 | [Reading position slider (spoiler control UI)](012-reading-position-ui.md) | done | M | 010 |
 | 013 | [Inline citation rendering](013-citation-rendering.md) | done | S | 010 |
-| 029 | [Chat UX basics — stop, regenerate, error retry](029-chat-ux-basics.md) | todo | S/M | 010 |
+| 029 | [Chat UX basics — stop, regenerate, error retry](029-chat-ux-basics.md) | done | S/M | 010 |
 
 ## Phase 4 — Eval + deploy
 

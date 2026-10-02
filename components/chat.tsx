@@ -33,7 +33,7 @@ export function Chat({
   onOpenSettings: () => void;
 }) {
   const [input, setInput] = useState("");
-  const { messages, sendMessage, status, error } = useChat();
+  const { messages, sendMessage, status, error, stop, regenerate } = useChat();
   const busy = status === "submitted" || status === "streaming";
   const unset = position === null;
   const bothNull =
@@ -93,6 +93,20 @@ export function Chat({
         <div className="rounded border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
           Something went wrong talking to the model — try again. (Details in
           the server console.)
+          <button
+            type="button"
+            className="ml-2 underline hover:text-white"
+            onClick={() => regenerate()}
+          >
+            Retry last message
+          </button>
+        </div>
+      ) : null}
+
+      {messages.length === 0 && !disabled ? (
+        <div className="px-1 text-xs text-white/40">
+          Ask about a chapter (&ldquo;what happens in chapter 245?&rdquo;), a character, a pathway, or an
+          arc overview. Answers cite the exact chapter they came from.
         </div>
       ) : null}
 
@@ -135,6 +149,15 @@ export function Chat({
         >
           Send
         </button>
+        {busy ? (
+          <button
+            type="button"
+            onClick={() => stop()}
+            className="rounded-md border border-red-500/40 px-3 py-2 text-sm text-red-300 hover:bg-red-500/10"
+          >
+            Stop
+          </button>
+        ) : null}
       </form>
     </div>
   );

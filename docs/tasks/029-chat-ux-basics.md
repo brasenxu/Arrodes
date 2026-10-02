@@ -2,7 +2,7 @@
 id: 029
 title: Chat UX basics — stop, regenerate, error retry
 phase: 3
-status: todo
+status: done
 depends_on: [010]
 estimate: S/M
 updated: 2026-10-02
@@ -32,6 +32,13 @@ Audit finding: `components/chat.tsx` uses bare `useChat()` — refresh loses eve
 - Stop halts generation mid-stream cleanly.
 - A failed turn can be regenerated in place.
 - `pnpm build` + typecheck green.
+
+## Resolution (2026-10-02, reopening Task 19)
+
+- **Decision recorded:** chat history stays **ephemeral** — no persistence in this pass (post-015 nicety). Sessions live in component state; a refresh clears them.
+- Stop button (AI SDK `stop()`) appears while streaming.
+- Error banner gains "Retry last message" (`regenerate()`).
+- Empty-state hint describing what to ask (added alongside the 012 disabled-state prompt).
 
 ## Verification
 
