@@ -3,9 +3,12 @@ import { z } from "zod";
 import { and, eq, inArray, sql as dsql } from "drizzle-orm";
 import { db, schema } from "@/lib/db/client";
 import { hybridSearch } from "./retrieval";
+import { EVENT_TYPE_FILTER_SCHEMA, normalizeEmbedModelId } from "./schemas";
 import type { ReadingPosition } from "./types";
 
-const embedModel = process.env.INGEST_EMBED_MODEL ?? "openai/text-embedding-3-small";
+const embedModel = normalizeEmbedModelId(
+  process.env.INGEST_EMBED_MODEL ?? "text-embedding-3-small",
+);
 
 const bookEnum = z.enum(["lotm1", "coi"]);
 
@@ -83,19 +86,10 @@ export function buildTools(position: ReadingPosition) {
 
     aggregateEvents: tool({
       description:
-        "Aggregate structured events (Sequence advances, meetings, deaths, identity reveals) filtered by entity and event type. Use for list / count / 'all' queries where top-k retrieval would miss distant mentions.",
+        "Aggregate structured events (Sequence advances, potion digestion, meetings, organization joins, battles, deaths, identity assumes/reveals) filtered by entity and event type. Use for list / count / 'all' queries where top-k retrieval would miss distant mentions. Result is capped at 200 rows ordered by book then chapter; truncated=true tells you rows were dropped.",
       inputSchema: z.object({
         entityName: z.string().min(2),
-        eventType: z
-          .enum([
-            "sequence_advance",
-            "death",
-            "meeting",
-            "identity_reveal",
-            "location_change",
-            "any",
-          ])
-          .default("any"),
+        eventType: EVENT_TYPE_FILTER_SCHEMA.default("any"),
         books: z.array(bookEnum).default(["lotm1", "coi"]),
       }),
       execute: async ({ entityName, eventType, books }) => {
