@@ -5,7 +5,15 @@ import {
   EVENT_TYPE_FILTER_SCHEMA,
   isValidPosition,
   normalizeEmbedModelId,
+  resolveEntityMatch,
+  type EntityMatchRow,
 } from "./schemas";
+
+const row = (id: number, canonicalName: string, aliases: string[]): EntityMatchRow => ({
+  id,
+  canonicalName,
+  aliases,
+});
 
 describe("EVENT_TYPE_FILTER_SCHEMA", () => {
   it("accepts every EVENT_TYPES value", () => {
@@ -94,5 +102,64 @@ describe("EVENT_TYPE_FILTER_SCHEMA shape", () => {
       EVENT_TYPE_FILTER_SCHEMA.safeParse(t).success ? [t] : [],
     );
     expect(accepted).toHaveLength(EVENT_TYPES.length);
+  });
+});
+
+describe("resolveEntityMatch", () => {
+  it("exact canonical match wins even when an alias match appears first", () => {
+    // Audit defect 2: "Fool" is a pathway canonical AND a Klein alias.
+    const rows = [
+      row(2, "Klein Moretti", ["The Fool", "Fool", "Fool God"]),
+      row(7, "Fool", []),
+    ];
+    const result = resolveEntityMatch(rows, "fool");
+    expect(result).toEqual({ entity: row(7, "Fool", []) });
+  });
+
+  it("is case-insensitive on the canonical comparison", () => {
+    const rows = [row(7, "Fool", [])];
+    expect(resolveEntityMatch(rows, "FOOL")).toEqual({ entity: row(7, "Fool", []) });
+  });
+
+  it("two alias-only matches are ambiguous with sorted candidates", () => {
+    const rows = [
+      row(5, "B", ["mist"]),
+      row(3, "A", ["Mist"]),
+    ];
+    const result = resolveEntityMatch(rows, "mist");
+    expect(result).toEqual({
+      ambiguous: true,
+      candidates: [row(3, "A", ["Mist"]), row(5, "B", ["mist"])],
+    });
+  });
+
+  it("single alias match resolves to that entity", () => {
+    const rows = [row(4, "Audrey", ["Spectator", "Miss Justice"])];
+    expect(resolveEntityMatch(rows, "miss justice")).toEqual({
+      entity: row(4, "Audrey", ["Spectator", "Miss Justice"]),
+    });
+  });
+
+  it("two canonical matches (case-collision in data) are ambiguous", () => {
+    const rows = [row(9, "Fool", []), row(11, "FOOL", [])];
+    const result = resolveEntityMatch(rows, "fool");
+    expect(result).toEqual({
+      ambiguous: true,
+      candidates: [row(9, "Fool", []), row(11, "FOOL", [])],
+    });
+  });
+
+  it("no matching rows returns ambiguous with empty candidates (defensive)", () => {
+    expect(resolveEntityMatch([], "anything")).toEqual({
+      ambiguous: true,
+      candidates: [],
+    });
+  });
+
+  it("is deterministic: shuffled input, same output", () => {
+    const rows = [row(5, "B", ["mist"]), row(3, "A", ["Mist"]), row(9, "C", ["misty"])];
+    const a = resolveEntityMatch(rows, "mist");
+    const b = resolveEntityMatch([...rows].reverse(), "mist");
+    expect(b).toEqual(a);
   });
 });

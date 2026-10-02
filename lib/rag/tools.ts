@@ -3,7 +3,7 @@ import { z } from "zod";
 import { and, eq, inArray, sql as dsql } from "drizzle-orm";
 import { db, schema } from "@/lib/db/client";
 import { hybridSearch } from "./retrieval";
-import { EVENT_TYPE_FILTER_SCHEMA, normalizeEmbedModelId } from "./schemas";
+import { EVENT_TYPE_FILTER_SCHEMA, normalizeEmbedModelId, resolveEntityMatch } from "./schemas";
 import type { ReadingPosition } from "./types";
 
 const embedModel = normalizeEmbedModelId(
@@ -57,11 +57,23 @@ export function buildTools(position: ReadingPosition) {
                 WHERE LOWER(a) = ${needle}
               )`,
           )
+          // Deterministic order (audit defect 2): exact-canonical matches
+          // first, then by id — resolveEntityMatch re-checks the same
+          // predicate in TS so SQL return order never decides the winner.
+          .orderBy(
+            dsql`CASE WHEN LOWER(${schema.entities.canonicalName}) = ${needle} THEN 0 ELSE 1 END`,
+            schema.entities.id,
+          )
           .limit(5);
 
         if (entityRows.length === 0) return { entity: null, mentions: [] };
 
-        const entity = entityRows[0];
+        const match = resolveEntityMatch(entityRows, needle);
+        if ("ambiguous" in match) {
+          return { ambiguous: true, candidates: match.candidates };
+        }
+
+        const entity = match.entity;
         const mentions = await db
           .select({
             bookId: schema.entityMentions.bookId,
@@ -94,7 +106,7 @@ export function buildTools(position: ReadingPosition) {
       }),
       execute: async ({ entityName, eventType, books }) => {
         const needle = entityName.toLowerCase();
-        const [entity] = await db
+        const entityRows = await db
           .select()
           .from(schema.entities)
           .where(
@@ -104,9 +116,21 @@ export function buildTools(position: ReadingPosition) {
                 WHERE LOWER(a) = ${needle}
               )`,
           )
-          .limit(1);
+          .orderBy(
+            dsql`CASE WHEN LOWER(${schema.entities.canonicalName}) = ${needle} THEN 0 ELSE 1 END`,
+            schema.entities.id,
+          )
+          .limit(5);
 
-        if (!entity) return { entity: null, events: [] };
+        if (entityRows.length === 0) return { entity: null, events: [] };
+
+        const match = resolveEntityMatch(entityRows, needle);
+        if ("ambiguous" in match) {
+          if (match.candidates.length === 0) return { entity: null, events: [] };
+          return { ambiguous: true, events: [] };
+        }
+
+        const entity = match.entity;
 
         const rows = await db
           .select()

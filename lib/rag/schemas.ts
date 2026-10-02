@@ -39,3 +39,47 @@ export function isValidPosition(p: unknown): p is ReadingPosition {
     .safeParse(p);
   return result.success;
 }
+
+/**
+ * Minimal structural shape needed to resolve an entity among candidates.
+ * Full DB rows satisfy this structurally.
+ */
+export type EntityMatchRow = {
+  id: number;
+  canonicalName: string;
+  aliases: string[];
+};
+
+export type EntityMatch<T extends EntityMatchRow> =
+  | { entity: T }
+  | { ambiguous: true; candidates: T[] };
+
+/**
+ * Deterministic entity resolution among pre-filtered candidate rows.
+ *
+ * Audit defect 2: both lookup tools used to take `rows[0]` with no ORDER BY —
+ * Postgres returns ties in arbitrary order, so ambiguous names ("Fool" is
+ * both a pathway canonical and a Klein alias) silently resolved to the wrong
+ * entity. Policy here: an exact case-insensitive canonical match wins; among
+ * alias-only matches (or duplicate canonicals), ties are ambiguous rather
+ * than arbitrary.
+ */
+export function resolveEntityMatch<T extends EntityMatchRow>(
+  rows: T[],
+  needle: string,
+): EntityMatch<T> {
+  const n = needle.toLowerCase();
+  const byId = (a: T, b: T) => a.id - b.id;
+
+  const canonical = rows
+    .filter((r) => r.canonicalName.toLowerCase() === n)
+    .sort(byId);
+  if (canonical.length === 1) return { entity: canonical[0] };
+  if (canonical.length > 1) return { ambiguous: true, candidates: canonical };
+
+  const aliasOnly = rows
+    .filter((r) => r.aliases.some((a) => a.toLowerCase() === n))
+    .sort(byId);
+  if (aliasOnly.length === 1) return { entity: aliasOnly[0] };
+  return { ambiguous: true, candidates: aliasOnly };
+}
