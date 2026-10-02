@@ -148,9 +148,10 @@ export function buildTools(position: ReadingPosition) {
               )`,
             ),
           )
-          .orderBy(schema.events.bookId, schema.events.chapterNum);
+          .orderBy(schema.events.bookId, schema.events.chapterNum, schema.events.id)
+          .limit(200);
 
-        return { entity, events: rows };
+        return { entity, events: rows, truncated: rows.length === 200 };
       },
     }),
   };
