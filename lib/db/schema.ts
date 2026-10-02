@@ -136,7 +136,7 @@ export const events = pgTable(
     entityId: integer("entity_id")
       .notNull()
       .references(() => entities.id, { onDelete: "cascade" }),
-    eventType: text("event_type").notNull(), // 'sequence_advance' | 'death' | 'meeting' | 'identity_reveal' | ...
+    eventType: text("event_type").notNull(), // EVENT_TYPES from lib/rag/types.ts: sequence_advance | digestion | meeting | organization_join | battle | death | identity_assume | identity_reveal
     chapterId: integer("chapter_id")
       .notNull()
       .references(() => chapters.id, { onDelete: "cascade" }),

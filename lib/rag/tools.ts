@@ -14,7 +14,8 @@ const bookEnum = z.enum(["lotm1", "coi"]);
 
 /**
  * Build the three RAG tools bound to a session's reading position.
- * Position is passed from the chat route (not trusted from the client).
+ * Position arrives from the client body; it is shape-validated and clamped
+ * to FULL_BOUNDS in the route (server-side session comes with ticket 031).
  */
 export function buildTools(position: ReadingPosition) {
   return {

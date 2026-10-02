@@ -1,5 +1,5 @@
 import { describe, test, expect } from "vitest";
-import { assignArc } from "./arc-map";
+import { assignArc, FULL_BOUNDS, MAIN_BOUNDS } from "./arc-map";
 
 describe("assignArc — LOTM1 main-story per-arc sample", () => {
   test.each([
@@ -355,7 +355,7 @@ describe("assignArc — COI contiguity + counts", () => {
   });
 });
 
-describe("assignArc — input validation", () => {
+describe("assignArc - input validation", () => {
   test("chapter 0 or negative throws", () => {
     expect(() => assignArc("lotm1", 0)).toThrow();
     expect(() => assignArc("coi", -1)).toThrow();
@@ -364,5 +364,26 @@ describe("assignArc — input validation", () => {
   test("chapter beyond known range throws", () => {
     expect(() => assignArc("lotm1", 1433)).toThrow();
     expect(() => assignArc("coi", 1182)).toThrow();
+  });
+});
+
+describe("book bounds (audit defect 3 clamp source — pinned against ingested DB)", () => {
+  // DB truth (arrodes-ro, 2026-10-02): lotm1 main 1-1394, side 1395-1432;
+  // coi main 1-1179, bonus 1180, side 1181.
+  test("MAIN_BOUNDS is the last main-story chapter per book", () => {
+    expect(MAIN_BOUNDS.lotm1).toBe(1394);
+    expect(MAIN_BOUNDS.coi).toBe(1179);
+  });
+
+  test("FULL_BOUNDS is the absolute last chapter per book", () => {
+    expect(FULL_BOUNDS.lotm1).toBe(1432);
+    expect(FULL_BOUNDS.coi).toBe(1181);
+  });
+
+  test("bounds are consistent with assignArc's throwing boundary", () => {
+    expect(() => assignArc("lotm1", FULL_BOUNDS.lotm1)).not.toThrow();
+    expect(() => assignArc("coi", FULL_BOUNDS.coi)).not.toThrow();
+    expect(() => assignArc("lotm1", FULL_BOUNDS.lotm1 + 1)).toThrow();
+    expect(() => assignArc("coi", FULL_BOUNDS.coi + 1)).toThrow();
   });
 });
