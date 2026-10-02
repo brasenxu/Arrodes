@@ -26,6 +26,8 @@ Current implementation note: despite legacy `Haiku` naming in some symbols/comme
 
 ## Scope
 
+- **Cost driver (2026-10-02 note):** this ticket's mandatory re-ingest is a **full-corpus NER re-run for both books** (`--phase ner --reset --yes` × 2; 16,398 chunks; paid API time measured in hours). Plan the re-run window and budget for it; the original 006 runs cost ~$63 before the DeepSeek migration.
+
 - Build a preprocessor that, per chunk:
   - Extracts quoted-speech spans (U+201C/U+201D, ASCII `"`).
   - For each quoted span, searches a narrow window (≤60 chars before/after) for a speech verb (said, replied, asked, muttered, whispered, chuckled, exclaimed, sighed, snapped, continued, added, began, remarked, observed, noted, stated, declared, …) paired with a named entity.

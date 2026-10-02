@@ -5,8 +5,10 @@ phase: 5
 status: todo
 depends_on: [014]
 estimate: L
-updated: 2026-04-21
+updated: 2026-10-02
 ---
+
+> **Pre-split note (2026-10-02):** `L` — split likely. Three workstreams in one ticket: 016a wiki ingest (scrape + strip + chunk/embed 2,000–5,000 rows), 016b source-priority rerank, 016c cross-encoder rerank (hosting decision needed). Split into 016a/016b/016c at execution time unless all three measurably improve the eval baseline together.
 
 ## Context
 

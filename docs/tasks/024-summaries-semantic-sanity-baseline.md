@@ -3,9 +3,9 @@ id: 024
 title: Summaries semantic sanity baseline
 phase: 4
 status: todo
-depends_on: [008, 014]
+depends_on: [008]
 estimate: S
-updated: 2026-05-04
+updated: 2026-10-02
 ---
 
 ## Context
@@ -36,3 +36,7 @@ Ticket 008 validated final summary counts, but the semantic nearest-neighbor san
 - Running the check yields stable, plausible arc/volume hits for the probe set.
 - Baseline is stored where future tickets can diff against it.
 - `pnpm eval:validate` remains green.
+
+## Probe query (pinned from the 008 spec)
+
+The canon-sensitive probe is: **"Klein kills Lanevus after Audrey reports the clue"** — expected top-1 is the corresponding arc summary. The phrase "Klein meets Audrey" must NOT be used (their first meeting is a separate Tarot Club event in Volume 1 — `docs/superpowers/specs/2026-05-02-hierarchical-summaries-design.md:159` corrects the original 008 AC wording).

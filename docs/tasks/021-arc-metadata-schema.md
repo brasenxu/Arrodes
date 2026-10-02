@@ -12,7 +12,7 @@ updated: 2026-04-24
 
 Current `chapters` table has `volume` + `volume_name` but no concept of narrative arcs within a volume. `lib/ingest/arc-map.ts` conflates arc with volume (one range per volume). Ticket 008 (hierarchical summaries) needs arc summaries distinct from volume summaries — "Klein meets Audrey" should retrieve the Faceless-arc summary, not the whole Vol 2 Faceless summary. Volumes also contain multiple arcs in both books (e.g., Vol 6 Dream Weaver's `The Fool's Dream` covers 131 chapters of a 150-chapter volume; LOTM1 Vol 1 Clown has 5 distinct narrative phases), so the current schema is insufficient.
 
-Arc boundaries have been derived from the LOTM fandom wiki (Volume N timelines + `{{Main|X}}` event-page references + Category:Events). Full derivation and proposed arc list is in `.claude/plans/2026-04-23_Arc-Derivation.md`.
+Arc boundaries have been derived from the LOTM fandom wiki (Volume N timelines + `{{Main|X}}` event-page references + Category:Events). Full derivation and proposed arc list is in `.claude/plans/2026-04-23_Arc-Derivation.md` *(machine-local, no longer on disk — `lib/ingest/arc-map.ts` is now the sole authoritative canon; see References below).*
 
 This ticket also absorbs the "Fill unmapped COI arc ranges" sub-task previously on ticket 014 — now obsolete since 021 rebuilds the whole arc-map with verified boundaries.
 
@@ -88,7 +88,7 @@ psql $DATABASE_URL_UNPOOLED -c "SELECT arc_name, min(chapter_num), max(chapter_n
 
 ## References
 
-- **Authoritative arc list:** `.claude/plans/2026-04-23_Arc-Derivation.md` — see the **Implementation table** section at the bottom. 71 rows total (37 LOTM1 + 34 COI). Copy verbatim into `arc-map.ts` — `arc_name` values are final, do not rename.
+- **Authoritative arc list:** `.claude/plans/2026-04-23_Arc-Derivation.md` — see the **Implementation table** section at the bottom. 71 rows total (37 LOTM1 + 34 COI). Copy verbatim into `arc-map.ts` — `arc_name` values are final, do not rename. *(Machine-local file, no longer on disk; `lib/ingest/arc-map.ts` is now the sole authoritative arc canon — do not re-derive from memory.)*
 - Source: LOTM fandom wiki Volume N pages (Synopsis + Timeline of Major Events) + Category:Events.
 - Schema context: current `arc-map.ts` at `lib/ingest/arc-map.ts`, current chapters schema at `lib/db/schema.ts:40-57` (chapters table), existing tests at `lib/ingest/arc-map.test.ts`.
 

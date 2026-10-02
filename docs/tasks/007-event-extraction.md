@@ -12,8 +12,8 @@ updated: 2026-04-24
 
 Aggregation queries ("list all Tarot Club meetings", "when does Klein reach each Sequence") starve on dense retrieval because distant mentions drop below top-k. The `events` table solves this with a structured index: one row per `(entity, event_type, chapter)` tuple with a pointer back to the evidence chunk. `aggregateEvents` tool then runs a cheap SQL scan.
 
-**Design source:** `.claude/plans/2026-04-23_007-event-extraction.md`
-**Implementation plan:** `.claude/plans/2026-04-23_007-event-extraction-plan.md`
+**Design source:** `.claude/plans/2026-04-23_007-event-extraction.md` *(machine-local, no longer on disk — the implemented shape in this ticket + `lib/ingest/events.ts` is the record)*
+**Implementation plan:** `.claude/plans/2026-04-23_007-event-extraction-plan.md` *(same — superseded by this ticket's implemented shape)*
 
 The ticket's original Scope + Acceptance criteria were revised in design; the implemented shape below supersedes the pre-design version.
 

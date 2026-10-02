@@ -16,7 +16,8 @@ First production deploy on Vercel Hobby. Neon is already Marketplace-provisioned
 
 - `vercel link` the project to a new Vercel project named `arrodes`.
 - `vercel env pull .env.local` to verify Neon vars are auto-populated in the Vercel project (from ticket 001's Marketplace provisioning).
-- Add `AI_GATEWAY_API_KEY` to Vercel project env (if not already set by AI Gateway integration).
+- Add `AI_GATEWAY_API_KEY` to Vercel project env — **required**: the chat route resolves `CHAT_MODEL` and the embed model through the AI Gateway (see `.env.example` post-2026-10-02).
+- Verify the project's Node runtime on Vercel satisfies the `package.json` engines floor (node ≥ 20.19).
 - `vercel --prod` for the first production deploy.
 - Smoke test: load the deployed URL, set reading position, ask 3 questions.
 - Enable Rolling Releases (GA since June 2025) if beneficial — not strictly needed at this scale.

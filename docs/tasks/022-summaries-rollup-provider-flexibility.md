@@ -5,7 +5,7 @@ phase: 5
 status: todo
 depends_on: [008, 020]
 estimate: S
-updated: 2026-05-04
+updated: 2026-10-02
 ---
 
 ## Context
@@ -16,7 +16,7 @@ Ticket 008 intentionally constrained summary-tier model selection to DeepSeek-on
 
 - Relax summary-tier provider validation so configured non-DeepSeek models can be used safely.
 - Keep clear validation errors for unsupported or malformed model IDs.
-- Preserve existing `INGEST_SUMMARY_MODEL` then `CHAT_MODEL` fallback behavior.
+- **Fallback semantics (revised 2026-10-02):** drop the `INGEST_SUMMARY_MODEL` → `CHAT_MODEL` fallback. The old fallback is dead post-020 (`CHAT_MODEL=google/gemini-2.5-flash` fails `resolveDeepSeekSummaryModelId` after logging "using CHAT_MODEL fallback"). Fail fast with an actionable error ("set INGEST_SUMMARY_MODEL") when the env var is missing or incompatible.
 
 ## Out of scope
 

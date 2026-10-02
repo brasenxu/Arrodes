@@ -14,6 +14,19 @@ updated: 2026-04-21
 
 ## Required pre-work from ticket 007 (shipped 2026-04-24)
 
+## Remaining checklist (2026-10-02 audit — everything left before this ticket closes)
+
+1. **Enum fix** (audit defect 1, HIGH): `aggregateEvents` eventType at `lib/rag/tools.ts:89-98` — drop `location_change`, source the enum from `EVENT_TYPES` (`lib/rag/types.ts:31-40`) via `lib/rag/schemas.ts`; currently 4 of 8 ingested event types fail zod validation and `location_change` silently returns 0 rows.
+2. **Ambiguity guard** (defect 2, HIGH): `lookupEntity`/`aggregateEvents` resolve entities first-row-wins with no ORDER BY — "Fool" collides (pathway entity vs Klein aliases). Deterministic ordering + `{ambiguous: true, candidates: [...]}`.
+3. **Position/body validation** (defects 3-4): validate `body.position` shape, clamp to arc-map bounds, 400 on malformed JSON, strip client `system`-role messages.
+4. **Bounded aggregateEvents** (defect 5): ORDER BY + `.limit(200)` + `truncated` flag.
+5. **Embed resolution + `.env.example` truthing** (defect 6): normalize bare/gateway model IDs in `lib/rag/tools.ts`; document that `AI_GATEWAY_API_KEY` is required by the chat route.
+6. **Types cleanup** (defects 8-9): delete/reshape `EventExtra` (zero importers, wrong shape); trim `RetrievedChunk.source` to `"epub"`; drop the wiki/forum line from SYSTEM_PROMPT.
+7. **Error surfacing**: friendly UI error on provider 429 / tool failure (minimal in Task 12; full UX in 029).
+8. **10-question battery** (below) → transcript in `## Findings`, close 010, backfill 020.
+
+---
+
 The `aggregateEvents` tool's `eventType` enum (`lib/rag/tools.ts:89`) needs reshaping to match what 007 actually writes to the `events` table:
 
 - **Drop:** `location_change` (no longer extracted)
@@ -40,7 +53,7 @@ The 4,230-row events corpus has known noise in `identity_assume` for Klein (mult
   - `lookupEntity` for ambiguous strings ("Death", "Black Emperor", "Fool", "Hermit") where the name matches both a pathway canonical and a character alias: decide precedence. Ticket 018 will finalize the policy in the seed; in the meantime, verify the tool doesn't silently return the wrong entity type. Consider returning `{ambiguous: true, candidates: [...]}` if the name resolves to > 1 entity via case-insensitive match across canonical and alias columns.
   - `aggregateEvents` with `eventType="any"` should return all types — verify join + order.
   - `hybridSearch` when one book's position is null should still return results from the other book — verify the `bookCeilings.length === 0` branch never triggers when at least one book is read.
-- Rate-limit guard: if Sonnet rejects with 429, surface a clean error to the UI.
+- Rate-limit guard: if the chat provider rejects with 429, surface a clean error to the UI.
 
 ## Out of scope
 

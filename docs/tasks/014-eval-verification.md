@@ -12,7 +12,9 @@ updated: 2026-04-21
 
 19/40 eval entries have empty `expected_chapters`. Without that, retrieval metrics are meaningless. This ticket sweeps all 40 entries to promote them to `status:"verified"` — filling in chapters, refining reference answers, and running the first real eval baseline.
 
-Heaviest lift in Phase 4 because it requires the corpus to exist and someone (you) to read LOTM to verify. Plan on ~3–5 hours for a careful pass.
+Heaviest lift in Phase 4 because it requires the corpus to exist and someone (you) to read LOTM to verify. Real scope: implement `eval.ts` (currently a stub) + `eval-helper.ts` from scratch, author the 19 missing `expected_chapters`, and promote all 40 draft entries — hence the `L` estimate.
+
+Lore/pathway entries verify **EPUB-only** for now; wiki cross-verification is deferred until ticket 016 (wiki ingest) lands, with a re-verification pass afterwards.
 
 ## Scope
 

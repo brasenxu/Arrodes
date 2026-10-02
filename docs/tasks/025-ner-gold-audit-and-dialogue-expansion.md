@@ -3,10 +3,12 @@ id: 025
 title: NER gold audit + targeted dialogue expansion
 phase: 5
 status: todo
-depends_on: [014, 019]
+depends_on: [006]
 estimate: M
-updated: 2026-05-06
+updated: 2026-10-02
 ---
+
+> **Waves (2026-10-02):** Wave 1 = thin gold pass (audit current 26-chunk gold, re-adjudicate ambiguous roles) — depends on 006 only, runs **before** 019 so the preprocessor measures against stable gold. Wave 2 = targeted dialogue expansion — after 019. 014 was dropped from `depends_on`: the NER-gold files are independent of the retrieval eval set. Wave 2 also absorbs event-gold expansion from 007's carried-forward gaps (`organization_join`/`identity_reveal` 0 labels, `sequence_advance` 1 noisy label) if it fits, or spins a follow-up ticket.
 
 ## Context
 
