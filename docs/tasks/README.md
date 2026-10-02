@@ -49,7 +49,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 
 | # | Ticket | Status | Est | Depends on |
 |---|---|---|---|---|
-| 014 | [Eval verification sweep + baseline run](014-eval-verification.md) | done | L | 003, 005, 009 |
+| 014 | [Eval verification sweep + baseline run](014-eval-verification.md) | review | L | 003, 005, 009 |
 | 015 | [Vercel deploy (Hobby tier)](015-vercel-deploy.md) | todo | S | 010, 012, 014 |
 
 ## Phase 5 — Later
@@ -57,7 +57,8 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 | # | Ticket | Status | Est | Depends on |
 |---|---|---|---|---|
 | 016 | [Wiki + source-priority + cross-encoder rerank](016-wiki-and-rerank.md) | todo | L | 014 |
-| 020 | [Provider migration — Anthropic → DeepSeek V4 / Gemini](020-provider-migration-gemini.md) | done | S | — || 022 | [Summaries rollup provider flexibility](022-summaries-rollup-provider-flexibility.md) | todo | S | 008, 020 |
+| 020 | [Provider migration — Anthropic → DeepSeek V4 / Gemini](020-provider-migration-gemini.md) | done | S | — |
+| 022 | [Summaries rollup provider flexibility](022-summaries-rollup-provider-flexibility.md) | todo | S | 008, 020 |
 | 023 | [Summaries dedupe hardening (DB unique key)](023-summaries-dedupe-unique-key.md) | done | M | 008 |
 | 024 | [Summaries semantic sanity baseline](024-summaries-semantic-sanity-baseline.md) | todo | S | 008 |
 | 030 | [Data dedupe migration — unique keys ×3 tables + content_kind CHECK](030-data-dedupe-migration.md) | done | M | 003, 005, 006, 007, 008 |
@@ -92,7 +93,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
                                          010 ──► 015 (frontmatter edge)
 003+005+006+007+008 ──► 030 (supersedes 023)
 
-phase-0 meta: 027 (done), 028 (in-progress) — no code deps
+phase-0 meta: 027 (done), 028 (done) — no code deps
 
 backlog: 017 (entity reveal gating) — depends on 004, 006, 012
          018 (entity consolidation) — depends on 006

@@ -2,7 +2,7 @@
 id: 014
 title: Eval verification sweep + baseline run
 phase: 4
-status: done
+status: review
 depends_on: [003, 005, 009]
 estimate: L
 updated: 2026-10-02
@@ -73,7 +73,7 @@ pnpm eval:validate
 
 ### Baseline (2026-10-02, reopening Task 21 — retrieval-only, k=8, 29 verified entries)
 
-Ground truth: 29 entries verified — 8 pre-authored (promoted), 21 authored from independent evidence (events pipeline, chapter summaries, lexical text search — NOT the embedding retrieval being scored; per-entry sources in the eval-set `notes`). 11 remain draft for the human pass (Q007, Q017, Q020, Q022, Q023, Q029, Q031, Q032, Q037, Q038, Q040) — `scripts/eval-helper.ts` is built for exactly that; `pnpm eval` skips drafts.
+Ground truth: 29 entries verified — 8 pre-authored (promoted), 21 authored from independent evidence (events pipeline, chapter summaries, lexical text search — NOT the embedding retrieval being scored; per-entry sources in the eval-set `notes`). **11 remain draft for the human pass** (Q007, Q017, Q020, Q022, Q023, Q029, Q031, Q032, Q037, Q038, Q040) — `scripts/eval-helper.ts` (interactive CLI: retrieval preview → add chapters → verified, written back in place) is ready for it; `pnpm eval` skips drafts. *An earlier version of this note claimed the helper was already built — it wasn't; written during the final review fix pass (2026-10-02).*
 
 | Query type | Entries | recall@8 |
 |---|---|---|
@@ -96,3 +96,7 @@ Weakest types + hypotheses (the 0.7 target iteration continues in follow-up tick
 - **timeline (0.300)**: "when does X first happen" needs first-appearance anchoring — same hypothesis as character.
 
 `eval_runs` rows written for all three baseline runs (pre-fix, post-pin).
+
+### Status: review (2026-10-02 final-review re-scope)
+
+The original AC "draft: 0, verified: 40" requires the human chapter pass — 11 entries stay draft until it runs (`pnpm tsx scripts/eval-helper.ts`; the eval runner already skips them, so the baseline above is trustworthy). 014 closes when the user finishes the sweep — everything else in this ticket (runner, scoring, spoiler gate, baseline) is delivered and green.

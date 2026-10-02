@@ -6,6 +6,7 @@ import {
   SUMMARY_LOOKUP_SCHEMA,
   extractChapterPin,
   isValidPosition,
+  parseChatBody,
   resolveEntityMatch,
   stripProviderPrefix,
   withinPosition,
@@ -124,6 +125,37 @@ describe("extractChapterPin (chapter-targeted retrieval)", () => {
   it("ignores non-chapter numbers", () => {
     expect(extractChapterPin("What are the 22 pathways?")).toBe(null);
     expect(extractChapterPin("List all meetings before chapter 500")).toBe(500);
+  });
+});
+
+describe("parseChatBody (review fix — malformed shapes 400, not 500)", () => {
+  it("rejects null and non-object bodies", () => {
+    expect(parseChatBody(null)).toEqual({ ok: false, error: "Invalid JSON body" });
+    expect(parseChatBody("x")).toEqual({ ok: false, error: "Invalid JSON body" });
+    expect(parseChatBody([1, 2])).toEqual({ ok: false, error: "Invalid JSON body" });
+  });
+
+  it("rejects missing/empty/non-array messages", () => {
+    expect(parseChatBody({})).toEqual({ ok: false, error: "messages array required" });
+    expect(parseChatBody({ messages: "no" })).toEqual({ ok: false, error: "messages array required" });
+    expect(parseChatBody({ messages: [] })).toEqual({ ok: false, error: "messages array required" });
+  });
+
+  it("rejects non-object and null message entries", () => {
+    expect(parseChatBody({ messages: [null] })).toEqual({ ok: false, error: "messages array required" });
+    expect(parseChatBody({ messages: ["hi"] })).toEqual({ ok: false, error: "messages array required" });
+  });
+
+  it("accepts a valid body and preserves message fields + position passthrough", () => {
+    const result = parseChatBody({
+      position: { lotm1: 100, coi: null },
+      messages: [{ id: "1", role: "user", parts: [{ type: "text", text: "hi" }] }],
+    });
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.messages[0].role).toBe("user");
+      expect(result.position).toEqual({ lotm1: 100, coi: null });
+    }
   });
 });
 

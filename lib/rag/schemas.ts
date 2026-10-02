@@ -92,6 +92,38 @@ export function extractChapterPin(query: string): number | null {
 }
 
 /**
+ * Full request-body validation for the chat route (review fix: `null` bodies
+ * and non-object message entries previously slipped the guards and 500'd).
+ * Returns a discriminated result instead of throwing. `position` is passed
+ * through unvalidated (isValidPosition gates it at the call site).
+ */
+const MESSAGE_SHAPE = z.object({ role: z.string() }).passthrough();
+
+export function parseChatBody(raw: unknown):
+  | {
+      ok: true;
+      messages: Array<{ role: string } & Record<string, unknown>>;
+      position: unknown;
+    }
+  | { ok: false; error: string } {
+  if (raw === null || typeof raw !== "object" || Array.isArray(raw)) {
+    return { ok: false, error: "Invalid JSON body" };
+  }
+  const body = raw as Record<string, unknown>;
+  const messages = body.messages;
+  if (!Array.isArray(messages) || messages.length === 0) {
+    return { ok: false, error: "messages array required" };
+  }
+  const parsed: Array<{ role: string } & Record<string, unknown>> = [];
+  for (const m of messages) {
+    const result = MESSAGE_SHAPE.safeParse(m);
+    if (!result.success) return { ok: false, error: "messages array required" };
+    parsed.push(result.data as { role: string } & Record<string, unknown>);
+  }
+  return { ok: true, messages: parsed, position: body.position };
+}
+
+/**
  * Shape-check for a client-supplied ReadingPosition. Both books must be
  * present and either null (not started) or a non-negative integer. Partial
  * positions are rejected — a missing book previously reached SQL params as
