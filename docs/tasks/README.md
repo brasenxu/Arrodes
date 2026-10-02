@@ -49,7 +49,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 
 | # | Ticket | Status | Est | Depends on |
 |---|---|---|---|---|
-| 014 | [Eval verification sweep + baseline run](014-eval-verification.md) | todo | L | 003, 005, 009 |
+| 014 | [Eval verification sweep + baseline run](014-eval-verification.md) | done | L | 003, 005, 009 |
 | 015 | [Vercel deploy (Hobby tier)](015-vercel-deploy.md) | todo | S | 010, 012, 014 |
 
 ## Phase 5 — Later

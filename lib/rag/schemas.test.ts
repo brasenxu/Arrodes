@@ -4,6 +4,7 @@ import { EVENT_TYPES } from "./types";
 import {
   EVENT_TYPE_FILTER_SCHEMA,
   SUMMARY_LOOKUP_SCHEMA,
+  extractChapterPin,
   isValidPosition,
   resolveEntityMatch,
   stripProviderPrefix,
@@ -101,8 +102,32 @@ describe("EVENT_TYPE_FILTER_SCHEMA shape", () => {
   });
 });
 
-describe("SUMMARY_LOOKUP_SCHEMA (ticket 026)", () => {
-  it("accepts a chapter-scope lookup with chapterNum", () => {
+describe("extractChapterPin (chapter-targeted retrieval)", () => {
+  it('extracts from "what happens in chapter 245"', () => {
+    expect(extractChapterPin("What happens in chapter 245?")).toBe(245);
+  });
+
+  it("takes the LAST chapter mention (summarize chapter X … not chapter Y questions aside)", () => {
+    expect(extractChapterPin("Summarize chapter 245 of Lord of the Mysteries.")).toBe(245);
+  });
+
+  it('extracts from "Ch.245" and "Ch. 245" forms', () => {
+    expect(extractChapterPin("What does Klein do in Ch.245?")).toBe(245);
+    expect(extractChapterPin("Explain Ch. 245 events")).toBe(245);
+  });
+
+  it("returns null without an explicit chapter number", () => {
+    expect(extractChapterPin("What abilities does the Seer pathway grant?")).toBe(null);
+    expect(extractChapterPin("Who is the Fool?")).toBe(null);
+  });
+
+  it("ignores non-chapter numbers", () => {
+    expect(extractChapterPin("What are the 22 pathways?")).toBe(null);
+    expect(extractChapterPin("List all meetings before chapter 500")).toBe(500);
+  });
+});
+
+describe("SUMMARY_LOOKUP_SCHEMA (ticket 026)", () => {  it("accepts a chapter-scope lookup with chapterNum", () => {
     expect(
       SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "lotm1", scope: "chapter", chapterNum: 245 })
         .success,

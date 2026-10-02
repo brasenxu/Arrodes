@@ -7,6 +7,7 @@ import { hybridSearch } from "./retrieval";
 import {
   EVENT_TYPE_FILTER_SCHEMA,
   SUMMARY_LOOKUP_SCHEMA,
+  extractChapterPin,
   resolveEntityMatch,
   stripProviderPrefix,
 } from "./schemas";
@@ -50,6 +51,8 @@ export function buildTools(position: ReadingPosition) {
           books,
           position,
           limit,
+          // "summarize chapter 245" pins retrieval to ch.245 (014 baseline fix).
+          chapterNum: extractChapterPin(query) ?? undefined,
         });
         return { results };
       },

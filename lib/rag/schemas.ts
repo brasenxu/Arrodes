@@ -80,6 +80,18 @@ export function withinPosition(
 }
 
 /**
+ * Extracts an explicit "chapter N" / "Ch.N" / "Ch. N" pin from a question —
+ * chapter-targeted questions ("summarize chapter 245") starve in semantic
+ * top-8 otherwise (014 baseline: chapter_summary recall 0.097). Returns null
+ * when the question names no chapter.
+ */
+export function extractChapterPin(query: string): number | null {
+  const matches = [...query.matchAll(/\bch(?:apter)?\.?\s*(\d{1,4})\b/gi)];
+  if (matches.length === 0) return null;
+  return Number(matches[matches.length - 1][1]);
+}
+
+/**
  * Shape-check for a client-supplied ReadingPosition. Both books must be
  * present and either null (not started) or a non-negative integer. Partial
  * positions are rejected — a missing book previously reached SQL params as

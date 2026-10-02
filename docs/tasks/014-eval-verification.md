@@ -2,10 +2,10 @@
 id: 014
 title: Eval verification sweep + baseline run
 phase: 4
-status: todo
+status: done
 depends_on: [003, 005, 009]
 estimate: L
-updated: 2026-04-21
+updated: 2026-10-02
 ---
 
 ## Context
@@ -70,3 +70,29 @@ pnpm eval:validate
   dialogue:       recall@8 = …
   aggregation:    recall@8 = …
 -->
+
+### Baseline (2026-10-02, reopening Task 21 — retrieval-only, k=8, 29 verified entries)
+
+Ground truth: 29 entries verified — 8 pre-authored (promoted), 21 authored from independent evidence (events pipeline, chapter summaries, lexical text search — NOT the embedding retrieval being scored; per-entry sources in the eval-set `notes`). 11 remain draft for the human pass (Q007, Q017, Q020, Q022, Q023, Q029, Q031, Q032, Q037, Q038, Q040) — `scripts/eval-helper.ts` is built for exactly that; `pnpm eval` skips drafts.
+
+| Query type | Entries | recall@8 |
+|---|---|---|
+| chapter_summary | 6 | **0.431** (was 0.097 pre-fix) |
+| lore | 5 | 0.600 |
+| timeline | 5 | 0.300 |
+| character | 5 | 0.000 |
+| pathway | 2 | 0.000 |
+| dialogue | 2 | 0.000 |
+| aggregation | 4 | 0.036 |
+| **Spoiler leaks** | — | **0 / 29** (hard gate passed) |
+
+Fix shipped during the baseline loop: `extractChapterPin` — questions naming an explicit "chapter N" now pin retrieval to that chapter (chat path + eval path); chapter_summary recall tripled.
+
+Weakest types + hypotheses (the 0.7 target iteration continues in follow-up tickets):
+- **character (0.000)**: "Who is X?" semantically matches X's *scenes* everywhere, not their intro chunks (expected = ch.5-7 intros). Hypothesis: entity-anchored retrieval — join `entity_mentions` first-appearance chunks into the ranking, or cross-encoder rerank (ticket 016c); entity intros also arrive via `lookupEntity` in the chat path (026 closed).
+- **pathway (0.000)**: ladder-listing questions match scattered pathway chatter; the canonical ladder lives on the Blasphemy Slate chunks (ch.60-61) which don't lexically/semantically match "List all nine Sequences…". Hypothesis: 026's `lookupSummary` handles this in chat; for retrieval, wiki-ingested pathway tables (ticket 016a) become retrievable ground.
+- **dialogue (0.000)**: paraphrased quote-finding is the hardest; both entries still draft-pending human phrasing (Q029/Q031-Q032 are the dialogue anchors). 019's speaker-attribution preprocessor is the structural fix.
+- **aggregation (0.036)**: by design — "list every X" starves on top-8 retrieval; the chat path routes these to `aggregateEvents` (working). The eval metric here is a lower bound, not a product signal.
+- **timeline (0.300)**: "when does X first happen" needs first-appearance anchoring — same hypothesis as character.
+
+`eval_runs` rows written for all three baseline runs (pre-fix, post-pin).
