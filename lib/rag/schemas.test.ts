@@ -1,11 +1,11 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { EVENT_TYPES } from "./types";
 import {
   EVENT_TYPE_FILTER_SCHEMA,
   isValidPosition,
-  normalizeEmbedModelId,
   resolveEntityMatch,
+  stripProviderPrefix,
   type EntityMatchRow,
 } from "./schemas";
 
@@ -39,28 +39,22 @@ describe("EVENT_TYPE_FILTER_SCHEMA", () => {
   });
 });
 
-describe("normalizeEmbedModelId", () => {
-  it('prefixes a bare OpenAI embed id with "openai/"', () => {
-    expect(normalizeEmbedModelId("text-embedding-3-small")).toBe(
-      "openai/text-embedding-3-small",
+describe("stripProviderPrefix", () => {
+  it("strips an openai/ namespace from an embed id", () => {
+    expect(stripProviderPrefix("openai/text-embedding-3-small")).toBe(
+      "text-embedding-3-small",
     );
   });
 
-  it("leaves a gateway-format id unchanged", () => {
-    expect(normalizeEmbedModelId("openai/text-embedding-3-small")).toBe(
-      "openai/text-embedding-3-small",
+  it("leaves a bare id unchanged", () => {
+    expect(stripProviderPrefix("text-embedding-3-small")).toBe(
+      "text-embedding-3-small",
     );
   });
 
-  it("leaves a namespaced provider id unchanged", () => {
-    expect(normalizeEmbedModelId("deepseek/deepseek-v4-flash")).toBe(
-      "deepseek/deepseek-v4-flash",
-    );
-  });
-
-  it("maps unknown bare ids to the openai/ namespace", () => {
-    expect(normalizeEmbedModelId("text-embedding-3-large")).toBe(
-      "openai/text-embedding-3-large",
+  it("strips a google/ namespace", () => {
+    expect(stripProviderPrefix("google/gemini-2.5-flash")).toBe(
+      "gemini-2.5-flash",
     );
   });
 });

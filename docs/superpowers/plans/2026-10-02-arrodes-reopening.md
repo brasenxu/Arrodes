@@ -254,6 +254,20 @@ Failure modes the ticket specs imply but no task's tests fully exercise — each
 - [ ] **Step 3:** Verify: `pnpm build` passes; full UX (persistence/stop/regenerate) is ticket 029, not here.
 - [ ] **Step 4:** Commit: `fix(ui): surface chat + tool errors instead of raw JSON (audit 10)`
 
+## Task 12b: Direct provider wiring (battery blocker — audit defect 6 confirmed live)
+
+**Files:**
+- Modify: `lib/rag/schemas.ts` + `lib/rag/schemas.test.ts` (replace `normalizeEmbedModelId` with `stripProviderPrefix`)
+- Create: `lib/rag/chat-model.ts` + `lib/rag/chat-model.test.ts`
+- Modify: `lib/rag/tools.ts` (embed → direct OpenAI provider), `app/api/chat/route.ts` (chat model via resolver), `package.json` (`@ai-sdk/google`), `.env.example` (key truthing)
+
+**Ruling:** the battery failed on `AI Gateway authentication failed: No authentication provided` — `AI_GATEWAY_API_KEY` is absent from `.env.local` and the audit's "works by accident" concern is confirmed live (the chat route has never executed). Fix: direct provider keys the user already has. `@ai-sdk/google` is a justified new dependency — ticket 020's deliverable "if using Gemini, wire @ai-sdk/google" was never landed, and no existing dep constructs a Gemini model object. Gateway format remains supported when `AI_GATEWAY_API_KEY` is present and the id is namespaced. Cost if wrong: one dependency + a small resolver, both reversible.
+
+- [ ] **Step 1 (RED):** tests for `stripProviderPrefix` (`"openai/text-embedding-3-small"` → bare; bare → bare; `"google/gemini-2.5-flash"` → `"gemini-2.5-flash"`) and `resolveChatModel` (gateway key + namespaced id → string passthrough; no gateway key → google provider instance with `modelId === "gemini-2.5-flash"`).
+- [ ] **Step 2:** GREEN implementation.
+- [ ] **Step 3:** Wire tools.ts + route.ts; `pnpm add @ai-sdk/google`; `.env.example` truthing (`AI_GATEWAY_API_KEY` optional; `GOOGLE_GENERATIVE_AI_API_KEY` required for chat; embed id bare form).
+- [ ] **Step 4:** Full suite + typecheck + build; commit; resume battery.
+
 ## Task 13: 10-question battery → close tickets 010 + 020
 
 **Files:**

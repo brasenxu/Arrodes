@@ -5,6 +5,7 @@ import {
   type UIMessage,
 } from "ai";
 import { buildTools } from "@/lib/rag/tools";
+import { resolveChatModel } from "@/lib/rag/chat-model";
 import { isValidPosition } from "@/lib/rag/schemas";
 import { FULL_BOUNDS, MAIN_BOUNDS } from "@/lib/ingest/arc-map";
 import type { ReadingPosition } from "@/lib/rag/types";
@@ -12,7 +13,7 @@ import type { ReadingPosition } from "@/lib/rag/types";
 export const runtime = "nodejs"; // Fluid Compute (not Edge — AI SDK + pgvector work best on Node)
 export const maxDuration = 60;
 
-const CHAT_MODEL = process.env.CHAT_MODEL ?? "google/gemini-2.5-flash";
+const CHAT_MODEL = resolveChatModel();
 
 // Citation format is pinned exactly — components/citation parsing (ticket 013)
 // depends on this casing: (LOTM1 Ch.N) / (COI Ch.N).

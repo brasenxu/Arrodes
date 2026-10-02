@@ -12,16 +12,14 @@ export const EVENT_TYPE_FILTER_SCHEMA = z
   .or(z.literal("any"));
 
 /**
- * Chat-time embed model IDs resolve through the AI Gateway, which requires
- * the "provider/model" form. Ingestion strips the prefix and calls provider
- * SDKs directly, so the documented bare format is safe there — but the chat
- * path needs it re-namespaced. Bare ids are assumed OpenAI embeddings (the
- * only embedding provider in the stack); anything already namespaced passes
- * through unchanged. (Audit defect 6.)
+ * Ingest/eval scripts call provider SDKs directly with a bare model id
+ * ("deepseek-v4-flash", "text-embedding-3-small"); config docs record the
+ * bare form. Strip any "provider/" namespace so direct provider SDK calls
+ * always receive the bare id. (Audit defect 6 — inverse of the old
+ * gateway-side normalization.)
  */
-export function normalizeEmbedModelId(id: string): string {
-  if (id.includes("/")) return id;
-  return `openai/${id}`;
+export function stripProviderPrefix(id: string): string {
+  return id.replace(/^[^/]+\//, "");
 }
 
 /**

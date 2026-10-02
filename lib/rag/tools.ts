@@ -1,13 +1,27 @@
 import { tool, embed } from "ai";
 import { z } from "zod";
 import { and, eq, inArray, sql as dsql } from "drizzle-orm";
+import { createOpenAI } from "@ai-sdk/openai";
 import { db, schema } from "@/lib/db/client";
 import { hybridSearch } from "./retrieval";
-import { EVENT_TYPE_FILTER_SCHEMA, normalizeEmbedModelId, resolveEntityMatch } from "./schemas";
+import {
+  EVENT_TYPE_FILTER_SCHEMA,
+  resolveEntityMatch,
+  stripProviderPrefix,
+} from "./schemas";
 import type { ReadingPosition } from "./types";
 
-const embedModel = normalizeEmbedModelId(
-  process.env.INGEST_EMBED_MODEL ?? "text-embedding-3-small",
+// Direct provider wiring (audit defect 6): embeds go straight to OpenAI with
+// OPENAI_API_KEY — the same pattern ingest uses — instead of depending on an
+// AI Gateway key being present. INGEST_EMBED_MODEL's documented bare form is
+// used as-is (namespace stripped defensively).
+const openaiProvider = createOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+});
+const embedModel = openaiProvider.embedding(
+  stripProviderPrefix(
+    process.env.INGEST_EMBED_MODEL ?? "text-embedding-3-small",
+  ),
 );
 
 const bookEnum = z.enum(["lotm1", "coi"]);
