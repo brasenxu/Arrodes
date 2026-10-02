@@ -1,11 +1,12 @@
 import { tool, embed } from "ai";
 import { z } from "zod";
-import { and, eq, inArray, sql as dsql } from "drizzle-orm";
+import { and, eq, gte, ilike, inArray, lte, sql as dsql } from "drizzle-orm";
 import { createOpenAI } from "@ai-sdk/openai";
 import { db, schema } from "@/lib/db/client";
 import { hybridSearch } from "./retrieval";
 import {
   EVENT_TYPE_FILTER_SCHEMA,
+  SUMMARY_LOOKUP_SCHEMA,
   resolveEntityMatch,
   stripProviderPrefix,
 } from "./schemas";
@@ -167,6 +168,70 @@ export function buildTools(position: ReadingPosition) {
           .limit(200);
 
         return { entity, events: rows, truncated: rows.length === 200 };
+      },
+    }),
+
+    lookupSummary: tool({
+      description:
+        "Retrieve a pre-computed hierarchical summary. scope=chapter + chapterNum returns that chapter's summary plus its parent arc summary; scope=arc|volume|series + name returns the matching overview. Use for 'summarize chapter N' and 'what is the X arc/volume about' questions — before searchBook. Returns nothing when the summary covers chapters past the user's reading position.",
+      inputSchema: SUMMARY_LOOKUP_SCHEMA,
+      execute: async ({ book, scope, chapterNum, name }) => {
+        // Never select the embedding column — 1536 floats per row.
+        const cols = {
+          level: schema.summaries.level,
+          bookId: schema.summaries.bookId,
+          rangeStart: schema.summaries.rangeStart,
+          rangeEnd: schema.summaries.rangeEnd,
+          label: schema.summaries.label,
+          content: schema.summaries.content,
+        };
+        // Gate in SQL: nothing covering a chapter past the position returns.
+        const ceiling = position[book] ?? 0;
+
+        if (scope === "chapter") {
+          if (ceiling === 0 || (chapterNum ?? 0) > ceiling) {
+            return { summaries: [] };
+          }
+          const enclosing = and(
+            eq(schema.summaries.bookId, book),
+            lte(schema.summaries.rangeStart, chapterNum ?? 0),
+            gte(schema.summaries.rangeEnd, chapterNum ?? 0),
+            lte(schema.summaries.rangeEnd, ceiling),
+          );
+          const chapterRows = await db
+            .select(cols)
+            .from(schema.summaries)
+            .where(and(eq(schema.summaries.level, "chapter"), enclosing))
+            .limit(1);
+          const arcRows = await db
+            .select(cols)
+            .from(schema.summaries)
+            .where(and(eq(schema.summaries.level, "arc"), enclosing))
+            .limit(1);
+          return { summaries: [...chapterRows, ...arcRows] };
+        }
+
+        // arc / volume / series: exact case-insensitive label, then contains.
+        const needle = (name ?? "").toLowerCase();
+        const base = and(
+          eq(schema.summaries.level, scope),
+          eq(schema.summaries.bookId, book),
+          lte(schema.summaries.rangeEnd, ceiling),
+        );
+        const exact = await db
+          .select(cols)
+          .from(schema.summaries)
+          .where(and(base, dsql`LOWER(${schema.summaries.label}) = ${needle}`))
+          .limit(1);
+        if (exact.length > 0) return { summaries: exact };
+
+        const fuzzy = await db
+          .select(cols)
+          .from(schema.summaries)
+          .where(and(base, ilike(schema.summaries.label, `%${name}%`)))
+          .orderBy(schema.summaries.rangeStart, schema.summaries.id)
+          .limit(5);
+        return { summaries: fuzzy };
       },
     }),
   };

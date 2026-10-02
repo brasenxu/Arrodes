@@ -2,7 +2,7 @@
 id: 026
 title: Summary retrieval tool (lookupSummary)
 phase: 2
-status: todo
+status: done
 depends_on: [008, 010]
 estimate: M
 updated: 2026-10-02
@@ -44,3 +44,10 @@ The `summaries` table is fully populated (2,613 chapter + 71 arc + 16 volume + 2
 pnpm test lib/rag/schemas.test.ts
 pnpm dev  # battery additions: chapter summary, arc overview, past-position refusal
 ```
+
+## Resolution
+
+- `lookupSummary` added as the 4th tool in `buildTools(position)`; input schemas (`SUMMARY_LOOKUP_SCHEMA`) + spoiler gate (`withinPosition`) in `lib/rag/schemas.ts` with tests (27 pass). Embedding column never selected.
+- SYSTEM_PROMPT routing rule added: chapter recaps and arc/volume/series overviews route to `lookupSummary` before `searchBook`.
+- Battery (2026-10-02): "What happens in chapter 245?" → chapter + parent-arc summary, cited `(LOTM1 Ch.245)`; "What is the Red Priest arc about?" → volume-5 summary (fuzzy label match "Red Priest" → "Volume 5: Red Priest", all 3 arcs cited with ranges); "chapter 1500" → clean refusal past FULL_BOUNDS, no leak.
+- Series summaries cover main story only (range_end 1394) — side stories have no series-level row; noted, acceptable.

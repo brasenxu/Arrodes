@@ -23,6 +23,63 @@ export function stripProviderPrefix(id: string): string {
 }
 
 /**
+ * Input schema for the lookupSummary tool (ticket 026): chapter scope takes a
+ * chapter number; arc/volume/series scopes take a label. The two modes are
+ * mutually exclusive.
+ */
+const SUMMARY_SCOPES = ["chapter", "arc", "volume", "series"] as const;
+
+export const SUMMARY_LOOKUP_SCHEMA = z
+  .object({
+    book: z.enum(["lotm1", "coi"]),
+    scope: z.enum(SUMMARY_SCOPES),
+    chapterNum: z.number().int().min(1).optional(),
+    name: z.string().min(2).optional(),
+  })
+  .strict()
+  .superRefine((val, ctx) => {
+    const wantsChapter = val.scope === "chapter";
+    if (wantsChapter && val.chapterNum === undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'scope "chapter" requires chapterNum',
+      });
+    }
+    if (!wantsChapter && val.name === undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `scope "${val.scope}" requires name`,
+      });
+    }
+    if (wantsChapter && val.name !== undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'scope "chapter" does not take name',
+      });
+    }
+    if (!wantsChapter && val.chapterNum !== undefined) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `scope "${val.scope}" does not take chapterNum`,
+      });
+    }
+  });
+
+/**
+ * Spoiler gate for summary rows (and any other position-gated read): a row
+ * covering through chapterNum is visible only when the user's position for
+ * that book is set and >= chapterNum. Null position gates everything.
+ */
+export function withinPosition(
+  position: ReadingPosition,
+  book: keyof ReadingPosition,
+  chapterNum: number,
+): boolean {
+  const ceiling = position[book];
+  return ceiling !== null && ceiling !== undefined && chapterNum <= ceiling;
+}
+
+/**
  * Shape-check for a client-supplied ReadingPosition. Both books must be
  * present and either null (not started) or a non-negative integer. Partial
  * positions are rejected — a missing book previously reached SQL params as

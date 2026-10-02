@@ -3,9 +3,11 @@ import { z } from "zod";
 import { EVENT_TYPES } from "./types";
 import {
   EVENT_TYPE_FILTER_SCHEMA,
+  SUMMARY_LOOKUP_SCHEMA,
   isValidPosition,
   resolveEntityMatch,
   stripProviderPrefix,
+  withinPosition,
   type EntityMatchRow,
 } from "./schemas";
 
@@ -96,6 +98,71 @@ describe("EVENT_TYPE_FILTER_SCHEMA shape", () => {
       EVENT_TYPE_FILTER_SCHEMA.safeParse(t).success ? [t] : [],
     );
     expect(accepted).toHaveLength(EVENT_TYPES.length);
+  });
+});
+
+describe("SUMMARY_LOOKUP_SCHEMA (ticket 026)", () => {
+  it("accepts a chapter-scope lookup with chapterNum", () => {
+    expect(
+      SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "lotm1", scope: "chapter", chapterNum: 245 })
+        .success,
+    ).toBe(true);
+  });
+
+  it("chapter scope requires chapterNum", () => {
+    expect(
+      SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "lotm1", scope: "chapter" }).success,
+    ).toBe(false);
+  });
+
+  it("arc/volume/series scope requires name", () => {
+    expect(
+      SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "coi", scope: "arc" }).success,
+    ).toBe(false);
+    expect(
+      SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "coi", scope: "volume", name: "Sinner" })
+        .success,
+    ).toBe(true);
+    expect(
+      SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "lotm1", scope: "series", name: "Lord of the Mysteries" })
+        .success,
+    ).toBe(true);
+  });
+
+  it("chapter scope must not carry name; name scopes must not carry chapterNum", () => {
+    expect(
+      SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "lotm1", scope: "chapter", chapterNum: 5, name: "Clown" })
+        .success,
+    ).toBe(false);
+    expect(
+      SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "lotm1", scope: "arc", name: "Clown", chapterNum: 5 })
+        .success,
+    ).toBe(false);
+  });
+
+  it("rejects unknown scopes and bad chapterNum", () => {
+    expect(
+      SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "lotm1", scope: "book", name: "x" }).success,
+    ).toBe(false);
+    expect(
+      SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "lotm1", scope: "chapter", chapterNum: 0 }).success,
+    ).toBe(false);
+    expect(
+      SUMMARY_LOOKUP_SCHEMA.safeParse({ book: "lotm1", scope: "chapter", chapterNum: 2.5 }).success,
+    ).toBe(false);
+  });
+});
+
+describe("withinPosition (summary gate)", () => {
+  it("gates by the book's ceiling", () => {
+    const p = { lotm1: 100, coi: null };
+    expect(withinPosition(p, "lotm1", 100)).toBe(true);
+    expect(withinPosition(p, "lotm1", 101)).toBe(false);
+    expect(withinPosition(p, "coi", 1)).toBe(false);
+  });
+
+  it("null position gates everything", () => {
+    expect(withinPosition({ lotm1: null, coi: null }, "lotm1", 1)).toBe(false);
   });
 });
 
