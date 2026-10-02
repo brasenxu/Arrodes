@@ -33,7 +33,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 
 | # | Ticket | Status | Est | Depends on |
 |---|---|---|---|---|
-| 010 | [Chat route — live tool wiring](010-chat-tools-live.md) | todo | M | 005, 006, 007, 009 |
+| 010 | [Chat route — live tool wiring](010-chat-tools-live.md) | done | M | 005, 006, 007, 009 |
 | 026 | [Summary retrieval tool (lookupSummary)](026-summary-retrieval-tool.md) | todo | M | 008, 010 |
 | 011 | [Prompt caching (system + glossary)](011-prompt-caching.md) | todo | S | 010 |
 
@@ -57,8 +57,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 | # | Ticket | Status | Est | Depends on |
 |---|---|---|---|---|
 | 016 | [Wiki + source-priority + cross-encoder rerank](016-wiki-and-rerank.md) | todo | L | 014 |
-| 020 | [Provider migration — Anthropic → DeepSeek V4 / Gemini](020-provider-migration-gemini.md) | done | S | — |
-| 022 | [Summaries rollup provider flexibility](022-summaries-rollup-provider-flexibility.md) | todo | S | 008, 020 |
+| 020 | [Provider migration — Anthropic → DeepSeek V4 / Gemini](020-provider-migration-gemini.md) | done | S | — || 022 | [Summaries rollup provider flexibility](022-summaries-rollup-provider-flexibility.md) | todo | S | 008, 020 |
 | 023 | [Summaries dedupe hardening (DB unique key)](023-summaries-dedupe-unique-key.md) | done | M | 008 |
 | 024 | [Summaries semantic sanity baseline](024-summaries-semantic-sanity-baseline.md) | todo | S | 008 |
 | 030 | [Data dedupe migration — unique keys ×3 tables + content_kind CHECK](030-data-dedupe-migration.md) | todo | M | 003, 005, 006, 007, 008 |

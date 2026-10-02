@@ -2,10 +2,10 @@
 id: 010
 title: Chat route — live tool wiring
 phase: 2
-status: todo
+status: done
 depends_on: [005, 006, 007, 009]
 estimate: M
-updated: 2026-04-21
+updated: 2026-10-02
 ---
 
 ## Context
@@ -83,3 +83,32 @@ pnpm dev
 ## Findings
 
 <!-- Paste test transcript + any bugs found and fixed. -->
+
+### Battery transcript (2026-10-02, plan Task 13 — programmatic, `scripts/parse-battery.mjs`)
+
+Setup: `pnpm dev` on Node v24.21.0; chat model `gemini-2.5-flash` via **direct** google provider (`@ai-sdk/google@^3`), embeds via direct OpenAI — gateway key absent (see Ruling in the plan ledger).
+
+| # | Question | Tools fired | Citations | Verdict |
+|---|---|---|---|---|
+| q01 | "What happens in chapter 245?" | searchBook | — | Honest refusal: chapter-targeted question missed by semantic top-8 — **the ticket 026 gap** (chapter summaries), not a bug. |
+| q02 | Seer pathway abilities | searchBook | (LOTM1 Ch.65/237/96/1164/463) | Grounded, cited. |
+| q03 | Who is Audrey? | lookupEntity | (LOTM1 Ch.5) | Entity + pathway, cited. |
+| q04 | Who is the Fool? | lookupEntity | (LOTM1 Ch.1) | Deterministic single-match resolution (Klein via alias). |
+| q05 | Tarot Club meetings < ch500 | aggregateEvents, searchBook | (LOTM1 Ch. 7/390/483/489) | Correct list; **emits `(LOTM1 Ch. 7)` with a space** — 013's parser must tolerate optional space (ledger ruling). |
+| q06 | Klein battles < ch200 | aggregateEvents | 10+ battle citations | New enum values (`battle` etc.) queryable — the enum fix works live. |
+| q07 | "I don't want to be a hero" quote | searchBook ×6 | — | First run burned all 6 steps on searches, never answered (0 text). Fixed: prompt "max 3 tools, don't repeat empty searches" + `stepCountIs(8)`. Re-run: honest "couldn't find" — correct grounded behavior. |
+| q08 | In Modern Day ch.1405 | — | — | Refusal past default position (side stories gated) ✓ |
+| q09 | Seer question, position both null | lookupEntity, searchBook | — | Tools correctly return empty; graceful "unable to find" ✓ |
+| q10 | Audrey, `{lotm1:100, coi:null}` | lookupEntity | (LOTM1 Ch.5) | One-book-null flows results from the read book ✓ |
+| q11 | position `{999999,999999}` | searchBook | (LOTM1 Ch. 65/96/237/463) | Accepted + clamped to FULL_BOUNDS ✓ |
+| e1 | malformed JSON body | — | — | 400 ✓ |
+| e2 | messages not an array | — | — | 400 ✓ |
+| e3 | position `{lotm1:999999}` (partial) | — | — | 400 (strict shape) ✓ |
+| e4 | all-system-role messages | — | — | 400 after system-role strip ✓ |
+
+Fixes made during the battery (prompt tuning only, per 010 scope):
+- SYSTEM_PROMPT: citation rule strengthened (incl. entity/event claims); tool-budget rule added ("max 3 tools; don't repeat empty searches").
+- `stopWhen: stepCountIs(6)` → `stepCountIs(8)`.
+- Route: all-system-message requests → 400 (was a mid-stream error event).
+
+Known gaps carried forward: chapter-summary routing (→ 026); citation format drift tolerance (→ 013, parser side); aggregateEvents meetings for THE organization entity (Tarot Club as org) may need 018's consolidation.

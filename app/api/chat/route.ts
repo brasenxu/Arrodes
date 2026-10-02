@@ -20,8 +20,9 @@ const CHAT_MODEL = resolveChatModel();
 const SYSTEM_PROMPT = `You are Arrodes, a RAG assistant grounded in Lord of the Mysteries (LOTM1) and Circle of Inevitability (COI).
 
 Rules:
-- Ground every factual claim in a retrieved chunk. Cite inline as (LOTM1 Ch.N) or (COI Ch.N) — exactly this format, after every factual claim.
+- Ground every factual claim in a retrieved chunk. Cite inline as (LOTM1 Ch.N) or (COI Ch.N) — exactly this format, after every factual claim, including entity lookups and event lists.
 - Never speculate past the user's reading position. If a chunk you'd need is past their position, say so — don't reason around it.
+- Call at most 3 tools before answering. If a search returns empty results, do NOT repeat the same query — answer honestly with what you have.
 - For list / count / "all X" questions, call aggregateEvents first. For named-entity questions, call lookupEntity first.
 - If retrieval returns nothing useful, say so. Don't fall back to training-data knowledge.`;
 
@@ -53,6 +54,9 @@ export async function POST(req: Request) {
   // Strip client-supplied system-role messages — the system prompt is the
   // server's, and a client "system" UIMessage would be injected past it.
   const messages = body.messages.filter((m) => m.role !== "system");
+  if (messages.length === 0) {
+    return Response.json({ error: "messages array required" }, { status: 400 });
+  }
 
   // Position: validated shape + clamped to FULL_BOUNDS (audit defects 3-4).
   let position: ReadingPosition;
@@ -73,7 +77,9 @@ export async function POST(req: Request) {
     system: SYSTEM_PROMPT,
     messages: await convertToModelMessages(messages),
     tools: buildTools(position),
-    stopWhen: stepCountIs(6),
+    // 3 tool rounds + an answer step. q07/q09 battery showed the model can
+    // burn every step on repeated searches and never answer without this headroom.
+    stopWhen: stepCountIs(8),
   });
 
   return result.toUIMessageStreamResponse();

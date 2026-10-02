@@ -2,7 +2,7 @@
 id: 020
 title: Provider migration — Anthropic → DeepSeek V4 / Google Gemini
 phase: 5
-status: review
+status: done
 depends_on: []
 estimate: S
 updated: 2026-10-02
@@ -233,6 +233,7 @@ rg "ANTHROPIC_API_KEY" scripts/ app/ lib/ --no-filename
 ## Resolution
 
 - **Status `review` (2026-10-02 audit):** the chat-route acceptance criterion ("returns a streamed response with tool calls exercised") was explicitly deferred to ticket 010, which has not yet run its battery — the riskiest surface of this migration (provider swap on the untested chat route) is the one thing this ticket never verified. Also, no `@ai-sdk/google` dependency was added; `CHAT_MODEL="google/gemini-2.5-flash"` resolves as a string model ID via the AI Gateway (`AI_GATEWAY_API_KEY`, which is load-bearing for the chat route — see `.env.example`). 020 closes when 010's battery exercises the route end-to-end.
+- **Closed 2026-10-02 (010's battery):** the route now streams with tool calls live. Correction to the line above: the gateway key was NOT present, so the final wiring is **direct** — `@ai-sdk/google@^3` (this ticket's original "wire @ai-sdk/google" deliverable, landed in reopening Task 12b) with `GOOGLE_GENERATIVE_AI_API_KEY`; the gateway path remains supported when `AI_GATEWAY_API_KEY` is set. Battery transcript in 010's Findings; status `done`.
 - Runtime code paths now use `DEEPSEEK_API_KEY` instead of `ANTHROPIC_API_KEY` for
   ingestion/eval scripts, with DeepSeek wired through `@ai-sdk/openai` using
   `https://api.deepseek.com/v1`.
