@@ -5,7 +5,7 @@ import { useState } from "react";
 
 export function Chat() {
   const [input, setInput] = useState("");
-  const { messages, sendMessage, status } = useChat();
+  const { messages, sendMessage, status, error } = useChat();
   const busy = status === "submitted" || status === "streaming";
 
   return (
@@ -20,6 +20,19 @@ export function Chat() {
               {m.parts.map((part, i) => {
                 if (part.type === "text") return <span key={i}>{part.text}</span>;
                 if (part.type.startsWith("tool-")) {
+                  const st = (
+                    part as { state?: string; errorText?: string }
+                  ).state;
+                  if (st === "output-error") {
+                    return (
+                      <div
+                        key={i}
+                        className="mt-2 rounded border border-red-500/30 bg-red-500/10 px-2 py-1 text-xs text-red-300"
+                      >
+                        Tool call failed — answer continues with what it has.
+                      </div>
+                    );
+                  }
                   return (
                     <pre
                       key={i}
@@ -35,6 +48,13 @@ export function Chat() {
           </div>
         ))}
       </div>
+
+      {error ? (
+        <div className="rounded border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+          Something went wrong talking to the model — try again. (Details in
+          the server console.)
+        </div>
+      ) : null}
 
       <form
         className="flex gap-2 border-t border-white/10 pt-4"
