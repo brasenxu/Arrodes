@@ -2,7 +2,7 @@
 id: 030
 title: Data dedupe migration — unique keys ×3 tables + content_kind CHECK
 phase: 5
-status: todo
+status: done
 depends_on: [003, 005, 006, 007, 008]
 estimate: M
 updated: 2026-10-02
@@ -38,6 +38,17 @@ No unique keys on `summaries`, `entity_mentions`, or `events`: idempotency is ap
 - Migration applied on Neon; dedupe script's second run is a no-op (counts unchanged).
 - `pnpm test` + `pnpm typecheck` green.
 - Before/after row counts recorded in Resolution.
+
+## Resolution (2026-10-02, reopening Task 20)
+
+- **Design revisions from the audit's live-data checks** (both ledgered):
+  - events key = `(entity_id, event_type, evidence_chunk_id, md5(snippet))` — the planned 3-column key would have rejected 22 legitimate distinct-snippet multi-event groups; md5 also avoids the btree ~2704-byte limit.
+  - entity_mentions key = `(chunk_id, entity_id, coalesce(role,''))` — 128 groups legitimately carry role variety (speaker + mentioned).
+- **Applied to live Neon** (user-approved, `scripts/apply-data-dedupe.ts --yes`): deleted 397 duplicate rows (392 same-role mentions of 520 counted, 5 identical-snippet events of 28 counted; summaries already clean at 0) + CHECK + 3 unique indexes. Post-apply: dupe queries 0/0/0; totals mentions 129,101 → (dedupe removed 392), events 4,230 → 4,223 (5 identical dupes + 2 pre-existing variance), summaries 2,702.
+- **Journal recovery:** `drizzle/meta/` was gitignored and lost (audit finding 10) — drizzle-kit regenerated a full-state `0000_low_nightmare.sql` as the new baseline; the live DB's `__drizzle_migrations` was reset to that baseline (hash-sha256 of the file, created_at = journal `when`) so future `pnpm db:migrate` entries apply cleanly. The hand-written delta (`drizzle/0003_data_dedupe.sql`) documents what the live DB received; fresh clones get everything from 0000. `drizzle/meta/` now committed.
+- Insert paths: `events.ts` + `ner.ts` now `.onConflictDoNothing()`; `summaries.ts` insert already gated by `WHERE NOT EXISTS` on the identical natural key.
+- `lib/rag/chunking.ts` oversized-paragraph flush fix + 3 tests (chunk order restored; DB NOT re-chunked — noted: already-ingested chapters with oversized paragraphs keep their historical order until a future deliberate re-chunk).
+- NOTE: `arrodes-ro` MCP reads a different Neon branch than the script connection — MCP verification showed pre-apply state; all verification above ran on the script connection (`DATABASE_URL`/`DATABASE_URL_UNPOOLED`). Sync the MCP branch before relying on it for validation.
 
 ## Verification
 

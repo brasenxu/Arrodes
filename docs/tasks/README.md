@@ -60,7 +60,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 | 020 | [Provider migration — Anthropic → DeepSeek V4 / Gemini](020-provider-migration-gemini.md) | done | S | — || 022 | [Summaries rollup provider flexibility](022-summaries-rollup-provider-flexibility.md) | todo | S | 008, 020 |
 | 023 | [Summaries dedupe hardening (DB unique key)](023-summaries-dedupe-unique-key.md) | done | M | 008 |
 | 024 | [Summaries semantic sanity baseline](024-summaries-semantic-sanity-baseline.md) | todo | S | 008 |
-| 030 | [Data dedupe migration — unique keys ×3 tables + content_kind CHECK](030-data-dedupe-migration.md) | todo | M | 003, 005, 006, 007, 008 |
+| 030 | [Data dedupe migration — unique keys ×3 tables + content_kind CHECK](030-data-dedupe-migration.md) | done | M | 003, 005, 006, 007, 008 |
 
 ## Backlog (deferred)
 
