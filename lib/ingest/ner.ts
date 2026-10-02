@@ -744,7 +744,9 @@ export async function extractChapterMentions(opts: {
       // One multi-row INSERT per chapter: server-side atomic under neon-http,
       // which doesn't surface transactions. Crash between chapters leaves the
       // table consistent; crash mid-chapter inserts nothing for the chapter
-      // and the next run re-processes it.
+      // and the next run re-processes it. onConflictDoNothing: same
+      // (chunk, entity, role) rows are duplicates under the mentions unique
+      // index (ticket 030); role variety survives (distinct roles = distinct keys).
       await db.insert(schema.entityMentions).values(
         flat.map((m) => ({
           entityId: m.entityId,
@@ -753,7 +755,7 @@ export async function extractChapterMentions(opts: {
           chapterNum: m.chapterNum,
           role: m.role,
         })),
-      );
+      ).onConflictDoNothing();
       mentionsInserted = flat.length;
     }
   }
