@@ -5,7 +5,7 @@ phase: 4
 status: todo
 depends_on: [010, 012, 014]
 estimate: S
-updated: 2026-04-21
+updated: 2026-10-03
 ---
 
 ## Context
@@ -16,7 +16,7 @@ First production deploy on Vercel Hobby. Neon is already Marketplace-provisioned
 
 - `vercel link` the project to a new Vercel project named `arrodes`.
 - `vercel env pull .env.local` to verify Neon vars are auto-populated in the Vercel project (from ticket 001's Marketplace provisioning).
-- Add `AI_GATEWAY_API_KEY` to Vercel project env — **required**: the chat route resolves `CHAT_MODEL` and the embed model through the AI Gateway (see `.env.example` post-2026-10-02).
+- Add direct provider keys to the Vercel project env — **required**: `GOOGLE_GENERATIVE_AI_API_KEY` (chat — `CHAT_MODEL=google/gemini-2.5-flash` resolves directly via `@ai-sdk/google`), `OPENAI_API_KEY` (embeddings), `DEEPSEEK_API_KEY` (ingest scripts). `AI_GATEWAY_API_KEY` is **optional** post-020: string model IDs route through the Gateway only when it is set, otherwise they resolve directly (see `.env.example`; scope corrected 2026-10-03 — the original line here claimed the Gateway was required, which is stale pre-020 wording).
 - Verify the project's Node runtime on Vercel satisfies the `package.json` engines floor (node ≥ 20.19).
 - `vercel --prod` for the first production deploy.
 - Smoke test: load the deployed URL, set reading position, ask 3 questions.

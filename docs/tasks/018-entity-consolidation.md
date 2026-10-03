@@ -5,7 +5,7 @@ phase: 5
 status: todo
 depends_on: [006]
 estimate: M
-updated: 2026-04-23
+updated: 2026-10-03
 ---
 
 ## Context
@@ -84,3 +84,9 @@ psql $DATABASE_URL_UNPOOLED -c "
 ## Findings
 
 <!-- Paste P/R/F1 delta + audit notes after run. -->
+
+## Surfaced during the reopening battery (2026-10-02, recorded 2026-10-03)
+
+Found in PR #2's chat battery q04 ("Who is the Fool?"): the Fool pathway entity lacks "The Fool" as an alias. `data/entities/aliases.json` — Klein's character row carries `The Fool` / `Mr. Fool` (lines 21-22), but the pathway row (`canonical_name: "Fool"`, line 1301) only has `Fool Pathway / Pathway of the Fool / Seer / Seer Pathway / Pathway of the Seer / Clown`. Battery q04 therefore resolved deterministically to Klein via alias with no pathway candidate.
+
+Suggested handling at execution time: add "The Fool" (and decide "Mr. Fool" placement) to the Fool pathway row's aliases — **but** that re-creates issue #2's collision (character Tarot alias vs pathway canonical), so it must land together with the precedence decision (Scope bullet on alias precedence; the 010 route's `{ambiguous, candidates}` resolution is the collision safety net in the meantime). Also verify sibling pathway rows while at it (e.g., does the Visionary row carry "Author"? — pattern matches issue #1's uneven coverage).

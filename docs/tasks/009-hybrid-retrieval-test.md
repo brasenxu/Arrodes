@@ -111,3 +111,11 @@ because the question is about chapters above the ceiling).
 - Sparse scores are bare `ts_rank` (not BM25). Consider `ts_rank_cd` with a
   document-length normalisation flag if sparse starts dominating weirdly at scale.
 - Cross-encoder rerank (ticket 016) will sit on top of the k=20 RRF shortlist.
+
+## Resolution
+
+- Closed 2026-04-23; this Resolution added 2026-10-03 during the post-merge (PR #2) board audit.
+- Deliverables in place: `scripts/test-retrieval.ts` + `pnpm test:retrieval` script entry (`package.json:29`); results in `## Findings` above.
+- Acceptance criteria met per the Findings acceptance summary: 5/5 canned queries return non-empty hybrid top-8; RRF order differs from dense-only in 5/5 (stronger than the ≥1 AC); position-bounded run returned 0 violations (Case B: lotm1≤200, coi=null).
+- In-scope retrieval patch landed with this ticket: `buildTsquery` OR-joined `to_tsquery` + question-stopword drop in `lib/rag/retrieval.ts`, fixing the AND-stem collapse that returned zero sparse rows; null (all-stopword) queries fall through to a shape-compatible empty CTE.
+- Follow-ups correctly tracked elsewhere: eval expected-chapter verification (014), cross-encoder rerank (016). Untracked follow-up noted 2026-10-03: sparse scores are bare `ts_rank` — consider `ts_rank_cd` if sparse starts dominating at scale.

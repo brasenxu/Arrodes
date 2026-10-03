@@ -68,7 +68,7 @@ Estimate units: `S` (<half day), `M` (half–full day), `L` (multi-day).
 | # | Ticket | Status | Est | Depends on | Notes |
 |---|---|---|---|---|---|
 | 017 | [Entity-level reveal gating](017-entity-reveal-gating.md) | deferred | M | 004, 006, 012 | Schema change. Un-defer if app goes public. |
-| 018 | [Entity consolidation (aliases, canonical coverage, type gaps)](018-entity-consolidation.md) | todo | M | 006 | Identified during 006. Adds artifact + location rows, completes sequence-title aliases, resolves Tarot/pathway name overlaps. |
+| 018 | [Entity consolidation (aliases, canonical coverage, type gaps)](018-entity-consolidation.md) | todo | M | 006 | Identified during 006. Adds artifact + location rows, completes sequence-title aliases, resolves Tarot/pathway name overlaps. The Fool pathway row lacks "The Fool" alias (battery q04, PR #2) — folded into its audit. |
 | 025 | [NER gold audit + targeted dialogue expansion](025-ner-gold-audit-and-dialogue-expansion.md) | todo | M | 006 | Audit current 26-chunk gold, re-adjudicate ambiguous roles, and expand dialogue-heavy eval coverage. Wave 1 (thin pass) runs before 019; wave 2 (dialogue expansion) after 019. |
 | 031 | [Server-side reading position + auth](031-server-side-position-and-auth.md) | deferred | M | 012, 017 | Un-defer when app goes public. Position integrity, rate limiting, tool-part provenance. |
 

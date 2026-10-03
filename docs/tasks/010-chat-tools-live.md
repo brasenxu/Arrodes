@@ -112,3 +112,19 @@ Fixes made during the battery (prompt tuning only, per 010 scope):
 - Route: all-system-message requests → 400 (was a mid-stream error event).
 
 Known gaps carried forward: chapter-summary routing (→ 026); citation format drift tolerance (→ 013, parser side); aggregateEvents meetings for THE organization entity (Tarot Club as org) may need 018's consolidation.
+
+## Resolution
+
+- Closed 2026-10-02 (work shipped in PR #2, branch `reopening`); this Resolution added 2026-10-03 during the post-merge board audit.
+- All 8 remaining-checklist items delivered:
+  1. Enum sourced from `EVENT_TYPES` via `lib/rag/schemas.ts` (guarded by test at `lib/rag/schemas.test.ts:96-103`).
+  2. Deterministic entity resolution with `{ambiguous: true, candidates}` in `lib/rag/schemas.ts` + `lib/rag/tools.ts` (tested in `schemas.test.ts`).
+  3. Position/body validation + 400s on malformed bodies (incl. all-system-role requests) in `app/api/chat/route.ts`.
+  4. `aggregateEvents` bounded: ORDER BY + limit 200 + `truncated` flag.
+  5. Embed/chat model resolution normalized (`lib/rag/chat-model.ts`); `.env.example` updated — gateway **optional**, direct provider keys required post-020.
+  6. `EventExtra` reshaped as discriminated union in `lib/rag/types.ts`; `RetrievedChunk.source` narrowed to `"epub"`.
+  7. UI error surface (banner on provider errors; full UX followed in 029).
+  8. Battery transcript above — 11 questions + 4 error paths, all three tools exercised, side-story/position refusals verified.
+- Deviation documented: gateway key absent, so chat/embeds resolve **directly** (`@ai-sdk/google` + direct OpenAI); correction recorded in 020's Resolution.
+- Close-out evidence (PR #2 verification battery): `pnpm test` 276 passed / 14 skipped · `pnpm typecheck` clean · `pnpm build` green.
+- Battery finding carried forward to 018 (added there 2026-10-03): the Fool pathway entity lacks "The Fool" as an alias, so battery q04 resolves solely to Klein; candidates-based ambiguity handling covers the collision in the meantime.

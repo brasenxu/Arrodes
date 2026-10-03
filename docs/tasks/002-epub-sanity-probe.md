@@ -64,3 +64,10 @@ Ran `pnpm probe` 2026-04-21. Both EPUBs parse cleanly, no exceptions. Headline n
 5. **No translator notes leaking in** as separate sections — good, they're presumably inline.
 
 Full probe log: `/tmp/probe.log`.
+
+## Resolution
+
+- Closed 2026-04-21; this Resolution added 2026-10-03 during the post-merge (PR #2) board audit.
+- All deliverables are in place: `scripts/probe-epub.ts` + `pnpm probe` script entry (`package.json:18`); probe output in `## Findings` above.
+- Acceptance criteria were met on 2026-04-21: both EPUBs parse without exceptions; counts within the 2% tolerance per the Findings table — LOTM1's overshoot (2.58%) is the two bonus "That Corner" chapters the AC explicitly allows; COI's delta is the Afterword + Side Story + 2 front-matter sections.
+- Deviation recorded: the architecture doc's expected counts (LOTM1=1396, COI=1180) were slightly stale, and the probe's regex heuristic can't separate main story from side stories — 003's authoritative content_kind boundaries (lotm1: 1394 main + 38 side_story; coi: 1179 main + 1 bonus + 1 side_story) superseded both. Parser behaviour correct; no parser fixes needed.
