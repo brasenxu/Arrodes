@@ -5,7 +5,7 @@ phase: 4
 status: review
 depends_on: [003, 005, 009]
 estimate: L
-updated: 2026-10-02
+updated: 2026-10-03
 ---
 
 ## Context
@@ -100,3 +100,18 @@ Weakest types + hypotheses (the 0.7 target iteration continues in follow-up tick
 ### Status: review (2026-10-02 final-review re-scope)
 
 The original AC "draft: 0, verified: 40" requires the human chapter pass — 11 entries stay draft until it runs (`pnpm tsx scripts/eval-helper.ts`; the eval runner already skips them, so the baseline above is trustworthy). 014 closes when the user finishes the sweep — everything else in this ticket (runner, scoring, spoiler gate, baseline) is delivered and green.
+
+### Wiki-grounded note-hygiene pass (2026-10-03, post-merge board audit)
+
+Pre-016a canon correction of the eval set via the `lotm-wiki` MCP (ticket 027 tooling) — chapter loci untouched (still the human pass):
+
+- **Canon-wrong notes fixed:** Q004 (side-story boundaries per 003 — "bonus chapters are 1395, 1396" was wrong), Q005 (Cordu Village is Intis, not "southern Feysac"), Q014 (debut ch.5 is Clown arc — "Early-Faceless" removed), Q016 ("Rueselland/Ruen Empire" was hallucinated — Roselle is Emperor of the Intis Empire, "Son of Steam", Black Emperor S0), Q034 ("tarot_meeting" event-type doesn't exist — it's `meeting`, populated by 007), Q024/Q025 (stale wrong seed text — "roughly ch 80–100" / "around ch 215–240" — removed where the authored suffix already carried the correction).
+- **Q013:** removed "Benson Moretti" from expected_entities — same defect 007 caught on Q035 (real brother, not an identity).
+- **Q018:** canon-corrected (S9 Hunter → ends as Calamity of Destruction, authorities over Red Priest + Demoness; Tarot codename The Chariot; wiki reveal refs ~2|1034/2|1122/2|1178) and **downgraded verified→draft** — expected_chapters [1] cannot ground the end-state question; it joins the eval-helper sweep. Counts: **28 verified / 12 draft** (baseline table above predates this; the next `pnpm eval` reflects it). expected_entities updated to seed-existing rows: Red Priest + Demoness.
+- **Q020:** Tyrant S0 deity wiki-confirmed as the **Lord of Storms** (ladder S9 Sailor → S0 Tyrant); "Crimson Moon is Tyrant Sequence 0" was wrong (Moon-pathway association, no seed row) → swapped to Lord of Storms.
+- **Q022:** **Darkness pathway / The Star** wiki-confirmed (Hermit guess wrong); entities updated to seed-existing rows (Leonard Mitchell, Darkness, Sleepless, The Star); codename locus ~ch.951 still needs the human pass.
+- **Q019:** full Fool ladder wiki-verified (5 Marionettist, 4 Bizarro Sorcerer, 3 Scholar of Yore, 2 Miracle Invoker, 1 Attendant of Mysteries) — recorded in the entry's notes; folding the titles into the Fool seed row is 018 issue #1, so expected_entities left untouched.
+- **Systemic 018 flag:** expected_entities referencing names with no seed row — "Uniqueness" (Q009/Q020/Q040), "Magician", "Faceless" (Q019). Entity recall silently caps until 018 folds them.
+- **Question-text nit for the human pass:** Q010's "True Creators" should be singular (the True Creator) — left as-is here, fix when editing questions.
+- `scripts/eval-helper.ts` verification stamp now uses the run date (was hardcoded 2026-10-02).
+- Gates: `pnpm eval:validate` — 40 entries, {verified: 28, draft: 12} · `pnpm typecheck` — clean.

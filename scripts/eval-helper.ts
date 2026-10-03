@@ -65,6 +65,7 @@ async function main() {
   console.log(`${drafts.length} draft entries to verify (of ${entries.length} total).\n`);
 
   const rl = createInterface({ input: process.stdin, output: process.stdout });
+  const verifiedOn = new Date().toISOString().slice(0, 10);
   let changed = 0;
 
   for (const entry of drafts) {
@@ -109,7 +110,7 @@ async function main() {
       ...new Set([...entry.expected_chapters, ...additions]),
     ];
     entry.status = "verified";
-    entry.notes = `${entry.notes ? `${entry.notes} | ` : ""}Verified 2026-10-02 via eval-helper (human chapter pass).`;
+    entry.notes = `${entry.notes ? `${entry.notes} | ` : ""}Verified ${verifiedOn} via eval-helper (human chapter pass).`;
     changed++;
     console.log(`    → ${entry.id} verified with expected ${JSON.stringify(entry.expected_chapters)}\n`);
   }
