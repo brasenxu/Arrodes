@@ -9,6 +9,7 @@ import {
   uniqueIndex,
   customType,
   timestamp,
+  check,
 } from "drizzle-orm/pg-core";
 
 // Chapter classification. Drives reading-position spoiler filtering and
@@ -63,6 +64,10 @@ export const chapters = pgTable(
   (t) => [
     uniqueIndex("chapters_book_chapter_idx").on(t.bookId, t.chapterNum),
     index("chapters_book_volume_arc_idx").on(t.bookId, t.volume, t.arc),
+    check(
+      "chapters_content_kind_check",
+      sql`${t.contentKind} IN ('main', 'side_story', 'bonus')`,
+    ),
   ],
 );
 
@@ -126,6 +131,14 @@ export const entityMentions = pgTable(
   (t) => [
     index("entity_mentions_entity_chapter_idx").on(t.entityId, t.chapterNum),
     index("entity_mentions_chunk_idx").on(t.chunkId),
+    // Same (chunk, entity) may hold role variety (speaker + mentioned are
+    // legitimate); only same-role rows are duplicates. coalesce groups the
+    // NULL role with '' (expression index — audit 2026-10-02).
+    uniqueIndex("entity_mentions_chunk_entity_role_uq").on(
+      t.chunkId,
+      t.entityId,
+      sql`coalesce(${t.role}, '')`,
+    ),
   ],
 );
 
@@ -136,7 +149,7 @@ export const events = pgTable(
     entityId: integer("entity_id")
       .notNull()
       .references(() => entities.id, { onDelete: "cascade" }),
-    eventType: text("event_type").notNull(), // 'sequence_advance' | 'death' | 'meeting' | 'identity_reveal' | ...
+    eventType: text("event_type").notNull(), // EVENT_TYPES from lib/rag/types.ts: sequence_advance | digestion | meeting | organization_join | battle | death | identity_assume | identity_reveal
     chapterId: integer("chapter_id")
       .notNull()
       .references(() => chapters.id, { onDelete: "cascade" }),
@@ -149,6 +162,16 @@ export const events = pgTable(
   (t) => [
     index("events_entity_type_idx").on(t.entityId, t.eventType),
     index("events_book_chapter_idx").on(t.bookId, t.chapterNum),
+    // Identical (entity, type, evidence chunk, snippet) rows are duplicates;
+    // distinct snippets for the same key are legitimate multi-events. md5
+    // hash keeps the btree key under the ~2704-byte limit. NULL
+    // evidence_chunk_id rows are never duplicates (NULLs don't collide).
+    uniqueIndex("events_entity_type_evidence_snippet_uq").on(
+      t.entityId,
+      t.eventType,
+      t.evidenceChunkId,
+      sql`md5(${t.snippet})`,
+    ),
   ],
 );
 
@@ -164,7 +187,17 @@ export const summaries = pgTable(
     content: text("content").notNull(),
     embedding: vector("embedding", { dimensions: 1536 }).notNull(),
   },
-  (t) => [index("summaries_level_book_idx").on(t.level, t.bookId)],
+  (t) => [
+    index("summaries_level_book_idx").on(t.level, t.bookId),
+    // Natural key per 023's identity definition — ticket 030.
+    uniqueIndex("summaries_natural_key_uq").on(
+      t.bookId,
+      t.level,
+      t.rangeStart,
+      t.rangeEnd,
+      t.label,
+    ),
+  ],
 );
 
 export const evalRuns = pgTable("eval_runs", {

@@ -18,7 +18,9 @@ export type RetrievedChunk = {
   content: string;
   contextualPrefix: string;
   score: number;
-  source: "epub" | "wiki" | "forum";
+  // Every chunk currently ingested is EPUB-sourced (the chunks table has no
+  // source column); wiki/forum values arrive only with ticket 016's ingest.
+  source: "epub";
 };
 
 export type ReadingPosition = {
@@ -83,12 +85,28 @@ export type IdentityRevealExtra = {
   identity: string;
 };
 
-export type EventExtra =
-  | ({ event_type: "sequence_advance" } & SequenceAdvanceExtra)
-  | ({ event_type: "digestion" } & DigestionExtra)
-  | ({ event_type: "meeting" } & MeetingExtra)
-  | ({ event_type: "organization_join" } & OrganizationJoinExtra)
-  | ({ event_type: "battle" } & BattleExtra)
-  | ({ event_type: "death" } & DeathExtra)
-  | ({ event_type: "identity_assume" } & IdentityAssumeExtra)
-  | ({ event_type: "identity_reveal" } & IdentityRevealExtra);
+export type EventExtraShapes = {
+  [K in EventType]: K extends "sequence_advance"
+    ? SequenceAdvanceExtra
+    : K extends "digestion"
+      ? DigestionExtra
+      : K extends "meeting"
+        ? MeetingExtra
+        : K extends "organization_join"
+          ? OrganizationJoinExtra
+          : K extends "battle"
+            ? BattleExtra
+            : K extends "death"
+              ? DeathExtra
+              : K extends "identity_assume"
+                ? IdentityAssumeExtra
+                : IdentityRevealExtra;
+};
+
+/**
+ * The bare extra payload stored in events.extra, keyed by the row's
+ * event_type COLUMN value. Audit defect 8: the old union carried an
+ * `event_type` key *inside* the payload — the DB never writes that
+ * (event_type is its own column; extra is the bare model object).
+ */
+export type EventExtra = EventExtraShapes[EventType];

@@ -1,4 +1,8 @@
 /**
+ * STATUS: one-off dev artifact (ticket 002 sanity probe) — cleanup candidate.
+ * WHY: expected chapter counts are stale post-021 (arc-map is canonical now).
+ * SAFE-TO-RUN? Yes — read-only, free; degrades gracefully without EPUBs.
+ *
  * EPUB sanity probe — inspects chapter boundaries produced by @gxl/epub-parser
  * for data/epub/LOTM.epub and data/epub/COI.epub, without writing anything.
  *

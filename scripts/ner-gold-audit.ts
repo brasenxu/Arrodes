@@ -1,4 +1,8 @@
 /**
+ * STATUS: one-off dev artifact (2026-05 gold-cycle audit) — cleanup candidate.
+ * WHY: read-only audit of a specific labeling cycle; harmless but stale.
+ * SAFE-TO-RUN? Yes (read-only), but its context has passed. Kept for the record.
+ *
  * Audits `data/eval/ner-gold.jsonl` for names that don't appear in the chapter
  * text (or in a referenced-alias form that the chapter uses). Surfaces labels
  * that were drawn from book-wide memory rather than chapter-local text, which

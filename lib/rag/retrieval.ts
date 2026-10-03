@@ -53,6 +53,8 @@ export async function hybridSearch(args: {
   books: BookId[];
   position: ReadingPosition;
   limit?: number;
+  /** Explicit "chapter N" pin from the question (see extractChapterPin). */
+  chapterNum?: number;
 }): Promise<RetrievedChunk[]> {
   const k = args.limit ?? 8;
   const embedLiteral = `[${args.queryEmbedding.join(",")}]`;
@@ -72,6 +74,12 @@ export async function hybridSearch(args: {
     sql` OR `,
   );
 
+  // Chapter pin applies INSIDE the spoiler filter (never widens it).
+  const chapterFilter = args.chapterNum
+    ? sql` AND chapter_num = ${args.chapterNum}`
+    : sql``;
+  const pinnedBookFilter = sql`(${bookFilter})${chapterFilter}`;
+
   // Content-token OR query. Null ⇒ sparse branch contributes nothing (still
   // shape-compatible with the UNION so RRF keeps evaluating).
   const tsqueryStr = buildTsquery(args.queryText);
@@ -82,7 +90,7 @@ export async function hybridSearch(args: {
       ) AS r
       FROM chunks
       WHERE tsv @@ to_tsquery('english', ${tsqueryStr})
-        AND (${bookFilter})
+        AND (${pinnedBookFilter})
       LIMIT 20
     `
     : sql`SELECT NULL::int AS id, NULL::bigint AS r WHERE FALSE`;
@@ -100,7 +108,7 @@ export async function hybridSearch(args: {
     WITH dense AS (
       SELECT id, ROW_NUMBER() OVER (ORDER BY embedding <=> ${embedLiteral}::vector) AS r
       FROM chunks
-      WHERE ${bookFilter}
+      WHERE ${pinnedBookFilter}
       ORDER BY embedding <=> ${embedLiteral}::vector
       LIMIT 20
     ),

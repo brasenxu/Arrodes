@@ -1,4 +1,10 @@
 /**
+ * STATUS: repair tool — APPLIED 2026-04-23/24. ARCHIVED, do not re-run casually.
+ * WHY: one-off gold + events patches; its insert patches hardcode chunk ids
+ * (2132, 690, 5555) that are only stable while chunk serial ids don't shift —
+ * a re-chunked corpus makes them dangerous (audit finding 20).
+ * SAFE-TO-RUN? Only against the exact corpus state it was written for.
+ *
  * Two one-off patches after ticket 007's event ingest:
  *
  *   1. data/eval/event-gold.jsonl — disagreement-review gold edits

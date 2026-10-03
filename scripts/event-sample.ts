@@ -1,4 +1,12 @@
 /**
+ * STATUS: repair tool (eval-gold sampler) — KEEP, but destructive on re-run.
+ * WHY: regenerates data/eval/event-gold.jsonl, wiping hand-labeled event labels.
+ * SAFE-TO-RUN? Only with --force when gold exists. A 2026-10-02 guard refuses
+ * to overwrite non-empty gold without --force. Re-run only to intentionally
+ * restart gold labeling.
+ */
+
+/**
  * Event eval sampler. Produces data/eval/event-gold.jsonl with three strata:
  *
  *   1. Reused NER gold (26 chunks) — already labeled for entities, now needs
@@ -15,7 +23,7 @@ loadEnv({ path: ".env.local" });
 loadEnv();
 
 import { eq, inArray, sql } from "drizzle-orm";
-import { writeFileSync, readFileSync } from "node:fs";
+import { writeFileSync, readFileSync, existsSync, statSync } from "node:fs";
 import { db, schema } from "@/lib/db/client";
 import { passesKeywordGate } from "@/lib/ingest/events";
 
@@ -173,6 +181,16 @@ async function loadNerGoldChunks(): Promise<GoldChunk[]> {
 }
 
 async function main() {
+  // Guard: refuse to clobber hand-labeled event gold without --force.
+  const force = process.argv.includes("--force");
+  if (!force && existsSync(GOLD_PATH) && statSync(GOLD_PATH).size > 0) {
+    console.error(
+      `[refusing] ${GOLD_PATH} exists and is non-empty (hand-labeled gold).\n` +
+        "Re-running would destroy the labels. Pass --force to intentionally restart gold labeling.",
+    );
+    process.exit(1);
+  }
+
   // Stratum 1 — NER reuse
   const reuse = await loadNerGoldChunks();
   console.log(`[reuse] ${reuse.length} chunks from NER gold`);

@@ -1,0 +1,15 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "servers": {
+      "arrodes-ro": {
+        "type": "local",
+        "command": ["npx", "-y", "tsx", "tools/mcp/run-postgres-mcp.ts"]
+      },
+      "lotm-wiki": {
+        "type": "local",
+        "command": ["npx", "-y", "tsx", "tools/wiki-mcp/src/server.ts"]
+      }
+    }
+  }
+}

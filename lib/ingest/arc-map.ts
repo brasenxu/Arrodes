@@ -126,6 +126,26 @@ const RANGES_BY_BOOK: Record<BookId, Range[]> = {
   coi: COI_RANGES,
 };
 
+// Chapter bounds derived from the ranges above — no hardcoded duplicates.
+// MAIN = last main-story chapter (spoiler-gate default target for "finished
+// main story"); FULL = absolute last chapter (includes side_story + bonus).
+// Pinned against the ingested DB in arc-map.test.ts.
+const maxEnd = (ranges: Range[], kind?: ContentKind): number =>
+  ranges.reduce(
+    (max, r) => (!kind || r.contentKind === kind) && r.end > max ? r.end : max,
+    0,
+  );
+
+export const MAIN_BOUNDS: Record<BookId, number> = {
+  lotm1: maxEnd(LOTM1_RANGES, "main"),
+  coi: maxEnd(COI_RANGES, "main"),
+};
+
+export const FULL_BOUNDS: Record<BookId, number> = {
+  lotm1: maxEnd(LOTM1_RANGES),
+  coi: maxEnd(COI_RANGES),
+};
+
 export function assignArc(bookId: BookId, chapterNum: number): ArcAssignment {
   if (!Number.isInteger(chapterNum) || chapterNum < 1) {
     throw new Error(`assignArc: chapterNum must be a positive integer, got ${chapterNum}`);

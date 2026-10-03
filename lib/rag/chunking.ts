@@ -45,9 +45,13 @@ export function chunkChapter(rawText: string): RawChunk[] {
   for (const para of paragraphs) {
     const paraTokens = approxTokens(para);
 
-    // Paragraph on its own would exceed max → sentence-split it.
+    // Paragraph on its own would exceed max → sentence-split it. Flush the
+    // pending buffer FIRST (unconditionally — flush() no-ops on an empty
+    // buffer): skipping the flush when bufferTokens < MIN_TOKENS strands the
+    // buffer behind the oversized chunk, so the final flush emitted it after,
+    // breaking chunk_index narrative order.
     if (paraTokens > MAX_TOKENS) {
-      if (bufferTokens >= MIN_TOKENS) flush();
+      flush();
       for (const sentenceChunk of splitLongParagraph(para)) {
         chunks.push({
           chunkIndex: chunks.length,

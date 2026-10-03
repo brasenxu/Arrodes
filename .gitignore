@@ -21,8 +21,8 @@ next-env.d.ts
 # vercel
 .vercel
 
-# drizzle
-drizzle/meta/
+# drizzle — journal + snapshots are COMMITTED (they were lost once when this
+# dir was ignored; ticket 030)
 
 # typescript
 *.tsbuildinfo
@@ -62,7 +62,5 @@ eval-runs/
 .claude/
 .cursor/
 
-# project docs (design/research/tickets) — not committed for now
-docs/
 *.zip
 .env*.local

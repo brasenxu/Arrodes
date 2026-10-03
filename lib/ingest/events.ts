@@ -629,6 +629,8 @@ export async function extractChapterEvents(opts: {
   if (!opts.dryRun) {
     const flat = perChunkRows.flat();
     if (flat.length > 0) {
+      // onConflictDoNothing: same (entity, type, evidence chunk, md5 snippet)
+      // rows are duplicates under the events unique index (ticket 030).
       await db.insert(schema.events).values(
         flat.map((r) => ({
           entityId: r.entityId,
@@ -640,7 +642,7 @@ export async function extractChapterEvents(opts: {
           snippet: r.snippet,
           extra: r.extra,
         })),
-      );
+      ).onConflictDoNothing();
       result.rowsInserted = flat.length;
     }
   } else {

@@ -1,4 +1,11 @@
 /**
+ * STATUS: repair tool — BROKEN against live data, DO NOT RUN until rewritten.
+ * WHY: assumes chunk_id=0 sentinel semantics that no longer hold; deleting by
+ * id ranges can strand summaries/mentions/events rows and (per audit finding
+ * 20-class risks) collide with shifted serial ids after any re-ingest.
+ * SAFE-TO-RUN? NO — rewrite to locate chunks by (book_id, chapter_num) and
+ * handle summaries/mentions/events cleanup before ever running again.
+ *
  * One-off utility: delete chunks for a given book and chapter range.
  *
  * Run:

@@ -1,3 +1,9 @@
+/**
+ * STATUS: one-off dev artifact — cleanup candidate. Not wired into package.json.
+ * WHY: debug harness hardcoded to chunk 1099 during ticket 007 development.
+ * SAFE-TO-RUN? Technically (it makes real DeepSeek calls — costs a few cents).
+ *
+ */
 import { config as loadEnv } from "dotenv";
 loadEnv({ path: ".env.local" });
 loadEnv();
